@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">PuppiesSearchClient</string>
+    <string name="hint_username">Nombre del Usuario</string>
+    <string name="hint_mail">Email</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_signin">Registrarse</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="main_activity_title">My Best Friend</string>
+    <string name="input_pet_image">Ingrese image de la mascota</string>
+    <string name="btn_reportar">Reportar</string>
+    <string name="hint_location">Ubicación</string>
+    <string name="hint_comment">Comentario</string>
+    <string name="resport_lost_pet">Reportar Perdida</string>
+</resources>
