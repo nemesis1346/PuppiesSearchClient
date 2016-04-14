@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers.controllers;
+package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;

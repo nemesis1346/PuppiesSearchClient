@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers.controllers;
+package com.mywaytech.puppiessearchclient.controllers;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
+import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -48,8 +50,24 @@ public class MainActivity extends BaseActivity {
 
     private void selectTab ( int position){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = TabFragment.newInstance(position);
-        ft.replace(R.id.container, fragment).commit();
+        Fragment fragment;
+
+
+        switch (position) {
+            case FRAG0_POS:
+                fragment = WallFragment.newInstance(position);
+                ft.replace(R.id.container, fragment).commit();
+                break;
+            case FRAG1_POS:
+                fragment = AdoptionFragment.newInstance(position);
+                ft.replace(R.id.container, fragment).commit();
+                break;
+            default:
+                fragment = WallFragment.newInstance(position);
+                ft.replace(R.id.container, fragment).commit();
+                break;
+
+        }
 
     }
 
