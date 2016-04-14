@@ -18,29 +18,33 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
             android:src="@drawable/initial_dog_image" />
 
         <EditText
             android:id="@+id/edit_text_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/start_image"
             android:hint="@string/hint_username"
+            android:layout_centerHorizontal="true"
             android:inputType="text" />
 
         <EditText
             android:id="@+id/edit_text_mail"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_text_name"
+            android:layout_centerHorizontal="true"
             android:hint="@string/hint_mail"
             android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/edit_text_password"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_text_mail"
+            android:layout_centerHorizontal="true"
             android:hint="@string/hint_password"
             android:inputType="textPassword" />
 
@@ -48,21 +52,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_text_password"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/btn_singin"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:textAlignment="center"
                 android:text="@string/btn_signin"
                 />
 
             <Button
                 android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:textAlignment="center"
                 android:text="@string/btn_login" />
         </LinearLayout>
     </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers;
+package com.mywaytech.puppiessearchclient.controllers.controllers;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

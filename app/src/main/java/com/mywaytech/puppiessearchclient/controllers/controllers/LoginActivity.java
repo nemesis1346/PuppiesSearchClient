@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers;
+package com.mywaytech.puppiessearchclient.controllers.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         uMail= (EditText) findViewById(R.id.edit_text_mail);
         uPassword= (EditText) findViewById(R.id.edit_text_password);
-        bSignin= (Button) findViewById(R.id.btn_singin);
+        bSignin= (Button) findViewById(R.id.btn_login);
         bSignin.setOnClickListener(signListener);
 
     }

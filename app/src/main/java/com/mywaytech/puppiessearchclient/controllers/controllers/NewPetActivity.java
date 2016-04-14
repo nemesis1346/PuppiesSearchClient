@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers;
+package com.mywaytech.puppiessearchclient.controllers.controllers;
 
 import com.mywaytech.puppiessearchclient.R;
 
