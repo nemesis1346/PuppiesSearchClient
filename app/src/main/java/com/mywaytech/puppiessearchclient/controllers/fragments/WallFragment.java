@@ -31,7 +31,10 @@ public class WallFragment extends Fragment {
     private WallAdapter wallAdapter;
     private ArrayList<UserPetObject> object_list;
     private int[] imagArray_raw;
-
+    private String[] mUser_10;
+    private String[] mAddress_10;
+    private String[] mComment_adop_10;
+    private String[] mComent_lost_10;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +47,7 @@ public class WallFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_wall);
         btn_add_dog.setOnClickListener(addListener);
-        imagArray_r = new int[]{
+        imagArray_raw = new int[]{
                 R.drawable.pet1,
                 R.drawable.pet2,
                 R.drawable.pet3,
@@ -68,6 +71,17 @@ public class WallFragment extends Fragment {
                 R.drawable.pet21,
         };
 
+        object_list = new ArrayList<>();
+
+        mUser_10 = getResources().getStringArray(R.array.users_10);
+        mAddress_10 = getResources().getStringArray(R.array.address_10);
+        mComment_adop_10 = getResources().getStringArray(R.array.comment_10_adoption);
+        mComent_lost_10 = getResources().getStringArray(R.array.comment_10_lost);
+
+        for (int i = 0; i < mUser_10.length; i++) {
+            object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i], imagArray_raw[i], mComent_lost_10[i]);
+        }
+        wallAdapter = new WallAdapter(getContext(),R.layout.wall_item_layout,object_list);
         return rootView;
     }
 

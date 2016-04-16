@@ -9,14 +9,12 @@ public class UserPetObject implements Serializable {
     private String uName;
     private String uAddress;
     private int pImage;
-    private int uImage;
-    private int uComment;
+    private String uComment;
 
-    public UserPetObject(String uName, String uAddress, int pImage, int uImage, int uComment) {
+    public UserPetObject(String uName, String uAddress, int pImage, String uComment) {
         this.uName = uName;
         this.uAddress = uAddress;
         this.pImage = pImage;
-        this.uImage = uImage;
         this.uComment = uComment;
     }
 
@@ -44,19 +42,11 @@ public class UserPetObject implements Serializable {
         this.pImage = pImage;
     }
 
-    public int getuImage() {
-        return uImage;
-    }
-
-    public void setuImage(int uImage) {
-        this.uImage = uImage;
-    }
-
-    public int getuComment() {
+    public String getuComment() {
         return uComment;
     }
 
-    public void setuComment(int uComment) {
+    public void setuComment(String uComment) {
         this.uComment = uComment;
     }
 }

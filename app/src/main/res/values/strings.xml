@@ -12,4 +12,37 @@
     <string name="hint_location">Ubicación</string>
     <string name="hint_comment">Comentario</string>
     <string name="resport_lost_pet">Reportar Perdida</string>
+
+    <string-array name="users_10">
+        <item>sraguevara</item>
+        <item>martinalejandro97</item>
+        <item>pamelavega31</item>
+        <item>mabeortizr</item>
+        <item>reimososha24</item>
+        <item>solllerena</item>
+    </string-array>
+    <string-array name="address_10">
+        <item>Tumbaco, Luis Cordero</item>
+        <item>Florencia y Miguel ángel</item>
+        <item>Vía intervalles 2da transversal Conjunto San Pietro</item>
+        <item>Barrió Santa Inés calle María auxiliadora y francisco de asís e73-29</item>
+        <item>Eloy Alfaro y Cristo Rey Oe3-24</item>
+        <item>Francisco de Orellana y Pampita Conjunto la comarca</item>
+    </string-array>
+    <string-array name="comment_10_adoption">
+        <item>Hola, quisiera saber ¿Cómo lo puedo adoptar? ¿Debo llenar algún formulario o algo?</item>
+        <item>¡Yo quiero adoptarla, está súper linda! ¿Cuántos meses tiene?</item>
+        <item>Qué lindo, espero encuentre un hogar pronto.</item>
+        <item>Me gustaría adoptarla ¿En dónde debo llenar los papeles?</item>
+        <item>Hola, me gustaría adoptar un perrito de 2 meses ¿Tienen alguno por si acaso?</item>
+        <item>Me gusta mucho su aplicación, quisiera adoptar un perrito</item>
+    </string-array>
+    <string-array name="comment_10_lost">
+        <item>¡Hola! Encontré este perrito en la calle cerca del colegio Saint Dominic School, creo que tiene 6 meses de edad es súper cariñoso y educado. ¿Quién quiere adoptarlo?</item>
+        <item>Saludos, por motivos de negocios estoy saliendo fuera del país por 6 meses. Me preguntaba quién podría cuidar de mi cachorro es de raza Pastor Alemán tiene 5 meses.</item>
+        <item>Hola, ¿Quién quiere adoptar una gata? La encontré en el mercado de Sangolqui es súper linda.</item>
+        <item>Hola encontré este perrito cerca de mi casa ¿Quién quiere adoptarlo?</item>
+        <item>Chicos si quieren un perrito tierno, amigable y súper educado además de ser buen compañero. Mi perrito se llama “Chucho” tiene 8 meses cualquier cosa avísenme ya que me estoy yendo a vivir a Ibarra y no quiero dejarlo botando.</item>
+        <item>¡Hola! ¿Quién quiere adoptar un perrito? Lo encontré camino a la universidad aun que esta algo sucio y descuidado sé que con cariño y amor va a estar mejor.</item>
+    </string-array>
 </resources>
