@@ -12,6 +12,10 @@
     <string name="hint_location">Ubicación</string>
     <string name="hint_comment">Comentario</string>
     <string name="resport_lost_pet">Reportar Perdida</string>
+    <string name="action_search">Search</string>
+    <string name="action_account">My Account</string>
+    <string name="action_map">Map</string>
+    <string name="myAccountTitle">Mi Cuenta</string>
 
     <string-array name="users_10">
         <item>sraguevara</item>

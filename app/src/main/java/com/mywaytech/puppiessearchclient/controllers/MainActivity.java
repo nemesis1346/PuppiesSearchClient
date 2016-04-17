@@ -1,10 +1,13 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
@@ -48,7 +51,34 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void selectTab ( int position){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item_layout,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.action_search:
+                return true;
+            case R.id.action_account:
+                intent=new Intent(MainActivity.this,AccountActivity.class);
+//                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
+                startActivity(intent);
+                return true;
+            case R.id.action_map:
+                intent=new Intent(MainActivity.this,MapActivity.class);
+//                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void selectTab (int position){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
 
