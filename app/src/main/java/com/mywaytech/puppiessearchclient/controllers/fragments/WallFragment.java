@@ -39,14 +39,14 @@ public class WallFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
-        btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_wall);
-        btn_add_dog.setOnClickListener(addListener);
+
         imagArray_raw = new int[]{
                 R.drawable.pet1,
                 R.drawable.pet2,
@@ -78,10 +78,14 @@ public class WallFragment extends Fragment {
         mComment_adop_10 = getResources().getStringArray(R.array.comment_10_adoption);
         mComent_lost_10 = getResources().getStringArray(R.array.comment_10_lost);
 
+        wallAdapter = new WallAdapter(getContext(), object_list);
         for (int i = 0; i < mUser_10.length; i++) {
-            object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i], imagArray_raw[i], mComent_lost_10[i]);
+            object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i], imagArray_raw[i], mComent_lost_10[i]));
         }
-        wallAdapter = new WallAdapter(getContext(),R.layout.wall_item_layout,object_list);
+        mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
+        btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_wall);
+        btn_add_dog.setOnClickListener(addListener);
+        mListView.setAdapter(wallAdapter);
         return rootView;
     }
 
