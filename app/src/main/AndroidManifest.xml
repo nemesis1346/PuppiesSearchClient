@@ -19,7 +19,8 @@
         <activity android:name=".controllers.MainActivity"></activity>
         <activity android:name=".controllers.LoginActivity"></activity>
         <activity android:name=".controllers.NewPetActivity"></activity>
-
+        <activity android:name=".controllers.AccountActivity"></activity>
+        <activity android:name=".controllers.MapActivity"></activity>
 
     </application>
 

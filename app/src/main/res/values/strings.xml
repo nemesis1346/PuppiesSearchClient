@@ -16,6 +16,7 @@
     <string name="action_account">My Account</string>
     <string name="action_map">Map</string>
     <string name="myAccountTitle">Mi Cuenta</string>
+    <string name="mapactivity_title">Mapa</string>
 
     <string-array name="users_10">
         <item>sraguevara</item>

@@ -53,23 +53,24 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_layout,menu);
+        getMenuInflater().inflate(R.menu.menu_item_layout, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_search:
+                showDialog();
                 return true;
             case R.id.action_account:
-                intent=new Intent(MainActivity.this,AccountActivity.class);
+                intent = new Intent(MainActivity.this, AccountActivity.class);
 //                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
                 startActivity(intent);
                 return true;
             case R.id.action_map:
-                intent=new Intent(MainActivity.this,MapActivity.class);
+                intent = new Intent(MainActivity.this, MapActivity.class);
 //                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
                 startActivity(intent);
                 return true;
@@ -78,11 +79,22 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void selectTab (int position){
+    public void showDialog() {
+        android.app.FragmentTransaction ft3 = getFragmentManager().beginTransaction();
+        SearchDialog searchDialog = SearchDialog.newInstance();
+        android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft3.remove(prev);
+        }
+        ft3.addToBackStack(null);
+
+        searchDialog.show(ft3, "dialog");
+    }
+
+
+    private void selectTab(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
-
-
         switch (position) {
             case FRAG0_POS:
                 fragment = WallFragment.newInstance(position);
