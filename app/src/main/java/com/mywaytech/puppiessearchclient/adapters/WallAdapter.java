@@ -53,7 +53,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mListItems.size();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
