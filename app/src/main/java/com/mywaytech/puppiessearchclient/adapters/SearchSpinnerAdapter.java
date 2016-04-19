@@ -1,33 +1,47 @@
 package com.mywaytech.puppiessearchclient.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.models.SearchRangeObject;
+
+import java.util.List;
 
 /**
  * Created by Marco on 4/18/2016.
  */
-public class SearchSpinnerAdapter extends ArrayAdapter<String> {
+public class SearchSpinnerAdapter extends ArrayAdapter<SearchRangeObject> {
 
     private Context context;
+    private List<SearchRangeObject> objects;
     private int resource;
-    private String[] objects;
 
-    public SearchSpinnerAdapter(Context context, int resource, String[] objects) {
-        super(context, resource,objects);
-        this.context=context;
-        this.resource=resource;
-        this.objects=objects;
+    public SearchSpinnerAdapter(Context context, int resource, List<SearchRangeObject> objects) {
+        super(context, resource, objects);
+        this.context = context;
+        this.resource = resource;
+        this.objects = objects;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+        View transpositorItemViewDefault= LayoutInflater.from(context).inflate(R.layout.spinner_search,parent, false);
+        TextView arrayTranspositorItemViewDefault= (TextView) transpositorItemViewDefault.findViewById(R.id.spinner_search);
+        arrayTranspositorItemViewDefault.setText(objects.get(position).getRange());
+        return transpositorItemViewDefault;
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return super.getDropDownView(position, convertView, parent);
+        View transpositorItemView=LayoutInflater.from(context).inflate(R.layout.spinner_search,parent,false);
+        TextView arrayTranspositorItemView= (TextView) transpositorItemView.findViewById(R.id.spinner_search);
+        arrayTranspositorItemView.setText(objects.get(position).getRange());
+        return transpositorItemView;
     }
 }

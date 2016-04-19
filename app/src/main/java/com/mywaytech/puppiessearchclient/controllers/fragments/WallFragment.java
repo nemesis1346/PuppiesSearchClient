@@ -82,12 +82,12 @@ public class WallFragment extends Fragment {
         mComment_adop_10 = getResources().getStringArray(R.array.comment_10_adoption);
         mComent_lost_10 = getResources().getStringArray(R.array.comment_10_lost);
 
-        wallAdapter = new WallAdapter(getContext(), object_list);
+
         for (int i = 0; i < mUser_10.length; i++) {
             //Bitmap test = decodeSampledBitmapFromResource(getResources(), imagArray_raw[i], 100, 100);
             object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i],  imagArray_raw[i], mComent_lost_10[i]));
         }
-
+        wallAdapter = new WallAdapter(getContext(), object_list);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
 
 
