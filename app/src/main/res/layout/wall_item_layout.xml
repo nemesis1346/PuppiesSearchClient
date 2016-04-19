@@ -28,7 +28,7 @@
         android:textSize="16dp"/>
 
 
-    <TextView
+    <com.mywaytech.puppiessearchclient.controllers.MyCustomTextView
         android:layout_below="@id/item_address"
         android:layout_marginTop="5dp"
         android:id="@+id/item_comment"
@@ -36,7 +36,12 @@
         android:layout_height="wrap_content"
         android:textSize="14dp"
         android:textStyle="italic"
+        android:layout_marginBottom="8dp"
         />
 
-
+    <View
+        android:layout_below="@+id/item_comment"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"/>
 </RelativeLayout>

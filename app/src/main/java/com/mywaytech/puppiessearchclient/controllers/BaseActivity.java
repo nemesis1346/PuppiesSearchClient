@@ -21,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getContentResource());
         Toolbar toolbar= (Toolbar) findViewById(R.id.main_toolbar);
+
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null){
             getSupportActionBar().setTitle(getToolbarTitle());
