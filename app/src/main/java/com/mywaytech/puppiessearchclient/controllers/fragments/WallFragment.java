@@ -1,6 +1,9 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -81,7 +84,8 @@ public class WallFragment extends Fragment {
 
         wallAdapter = new WallAdapter(getContext(), object_list);
         for (int i = 0; i < mUser_10.length; i++) {
-            object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i], imagArray_raw[i], mComent_lost_10[i]));
+            //Bitmap test = decodeSampledBitmapFromResource(getResources(), imagArray_raw[i], 100, 100);
+            object_list.add(new UserPetObject(mUser_10[i], mAddress_10[i],  imagArray_raw[i], mComent_lost_10[i]));
         }
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
