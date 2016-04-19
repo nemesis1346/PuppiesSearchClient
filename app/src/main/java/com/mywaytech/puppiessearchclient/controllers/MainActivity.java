@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,27 +17,28 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements SearchDialog.PassDataFragment {
 
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
+    int value=-1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-
-        tabLayout.getTabAt(0).setText("Muro");
-        tabLayout.getTabAt(1).setText("Adopción");
+        tabLayout.addTab(tabLayout.newTab().setText("Muro"));
+        tabLayout.addTab(tabLayout.newTab().setText("Adopción"));
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                selectTab(tab.getPosition());
+                if(value==-1){
+                    value=0;
+                }
+                selectTab(tab.getPosition(),value);
             }
 
             @Override
@@ -49,6 +51,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+        selectTab(FRAG0_POS,0);
     }
 
     @Override
@@ -80,9 +83,12 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showDialog() {
-        android.app.FragmentTransaction ft3 = getFragmentManager().beginTransaction();
+        FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
         SearchDialog searchDialog = SearchDialog.newInstance();
-        android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+//        searchDialog.setTargetFragment(,0);
+
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             ft3.remove(prev);
         }
@@ -92,20 +98,20 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void selectTab(int position) {
+    private void selectTab(int position,int value) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
         switch (position) {
             case FRAG0_POS:
-                fragment = WallFragment.newInstance(position);
+                fragment = WallFragment.newInstance(position,value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
             case FRAG1_POS:
-                fragment = AdoptionFragment.newInstance(position);
+                fragment = AdoptionFragment.newInstance(position,value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
             default:
-                fragment = WallFragment.newInstance(position);
+                fragment = WallFragment.newInstance(position,value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
 
@@ -124,4 +130,10 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void backData(int value) {
+        Log.d("backdata", "" + value);
+        this.value=value;
+        selectTab(tabLayout.getSelectedTabPosition(),value);
+    }
 }

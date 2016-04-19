@@ -7,11 +7,11 @@ import java.io.Serializable;
  */
 public class SearchRangeObject implements Serializable {
     private String range;
-    private int value;
+    private int movementValue;
 
-    public SearchRangeObject(String range, int value) {
+    public SearchRangeObject(String range, int movementValue) {
         this.range = range;
-        this.value = value;
+        this.movementValue = movementValue;
     }
 
     public String getRange() {
@@ -22,11 +22,11 @@ public class SearchRangeObject implements Serializable {
         this.range = range;
     }
 
-    public int getValue() {
-        return value;
+    public int getMovementValue() {
+        return movementValue;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setMovementValue(int movementValue) {
+        this.movementValue = movementValue;
     }
 }

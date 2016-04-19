@@ -25,7 +25,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     private Context mContext;
     private List<UserPetObject> mListItems;
     private CallBacks callbacks;
-    protected Resources mResources;
 
     public WallAdapter(Context mContext, List<UserPetObject> mListItems) {
         this.mContext = mContext;
@@ -49,9 +48,10 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     public void onBindViewHolder(ItemViewHolder holder, int position) {
 
         holder.userName.setText(mListItems.get(position).getuName());
-        holder.petImage.setImageResource(mListItems.get(position).getpImage());
-
-       // holder.petImage.setImageBitmap(decodeSampledBitmapFromResource(mResources,mListItems.get(position).getpImage(), 500, 500));
+       // holder.petImage.setImageResource(mListItems.get(position).getpImage());
+        int width = holder.petImage.getWidth();
+        int height=holder.petImage.getHeight();
+       holder.petImage.setImageBitmap(decodeSampledBitmapFromResource(mContext.getResources(),mListItems.get(position).getpImage(), 200, 200));
         holder.userAddres.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
 

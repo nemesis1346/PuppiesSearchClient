@@ -44,4 +44,8 @@ public class SearchSpinnerAdapter extends ArrayAdapter<SearchRangeObject> {
         arrayTranspositorItemView.setText(objects.get(position).getRange());
         return transpositorItemView;
     }
+
+    public int getMovementValue(int position){
+        return objects.get(position).getMovementValue();
+    }
 }
