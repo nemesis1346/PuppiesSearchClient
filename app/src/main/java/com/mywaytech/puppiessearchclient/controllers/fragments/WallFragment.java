@@ -157,6 +157,8 @@ public class WallFragment extends Fragment {
                 break;
         }
 
+
+
         wallAdapter = new WallAdapter(getContext(), object_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 

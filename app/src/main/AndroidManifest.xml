@@ -22,6 +22,9 @@
         <activity android:name=".controllers.AccountActivity"></activity>
         <activity android:name=".controllers.MapActivity"></activity>
 
+
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     </application>
 
 </manifest>

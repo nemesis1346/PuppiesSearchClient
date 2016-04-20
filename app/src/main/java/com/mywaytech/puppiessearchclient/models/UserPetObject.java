@@ -9,6 +9,7 @@ public class UserPetObject implements Serializable {
     private String uName;
     private String uAddress;
     private int pImage;
+    private String imagePath;
     private String uComment;
 
     public UserPetObject(String uName, String uAddress, int pImage, String uComment) {
@@ -16,6 +17,23 @@ public class UserPetObject implements Serializable {
         this.uAddress = uAddress;
         this.pImage = pImage;
         this.uComment = uComment;
+    }
+
+    public UserPetObject(String uName,String uAddress,String imagePath, String uComment) {
+        this.uName = uName;
+        this.uAddress = uAddress;
+        this.imagePath = imagePath;
+        this.uComment = uComment;
+
+
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getuName() {

@@ -14,6 +14,7 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.UserPetObject;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -22,18 +23,22 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
     public static  final String EXTRA_USERDATA="com.mywaytech.puppiessearchclient.extras.extra_userdata";
 
+    public static  final String EXTRA_NEWPET_DATA="com.mywaytech.puppiessearchclient.extras.extra_newpet_data";
+
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
     int value=-1;
 
     private NewUserObject newUserObject;
+    private UserPetObject userPetObject;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        newUserObject= (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA);
+        //newUserObject= (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA);
+        userPetObject= (UserPetObject) getIntent().getSerializableExtra(EXTRA_NEWPET_DATA);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -77,7 +82,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 return true;
             case R.id.action_account:
                 intent = new Intent(MainActivity.this, AccountActivity.class);
-                intent.putExtra(AccountActivity.EXTRA_USERDATA_IN, newUserObject);
+                //intent.putExtra(AccountActivity.EXTRA_USERDATA_IN, newUserObject);
                 startActivity(intent);
                 return true;
             case R.id.action_map:

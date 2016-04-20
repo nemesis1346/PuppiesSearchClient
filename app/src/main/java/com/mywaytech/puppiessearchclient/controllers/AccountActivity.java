@@ -36,9 +36,9 @@ public class AccountActivity extends BaseActivity {
 
         mName = (TextView) findViewById(R.id.show_user_name);
         mEmail = (TextView) findViewById(R.id.show_user_email);
-        newUserObject = (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA_IN);
-        mName.setText(newUserObject.getmName());
-        mEmail.setText(newUserObject.getmEmail());
+        //newUserObject = (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA_IN);
+//        mName.setText(newUserObject.getmName());
+ //       mEmail.setText(newUserObject.getmEmail());
 
     }
 }

@@ -17,6 +17,10 @@
     <string name="action_map">Map</string>
     <string name="myAccountTitle">Mi Cuenta</string>
     <string name="mapactivity_title">Mapa</string>
+    <string name="btn_new_user">Nuevo Usuario?</string>
+    <string name="hint_password_repeat">Repita Contraseña</string>
+    <string name="hint_address">Dirección</string>
+    <string name="hint_name">Persona Responsable</string>
 
     <string-array name="users_10_lost">
         <item>sraguevara</item>

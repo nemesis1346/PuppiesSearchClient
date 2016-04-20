@@ -14,6 +14,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
         <ImageView
+            android:layout_marginTop="80dp"
             android:id="@+id/start_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -22,22 +23,26 @@
 
 
         <EditText
+            android:layout_marginTop="15dp"
             android:id="@+id/edit_text_mail"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/start_image"
+            android:layout_centerHorizontal="true"
             android:hint="@string/hint_mail"
-            android:inputType="textPassword" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/edit_text_password"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_text_mail"
             android:hint="@string/hint_password"
+            android:layout_centerHorizontal="true"
             android:inputType="textPassword" />
 
         <LinearLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_text_password"
@@ -45,11 +50,28 @@
 
 
             <Button
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="center"
                 android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@string/btn_login" />
+
+            <Button
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="center"
+                android:id="@+id/btn_new_user"
+                android:layout_weight="1"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/btn_new_user" />
         </LinearLayout>
     </RelativeLayout>
 
