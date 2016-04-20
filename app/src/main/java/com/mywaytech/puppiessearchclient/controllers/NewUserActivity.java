@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.models.NewUserObject;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -19,6 +20,8 @@ public class NewUserActivity extends AppCompatActivity {
     private EditText uPassword;
     private Button uSignin;
     private Button uLogin;
+
+    private NewUserObject newUserObject;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,8 +42,11 @@ public class NewUserActivity extends AppCompatActivity {
     public View.OnClickListener signInListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            newUserObject=new NewUserObject(uName.getText().toString(),uEmail.getText().toString(),uPassword.getText().toString());
             Intent intent=new Intent(NewUserActivity.this,MainActivity.class);
+            intent.putExtra(MainActivity.EXTRA_USERDATA,newUserObject);
             startActivity(intent);
+
         }
     };
     public View.OnClickListener loginListener=new View.OnClickListener() {

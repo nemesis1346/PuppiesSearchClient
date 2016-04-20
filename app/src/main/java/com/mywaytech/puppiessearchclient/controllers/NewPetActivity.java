@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -21,6 +22,8 @@ public class NewPetActivity extends BaseActivity {
     private int newImage;
     private ImageButton addImageButton;
     static int TAKE_PICTURE_PHOTO = 3;
+
+    private Button btn_add_im;
 
     @Override
     public int getToolbarTitle() {
@@ -38,6 +41,8 @@ public class NewPetActivity extends BaseActivity {
         newAddress= (EditText) findViewById(R.id.edit_text_address);
         newComment= (EditText) findViewById(R.id.edit_text_password);
         addImageButton= (ImageButton) findViewById(R.id.check_add_button);
+        btn_add_im= (Button) findViewById(R.id.btn_add_image);
+        btn_add_im.setOnClickListener(addPhoto);
         addImageButton.setOnClickListener(addPhoto);
     }
 

@@ -13,20 +13,28 @@ import android.view.MenuItem;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
+import com.mywaytech.puppiessearchclient.models.NewUserObject;
 
 /**
  * Created by m.maigua on 4/13/2016.
  */
 public class MainActivity extends BaseActivity implements SearchDialog.PassDataFragment {
 
+    public static  final String EXTRA_USERDATA="com.mywaytech.puppiessearchclient.extras.extra_userdata";
+
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
     int value=-1;
 
+    private NewUserObject newUserObject;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        newUserObject= (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA);
+
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         tabLayout.addTab(tabLayout.newTab().setText("Muro"));
@@ -69,7 +77,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 return true;
             case R.id.action_account:
                 intent = new Intent(MainActivity.this, AccountActivity.class);
-//                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
+                intent.putExtra(AccountActivity.EXTRA_USERDATA_IN, newUserObject);
                 startActivity(intent);
                 return true;
             case R.id.action_map:
