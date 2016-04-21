@@ -51,7 +51,7 @@ public class WallFragment extends Fragment {
     private String[] mUser_20_lost;
     private String[] mAddress_20_lost;
     private String[] mComent_20_lost;
-
+    private static final int PET_REQUEST = 0;
 
     private int[] imagArray_30_lost;
     private String[] mUser_30_lost;
@@ -176,10 +176,17 @@ public class WallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), NewPetActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent,PET_REQUEST);
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PET_REQUEST && resultCode == Activity.RESULT_OK) {
+
+        }
+    }
 
     public static WallFragment newInstance(int position, int value) {
         WallFragment fragment = new WallFragment();

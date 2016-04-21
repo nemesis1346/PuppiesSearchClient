@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
@@ -36,8 +38,14 @@ public class NewPetActivity extends BaseActivity {
     private Button btn_image;
     private Button btn_report;
 
+    private ImageView imageShow;
+
+    public static final String EXTRA_PHOTO = "com.mywaytech.puppiessearchclient.extras.extra_photo";
+
     private Bitmap photo;
     private UserPetObject userPetObject;
+
+    private File file;
 
     @Override
     public int getToolbarTitle() {
@@ -59,48 +67,60 @@ public class NewPetActivity extends BaseActivity {
         btn_image = (Button) findViewById(R.id.input_image);
         btn_report = (Button) findViewById(R.id.btn_reportar);
 
+        imageShow = (ImageView) findViewById(R.id.showImage);
+
         btn_image.setOnClickListener(addPhoto);
-        btn_report.setOnClickListener(addPhoto);
+        btn_report.setOnClickListener(backToActivity);
     }
 
     public View.OnClickListener addPhoto = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //  intent.putExtra(NewPetActivity.EXTRA_PHOTO, file);
             startActivityForResult(intent, CAMERA_REQUEST);
         }
     };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File file;
+
         //super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode ==  CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             btn_image.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             btn_image.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             photo = (Bitmap) data.getExtras().get("data");
 
-            file=new File(this.getExternalFilesDir(null)+"/images");
-            if(!file.isDirectory()){
+            file = new File(getBaseContext().getExternalFilesDir(null) + "/images");
+            if (!file.isDirectory()) {
                 file.mkdir();
             }
-            file=new File(this.getExternalFilesDir(null)+"/images","img_" + System.currentTimeMillis()+".jpg");
+            file = new File(getBaseContext().getExternalFilesDir(null) + "/images", "img_" + System.currentTimeMillis() + ".jpg");
             try {
-                FileOutputStream fileOutputStream=new FileOutputStream(file);
-                photo.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
+                imageShow.setImageBitmap(photo);
+                imageShow.setVisibility(View.VISIBLE);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), data.getSerializableExtra(EXTRA_PHOTO).toString(), newComment.getText().toString());
+            //data.putExtra(MainActivity.EXTRA_NEWPET_DATA,userPetObject);
         }
-        if(requestCode ==  BACK_TOACTIVITY && resultCode == Activity.RESULT_OK) {
-            userPetObject=new UserPetObject(newResponsable.getText().toString(),newAddress.getText().toString(), file.getPath().toString());
-            data.putExtra();
+
+        if (requestCode == BACK_TOACTIVITY && resultCode == Activity.RESULT_OK) {
+            if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty()) {
+                Toast.makeText(NewPetActivity.this,"Ingrese Campos",Toast.LENGTH_LONG).show();
+            }else {
+                userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), imageShow.getImageAlpha(), newComment.getText().toString());
+                data.putExtra(MainActivity.EXTRA_NEWPET_DATA, userPetObject);
+                startActivity(data);
+            }
         }
 
     }
@@ -108,10 +128,9 @@ public class NewPetActivity extends BaseActivity {
     public View.OnClickListener backToActivity = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
             Intent intent = new Intent(NewPetActivity.this, MainActivity.class);
             //intent.putExtra(MainActivity.EXTRA_NEWPET_DATA, userPetObject);
-            startActivityForResult(intent,BACK_TOACTIVITY);
+            startActivityForResult(intent, BACK_TOACTIVITY);
         }
     };
 }

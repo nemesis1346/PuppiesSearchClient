@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            Boolean res = myDB.getUserdata(uMail.getText().toString());
+            Boolean res = myDB.consultData(uMail.getText().toString());
 
             //AUTENTIFICATION LOGIC
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 if (res) {
                     Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
+                    //intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {

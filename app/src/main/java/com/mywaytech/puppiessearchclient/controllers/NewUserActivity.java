@@ -62,7 +62,8 @@ public class NewUserActivity extends AppCompatActivity {
                     if (isInserted == true) {
                         Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-                        intent.putExtra(MainActivity.EXTRA_USERDATA, newUserObject);
+                        intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+                        //intent.putExtra(MainActivity.EXTRA_USERDATA, newUserObject);
                         startActivity(intent);
                     } else {
                         Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();

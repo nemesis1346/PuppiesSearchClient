@@ -21,15 +21,16 @@ import com.mywaytech.puppiessearchclient.models.UserPetObject;
  */
 public class MainActivity extends BaseActivity implements SearchDialog.PassDataFragment {
 
-    public static  final String EXTRA_USERDATA="com.mywaytech.puppiessearchclient.extras.extra_userdata";
-
-    public static  final String EXTRA_NEWPET_DATA="com.mywaytech.puppiessearchclient.extras.extra_newpet_data";
+    public static final String EXTRA_USERDATA = "com.mywaytech.puppiessearchclient.extras.extra_userdata";
+    public static final String EXTRA_EMAIL_FORAUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_forauth";
+    public static final String EXTRA_NEWPET_DATA = "com.mywaytech.puppiessearchclient.extras.extra_newpet_data";
 
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
-    int value=-1;
+    int value = -1;
 
+    private String emailForAuth;
     private NewUserObject newUserObject;
     private UserPetObject userPetObject;
 
@@ -38,7 +39,8 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         super.onCreate(savedInstanceState);
 
         //newUserObject= (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA);
-        userPetObject= (UserPetObject) getIntent().getSerializableExtra(EXTRA_NEWPET_DATA);
+        userPetObject = (UserPetObject) getIntent().getSerializableExtra(EXTRA_NEWPET_DATA);
+        emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -48,10 +50,10 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(value==-1){
-                    value=0;
+                if (value == -1) {
+                    value = 0;
                 }
-                selectTab(tab.getPosition(),value);
+                selectTab(tab.getPosition(), value);
             }
 
             @Override
@@ -64,7 +66,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
             }
         });
-        selectTab(FRAG0_POS,0);
+        selectTab(FRAG0_POS, 0);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 return true;
             case R.id.action_account:
                 intent = new Intent(MainActivity.this, AccountActivity.class);
-                //intent.putExtra(AccountActivity.EXTRA_USERDATA_IN, newUserObject);
+                intent.putExtra(AccountActivity.EXTRA_EMAIL, emailForAuth);
                 startActivity(intent);
                 return true;
             case R.id.action_map:
@@ -111,20 +113,20 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     }
 
 
-    private void selectTab(int position,int value) {
+    private void selectTab(int position, int value) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
         switch (position) {
             case FRAG0_POS:
-                fragment = WallFragment.newInstance(position,value);
+                fragment = WallFragment.newInstance(position, value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
             case FRAG1_POS:
-                fragment = AdoptionFragment.newInstance(position,value);
+                fragment = AdoptionFragment.newInstance(position, value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
             default:
-                fragment = WallFragment.newInstance(position,value);
+                fragment = WallFragment.newInstance(position, value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
 
@@ -146,7 +148,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     @Override
     public void backData(int value) {
         Log.d("backdata", "" + value);
-        this.value=value;
-        selectTab(tabLayout.getSelectedTabPosition(),value);
+        this.value = value;
+        selectTab(tabLayout.getSelectedTabPosition(), value);
     }
 }

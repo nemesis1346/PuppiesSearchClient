@@ -21,7 +21,7 @@ public class UserDatabase extends SQLiteOpenHelper {
 
 
     public UserDatabase(Context context) {
-        super(context, context.getExternalFilesDir(null) +"/"+ DATABASE_NAME, null, 1);
+        super(context, context.getExternalFilesDir(null) + "/" + DATABASE_NAME, null, 1);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
 
-    public boolean insertData(String name,String password, String email, String address) {
+    public boolean insertData(String name, String password, String email, String address) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL2, name);
@@ -49,21 +49,30 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean getUserdata(String email) {
+    public boolean consultData(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME+" WHERE EMAIL=?",new String[]{email} );
-        Log.d("resultCount:",""+res.getCount());
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE EMAIL=?", new String[]{email});
+        Log.d("resultCount:", "" + res.getCount());
         return res.moveToFirst();
     }
 
-public String getData(String email){
-    SQLiteDatabase db = this.getWritableDatabase();
-    Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME+" WHERE EMAIL=?",new String[]{email} );
-    if(!res.moveToFirst()){
-        return null;
-    }else{
-        return res.getString(res.getColumnIndex("EMAIL"));
+    public String getEmail(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE EMAIL=?", new String[]{email});
+        if (!res.moveToFirst()) {
+            return null;
+        } else {
+            return res.getString(res.getColumnIndex("EMAIL"));
+        }
     }
 
-}
+    public String[] getAllDatabyEmail(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE EMAIL=?", new String[]{email});
+        if (!res.moveToFirst()) {
+            return null;
+        } else {
+            return new String[]{res.getString(res.getColumnIndex("NAME")),res.getString(res.getColumnIndex("EMAIL")),res.getString(res.getColumnIndex("ADDRESS"))};
+        }
+    }
 }
