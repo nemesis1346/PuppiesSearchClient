@@ -58,6 +58,8 @@ public class WallFragment extends Fragment {
     private String[] mAddress_30_lost;
     private String[] mComent_30_lost;
 
+    private UserPetObject updatedPet;
+    public static final String EXTRA_UPDATE_PET = "com.mywaytech.puppiessearchclient.extras.extra_update_pet";
 
     private int[] position_10 = new int[]{0, 1, 2, 3, 4, 5};
     private int[] position_20 = new int[]{7, 1, 9, 3, 11, 5, 8, 2, 10, 4, 6, 0, 5};
@@ -157,7 +159,8 @@ public class WallFragment extends Fragment {
                 break;
         }
 
-
+//here must come the processing
+     //   onActivityResult(PET_REQUEST,Activity.RESULT_OK,this);
 
         wallAdapter = new WallAdapter(getContext(), object_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -176,15 +179,17 @@ public class WallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), NewPetActivity.class);
+            int pet_activity_value=1;
+            intent.putExtra(NewPetActivity.FRAGMENT_VALUE,pet_activity_value);
             startActivityForResult(intent,PET_REQUEST);
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PET_REQUEST && resultCode == Activity.RESULT_OK) {
-
+          updatedPet= (UserPetObject) data.getSerializableExtra(EXTRA_UPDATE_PET);
+            wallAdapter.updateData(updatedPet);
         }
     }
 

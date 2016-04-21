@@ -63,6 +63,7 @@ public class NewUserActivity extends AppCompatActivity {
                         Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
                         intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+                      //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         //intent.putExtra(MainActivity.EXTRA_USERDATA, newUserObject);
                         startActivity(intent);
                     } else {

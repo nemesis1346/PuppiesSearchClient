@@ -15,6 +15,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.services.UserDatabase;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -25,6 +26,8 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     public static final String EXTRA_EMAIL_FORAUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_forauth";
     public static final String EXTRA_NEWPET_DATA = "com.mywaytech.puppiessearchclient.extras.extra_newpet_data";
 
+    public static final String EXTRA_FRAGMENT_VAL = "com.mywaytech.puppiessearchclient.extras.extra_fragment_val";
+
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
@@ -34,13 +37,22 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     private NewUserObject newUserObject;
     private UserPetObject userPetObject;
 
+    private String[] email_second_method;
+
+    private UserDatabase myDB;
+
+    private int frag_val;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //newUserObject= (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA);
         userPetObject = (UserPetObject) getIntent().getSerializableExtra(EXTRA_NEWPET_DATA);
         emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
+        frag_val = getIntent().getIntExtra(EXTRA_FRAGMENT_VAL, 0);
+
+        myDB = new UserDatabase(this);
+        //   email_second_method=new String[]{myDB.getLastRow()[0],myDB.getLastRow()[1],myDB.getLastRow()[2]};
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -66,7 +78,20 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
             }
         });
-        selectTab(FRAG0_POS, 0);
+
+
+        switch(frag_val){
+            case 1:
+                selectTab(FRAG0_POS, 0);
+                break;
+            case 2:
+                selectTab(FRAG0_POS, 1);
+                break;
+            default:
+                selectTab(FRAG0_POS, 0);
+                break;
+        }
+
     }
 
     @Override
@@ -85,6 +110,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
             case R.id.action_account:
                 intent = new Intent(MainActivity.this, AccountActivity.class);
                 intent.putExtra(AccountActivity.EXTRA_EMAIL, emailForAuth);
+                //  intent.putExtra(AccountActivity.EXTRA_EMAIL, email_second_method[1]);
                 startActivity(intent);
                 return true;
             case R.id.action_map:
@@ -150,5 +176,12 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         Log.d("backdata", "" + value);
         this.value = value;
         selectTab(tabLayout.getSelectedTabPosition(), value);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }

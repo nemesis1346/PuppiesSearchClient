@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         myDB = new UserDatabase(this);
 
 
-        uMail = (EditText) findViewById(R.id.edit_text_mail);
+        uMail = (EditText) findViewById(R.id.edit_text_mail_input);
         uPassword = (EditText) findViewById(R.id.edit_text_password);
         bLogin = (Button) findViewById(R.id.btn_login);
         bLogin.setOnClickListener(LoginListener);
@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             Boolean res = myDB.consultData(uMail.getText().toString());
+          //  String email_in=myDB.getEmail(uMail.getText().toString());
 
             //AUTENTIFICATION LOGIC
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
@@ -57,8 +58,8 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 if (res) {
                     Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
-                    //intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
+                  //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();

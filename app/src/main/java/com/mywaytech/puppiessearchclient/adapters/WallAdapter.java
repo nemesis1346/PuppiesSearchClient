@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -51,7 +52,21 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
        // holder.petImage.setImageResource(mListItems.get(position).getpImage());
         int width = holder.petImage.getWidth();
         int height=holder.petImage.getHeight();
-       holder.petImage.setImageBitmap(decodeSampledBitmapFromResource(mContext.getResources(),mListItems.get(position).getpImage(), 200, 200));
+
+
+        if(mListItems.get(position).getImagePath()!=null) {
+            File imgFile = new  File(mListItems.get(position).getImagePath());
+
+            if(imgFile.exists()){
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                holder.petImage.setImageBitmap(myBitmap);
+
+            }
+        }else{
+            holder.petImage.setImageBitmap(decodeSampledBitmapFromResource(mContext.getResources(), mListItems.get(position).getpImage(), 200, 200));
+        }
+
         holder.userAddres.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
 
@@ -134,5 +149,10 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
     public interface CallBacks {
         public void onClickListener(UserPetObject listItem);
+    }
+
+    public void updateData(UserPetObject userPetObject){
+        mListItems.add(0,userPetObject);
+        notifyDataSetChanged();
     }
 }

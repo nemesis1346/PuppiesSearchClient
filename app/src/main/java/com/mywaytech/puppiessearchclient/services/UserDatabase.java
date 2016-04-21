@@ -75,4 +75,15 @@ public class UserDatabase extends SQLiteOpenHelper {
             return new String[]{res.getString(res.getColumnIndex("NAME")),res.getString(res.getColumnIndex("EMAIL")),res.getString(res.getColumnIndex("ADDRESS"))};
         }
     }
+
+    public String[] getLastRow(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM "+TABLE_NAME+" ORDER BY EMAIL DESC LIMIT 1",null);
+        if (!res.moveToFirst()) {
+            return null;
+        } else {
+            return new String[]{res.getString(res.getColumnIndex("NAME")),res.getString(res.getColumnIndex("EMAIL")),res.getString(res.getColumnIndex("ADDRESS"))};
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class AdoptionFragment extends Fragment {
     private WallAdapter wallAdapter;
     private ArrayList<UserPetObject> object_list;
 
+    private static final int PET_REQUEST = 0;
+
     private int[] imagArray_10_adoption;
     private String[] mUser_10_adoption;
     private String[] mAddress_10_adoption;
@@ -54,6 +57,9 @@ public class AdoptionFragment extends Fragment {
     private int[] position_30 = new int[]{14, 8, 2, 15, 9, 3, 16, 10, 4, 17, 11, 5, 12, 6, 13, 7, 1, 0};
 
     private int mValue;
+    private UserPetObject newadoptPet;
+    public static final String EXTRA_ADOPT_PET = "com.mywaytech.puppiessearchclient.extras.extra_adopt_pet";
+
 
 
     @Override
@@ -164,10 +170,20 @@ public class AdoptionFragment extends Fragment {
     public View.OnClickListener addListener_adoption = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            int adoption_activity_value=2;
             Intent intent = new Intent(getContext(), NewPetActivity.class);
-            startActivity(intent);
+            intent.putExtra(NewPetActivity.FRAGMENT_VALUE,adoption_activity_value);
+            startActivityForResult(intent, PET_REQUEST);
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode ==PET_REQUEST && resultCode == Activity.RESULT_OK) {
+            newadoptPet = (UserPetObject) data.getSerializableExtra(EXTRA_ADOPT_PET);
+            wallAdapter.updateData(newadoptPet);
+        }
+    }
 
     public static AdoptionFragment newInstance(int position, int value) {
         AdoptionFragment fragment = new AdoptionFragment();
