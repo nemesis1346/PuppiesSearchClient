@@ -23,10 +23,10 @@
         <activity android:name=".controllers.MapActivity"></activity>
 
 
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-        <uses-permission android:name="com.mywaytech.puppiessearchclient.READ_CONTENT"/>
-        <uses-permission android:name="com.mywaytech.puppiessearchclient.WRITE_CONTENT"/>
+
 
     </application>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.mywaytech.puppiessearchclient.READ_CONTENT"/>
+    <uses-permission android:name="com.mywaytech.puppiessearchclient.WRITE_CONTENT"/>
 </manifest>

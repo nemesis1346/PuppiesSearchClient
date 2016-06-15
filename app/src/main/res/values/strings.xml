@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PuppiesSearchClient</string>
+    <string name="app_name">My Best Friend</string>
     <string name="hint_username">Nombre del Usuario</string>
     <string name="hint_mail">Email</string>
     <string name="hint_password">Contraseña</string>
