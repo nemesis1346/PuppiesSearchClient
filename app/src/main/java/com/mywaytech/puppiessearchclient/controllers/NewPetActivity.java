@@ -48,13 +48,13 @@ public class NewPetActivity extends BaseActivity {
 
     private ImageView imageShow;
 
-    public static final String FRAGMENT_VALUE= "com.mywaytech.puppiessearchclient.extras.extra_fragment_value";
+    public static final String FRAGMENT_VALUE = "com.mywaytech.puppiessearchclient.extras.extra_fragment_value";
 
     private Bitmap photo;
     private UserPetObject userPetObject;
 
     private File file;
-private int callback;
+    private int callback;
     private String final_path;
 
     @Override
@@ -72,7 +72,7 @@ private int callback;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        callback=getIntent().getIntExtra(FRAGMENT_VALUE,0);
+        callback = getIntent().getIntExtra(FRAGMENT_VALUE, 0);
 
         newAddress = (EditText) findViewById(R.id.edit_text_address_lost_activity);
         newComment = (EditText) findViewById(R.id.edit_text_comment_lost_activity);
@@ -111,7 +111,7 @@ private int callback;
             }
 
             file = new File(getBaseContext().getExternalFilesDir(null) + "/images", "img_" + System.currentTimeMillis() + ".jpg");
-            final_path=file.getPath();
+            final_path = file.getPath();
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 photo.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
@@ -146,24 +146,24 @@ private int callback;
         public void onClick(View v) {
             Intent intent = new Intent();
             //intent.putExtra(MainActivity.EXTRA_NEWPET_DATA, userPetObject);
-            if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty()||final_path.isEmpty()) {
+            if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty() || final_path.isEmpty()) {
                 Toast.makeText(NewPetActivity.this, "Ingrese Campos", Toast.LENGTH_LONG).show();
             } else {
                 userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), final_path, newComment.getText().toString());
-                switch (callback){
+                switch (callback) {
                     case 1:
                         intent.putExtra(WallFragment.EXTRA_UPDATE_PET, userPetObject);
-                        setResult(Activity.RESULT_OK,intent);
+                        setResult(Activity.RESULT_OK, intent);
                         finish();
                         break;
                     case 2:
                         intent.putExtra(AdoptionFragment.EXTRA_ADOPT_PET, userPetObject);
-                        setResult(Activity.RESULT_OK,intent);
+                        setResult(Activity.RESULT_OK, intent);
                         finish();
                         break;
                     default:
                         intent.putExtra(WallFragment.EXTRA_UPDATE_PET, userPetObject);
-                        setResult(Activity.RESULT_OK,intent);
+                        setResult(Activity.RESULT_OK, intent);
                         finish();
                         break;
                 }

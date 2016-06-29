@@ -2,16 +2,32 @@ package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.UserDatabase;
+
+import java.util.UUID;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -24,7 +40,10 @@ public class NewUserActivity extends AppCompatActivity {
     private EditText uPassword_repeat;
     private UserDatabase myDB;
     private EditText uAddress;
-
+    private DatabaseReference myfireDB;
+    private String IdFirebaseUser;
+    private FirebaseAuth mAuth;
+    //private FirebaseAuth.AuthStateListener mAuthListener;
 
     private NewUserObject newUserObject;
 
@@ -34,13 +53,35 @@ public class NewUserActivity extends AppCompatActivity {
 
         myDB = new UserDatabase(this);
 
+        //FIREBASE
+      //  myfireDB = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        //LISTENER OF FIREBASE
+       // myfireDB.addValueEventListener(fireListener);
+//        myfireDB.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                IdFirebaseUser = dataSnapshot.getValue().toString();
+//                //String value=dataSnapshot.getValue().toString();
+//                Log.d("ValueChanged", "Value is: " + IdFirebaseUser);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.w("ERROR", "Failed to read value: " + databaseError.toException());
+//            }
+//        });
+
+        ////////////////////////////
+
         setContentView(R.layout.activity_new_user);
         uName = (EditText) findViewById(R.id.edit_text_name);
         uEmail = (EditText) findViewById(R.id.edit_text_mail);
         uPassword = (EditText) findViewById(R.id.edit_text_password);
         uSignin = (Button) findViewById(R.id.btn_singin);
         uPassword_repeat = (EditText) findViewById(R.id.edit_text_password_repeat);
-        uAddress= (EditText) findViewById(R.id.edit_text_address);
+        uAddress = (EditText) findViewById(R.id.edit_text_address);
 
         uSignin.setOnClickListener(signInListener);
 
@@ -54,31 +95,77 @@ public class NewUserActivity extends AppCompatActivity {
             newUserObject = new NewUserObject(uName.getText().toString(), uEmail.getText().toString(), uPassword.getText().toString());
 
             //PERSISTENCE METHOD
-            if (uName.getText().toString().isEmpty() || uEmail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()||uPassword_repeat.getText().toString().isEmpty()||uAddress.getText().toString().isEmpty()) {
+            if (uName.getText().toString().isEmpty() || uEmail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty() || uPassword_repeat.getText().toString().isEmpty() || uAddress.getText().toString().isEmpty()) {
                 Toast.makeText(NewUserActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
             } else {
                 if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
-                    boolean isInserted = myDB.insertData(uName.getText().toString(),uPassword.getText().toString(), uEmail.getText().toString(),uAddress.getText().toString() );
-                    if (isInserted == true) {
-                        Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-                        intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
-                      //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        //intent.putExtra(MainActivity.EXTRA_USERDATA, newUserObject);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();
-                        //if it arrives here, means that there was some problem with the registration
-                    }
+                        //FIREBASE INTEND
+                        //UUID uniquekey = UUID.randomUUID();
+                        //myfireDB.child("users").child(uniquekey.toString()).setValue(newUserObject);
+
+                        mAuth.createUserWithEmailAndPassword(uEmail.getText().toString(),uPassword.getText().toString())
+                                .addOnCompleteListener(NewUserActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        Log.d("Success on Creation", "CreateWithEmail:onComplete:" + task.isSuccessful());
+                                        if(!task.isSuccessful()){
+                                            Log.w("error", "signInWithEmail", task.getException());
+                                            Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();
+                                        }else {
+                                            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
+                                            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+                                            startActivity(intent);
+                                        }
+                                    }
+                                });
                 } else {
                     Toast.makeText(NewUserActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
                 }
 
             }
-
-
-
         }
     };
+
+    public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
+            } else {
+                Log.d("logout", "onAuthStateChanged:signed_out");
+            }
+        }
+    };
+
+//    public ValueEventListener fireListener = new ValueEventListener() {
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            IdFirebaseUser = dataSnapshot.getValue().toString();
+//            //String value=dataSnapshot.getValue().toString();
+//            Log.d("ValueChanged", "Value is: " + IdFirebaseUser);
+//        }
+//
+//        @Override
+//        public void onCancelled(DatabaseError databaseError) {
+//            Log.w("ERROR", "Failed to read value: " + databaseError.toException());
+//        }
+//    };
+
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        mAuth.addAuthStateListener(mAuthListener);
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if (mAuthListener != null) {
+//            mAuth.removeAuthStateListener(mAuthListener);
+//        }
+//    }
 
 }
