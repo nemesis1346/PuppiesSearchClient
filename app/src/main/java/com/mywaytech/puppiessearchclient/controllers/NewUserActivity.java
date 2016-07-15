@@ -25,6 +25,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.services.UserDatabase;
 
 import java.util.UUID;
@@ -32,7 +33,7 @@ import java.util.UUID;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class NewUserActivity extends AppCompatActivity {
+public class NewUserActivity extends AppCompatActivity implements  FireBaseHandler.Callback{
     private EditText uName;
     private EditText uEmail;
     private EditText uPassword;
@@ -54,11 +55,11 @@ public class NewUserActivity extends AppCompatActivity {
         myDB = new UserDatabase(this);
 
         //FIREBASE
-      //  myfireDB = FirebaseDatabase.getInstance().getReference();
+        //  myfireDB = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
         //LISTENER OF FIREBASE
-       // myfireDB.addValueEventListener(fireListener);
+        // myfireDB.addValueEventListener(fireListener);
 //        myfireDB.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -99,26 +100,31 @@ public class NewUserActivity extends AppCompatActivity {
                 Toast.makeText(NewUserActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
             } else {
                 if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
-                        //FIREBASE INTEND
-                        //UUID uniquekey = UUID.randomUUID();
-                        //myfireDB.child("users").child(uniquekey.toString()).setValue(newUserObject);
+                    //FIREBASE INTEND
+                    //UUID uniquekey = UUID.randomUUID();
+                    //myfireDB.child("users").child(uniquekey.toString()).setValue(newUserObject);
 
-                        mAuth.createUserWithEmailAndPassword(uEmail.getText().toString(),uPassword.getText().toString())
-                                .addOnCompleteListener(NewUserActivity.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        Log.d("Success on Creation", "CreateWithEmail:onComplete:" + task.isSuccessful());
-                                        if(!task.isSuccessful()){
-                                            Log.w("error", "signInWithEmail", task.getException());
-                                            Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();
-                                        }else {
-                                            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-                                            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
-                                            startActivity(intent);
-                                        }
-                                    }
-                                });
+                    FireBaseHandler.getInstance(NewUserActivity.this)
+                            .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), NewUserActivity.this,NewUserActivity.this);
+
+
+
+//                        mAuth.createUserWithEmailAndPassword(uEmail.getText().toString(),uPassword.getText().toString())
+//                                .addOnCompleteListener(NewUserActivity.this, new OnCompleteListener<AuthResult>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                                        Log.d("Success on Creation", "CreateWithEmail:onComplete:" + task.isSuccessful());
+//                                        if(!task.isSuccessful()){
+//                                            Log.w("error", "signInWithEmail", task.getException());
+//                                            Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();
+//                                        }else {
+//                                            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
+//                                            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
+//                                            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+//                                            startActivity(intent);
+//                                        }
+//                                    }
+//                                });
                 } else {
                     Toast.makeText(NewUserActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
                 }
@@ -127,17 +133,29 @@ public class NewUserActivity extends AppCompatActivity {
         }
     };
 
-    public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
-            } else {
-                Log.d("logout", "onAuthStateChanged:signed_out");
-            }
+    @Override
+    public void onCompleteSigning(boolean isSigned) {
+        if (isSigned) {
+            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
+            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
+            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+            startActivity(intent);
+        } else {
+            Toast.makeText(NewUserActivity.this, "Problema de Registro", Toast.LENGTH_LONG).show();
         }
-    };
+    }
+
+//    public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+//        @Override
+//        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//            FirebaseUser user = firebaseAuth.getCurrentUser();
+//            if (user != null) {
+//                Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
+//            } else {
+//                Log.d("logout", "onAuthStateChanged:signed_out");
+//            }
+//        }
+//    };
 
 //    public ValueEventListener fireListener = new ValueEventListener() {
 //        @Override

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.services.UserDatabase;
 
 /**
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         myDB = new UserDatabase(this);
 
         //FIREBASE ACTIONS
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
         /////////
 
         uMail = (EditText) findViewById(R.id.edit_text_mail_input);
@@ -64,23 +65,34 @@ public class LoginActivity extends AppCompatActivity {
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "No ha ingresado Usuario o Contraseña", Toast.LENGTH_LONG).show();
             } else {
-                    //FIREBASE SIGN METHOD
-                    mAuth.signInWithEmailAndPassword(uMail.getText().toString(), uPassword.getText().toString())
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.w("Signing Error", "signInWithEmail", task.getException());
-                                        Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
-                                    }else{
-                                        Log.d("Signed Sucessfully", "signInWithEmail:onComplete:" + task.isSuccessful());
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
-                                        intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
+                //FIREBASE SIGN METHOD
+                boolean isLogged = FireBaseHandler.getInstance(LoginActivity.this)
+                        .fireBaseLogin(uMail.getText().toString(), uPassword.getText().toString(), LoginActivity.this);
+                if (isLogged) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
+                    intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
+                }
+
+//                    mAuth.signInWithEmailAndPassword(uMail.getText().toString(), uPassword.getText().toString())
+//                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<AuthResult> task) {
+//                                    if (!task.isSuccessful()) {
+//                                        Log.w("Signing Error", "signInWithEmail", task.getException());
+//                                        Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
+//                                    }else{
+//                                        Log.d("Signed Sucessfully", "signInWithEmail:onComplete:" + task.isSuccessful());
+//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                        Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
+//                                        intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
+//                                        startActivity(intent);
+//                                    }
+//                                }
+//                            });
             }
         }
     };
@@ -92,6 +104,8 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    //TODO AFTERWORDS LOOK FOR A FIX TO THIS CODE, IT SHOULD BE ON THE FIREBASE HANDLER
 
     public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -108,14 +122,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        //mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+           // mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 
