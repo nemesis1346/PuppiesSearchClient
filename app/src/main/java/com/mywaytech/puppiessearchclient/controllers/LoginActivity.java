@@ -28,7 +28,7 @@ import com.mywaytech.puppiessearchclient.services.UserDatabase;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements FireBaseHandler.CallbackLogin {
     private EditText uMail;
     private EditText uPassword;
     private Button bLogin;
@@ -42,10 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         myDB = new UserDatabase(this);
 
-        //FIREBASE ACTIONS
-        //mAuth = FirebaseAuth.getInstance();
-        /////////
-
         uMail = (EditText) findViewById(R.id.edit_text_mail_input);
         uPassword = (EditText) findViewById(R.id.edit_text_password);
         bLogin = (Button) findViewById(R.id.btn_login);
@@ -53,49 +49,33 @@ public class LoginActivity extends AppCompatActivity {
 
         bNewUser = (Button) findViewById(R.id.btn_new_user);
         bNewUser.setOnClickListener(newUserListener);
-
-
     }
 
     public View.OnClickListener LoginListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            //AUTENTIFICATION LOGIC
+            //VALIDATION LOGIC
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "No ha ingresado Usuario o Contraseña", Toast.LENGTH_LONG).show();
             } else {
                 //FIREBASE SIGN METHOD
-                boolean isLogged = FireBaseHandler.getInstance(LoginActivity.this)
-                        .fireBaseLogin(uMail.getText().toString(), uPassword.getText().toString(), LoginActivity.this);
-                if (isLogged) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
-                    intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
-                }
-
-//                    mAuth.signInWithEmailAndPassword(uMail.getText().toString(), uPassword.getText().toString())
-//                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<AuthResult> task) {
-//                                    if (!task.isSuccessful()) {
-//                                        Log.w("Signing Error", "signInWithEmail", task.getException());
-//                                        Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
-//                                    }else{
-//                                        Log.d("Signed Sucessfully", "signInWithEmail:onComplete:" + task.isSuccessful());
-//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                        Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
-//                                        intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
-//                                        startActivity(intent);
-//                                    }
-//                                }
-//                            });
+                FireBaseHandler.getInstance(LoginActivity.this)
+                        .fireBaseLogin(uMail.getText().toString(), uPassword.getText().toString(), LoginActivity.this, LoginActivity.this);
             }
         }
     };
+
+    @Override
+    public void onCompleteLogging(boolean isLogged) {
+        if (isLogged) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Toast.makeText(LoginActivity.this, "Usuario Identificado", Toast.LENGTH_LONG).show();
+            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uMail.getText().toString()));
+            startActivity(intent);
+        } else {
+            Toast.makeText(LoginActivity.this, "Usuario no Identificado", Toast.LENGTH_LONG).show();
+        }
+    }
 
     public View.OnClickListener newUserListener = new View.OnClickListener() {
         @Override
@@ -129,9 +109,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if (mAuthListener != null) {
-           // mAuth.removeAuthStateListener(mAuthListener);
+            // mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
 }

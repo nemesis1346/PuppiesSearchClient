@@ -33,7 +33,7 @@ import java.util.UUID;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class NewUserActivity extends AppCompatActivity implements  FireBaseHandler.Callback{
+public class NewUserActivity extends AppCompatActivity implements FireBaseHandler.CallbackSign {
     private EditText uName;
     private EditText uEmail;
     private EditText uPassword;
@@ -54,28 +54,6 @@ public class NewUserActivity extends AppCompatActivity implements  FireBaseHandl
 
         myDB = new UserDatabase(this);
 
-        //FIREBASE
-        //  myfireDB = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
-        //LISTENER OF FIREBASE
-        // myfireDB.addValueEventListener(fireListener);
-//        myfireDB.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                IdFirebaseUser = dataSnapshot.getValue().toString();
-//                //String value=dataSnapshot.getValue().toString();
-//                Log.d("ValueChanged", "Value is: " + IdFirebaseUser);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.w("ERROR", "Failed to read value: " + databaseError.toException());
-//            }
-//        });
-
-        ////////////////////////////
-
         setContentView(R.layout.activity_new_user);
         uName = (EditText) findViewById(R.id.edit_text_name);
         uEmail = (EditText) findViewById(R.id.edit_text_mail);
@@ -85,8 +63,6 @@ public class NewUserActivity extends AppCompatActivity implements  FireBaseHandl
         uAddress = (EditText) findViewById(R.id.edit_text_address);
 
         uSignin.setOnClickListener(signInListener);
-
-
     }
 
     public View.OnClickListener signInListener = new View.OnClickListener() {
@@ -100,31 +76,10 @@ public class NewUserActivity extends AppCompatActivity implements  FireBaseHandl
                 Toast.makeText(NewUserActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
             } else {
                 if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
+                    //TODO FIRST, VALIDATE THE EXISTENCE OF CURRENT USER
                     //FIREBASE INTEND
-                    //UUID uniquekey = UUID.randomUUID();
-                    //myfireDB.child("users").child(uniquekey.toString()).setValue(newUserObject);
-
                     FireBaseHandler.getInstance(NewUserActivity.this)
-                            .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), NewUserActivity.this,NewUserActivity.this);
-
-
-
-//                        mAuth.createUserWithEmailAndPassword(uEmail.getText().toString(),uPassword.getText().toString())
-//                                .addOnCompleteListener(NewUserActivity.this, new OnCompleteListener<AuthResult>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                                        Log.d("Success on Creation", "CreateWithEmail:onComplete:" + task.isSuccessful());
-//                                        if(!task.isSuccessful()){
-//                                            Log.w("error", "signInWithEmail", task.getException());
-//                                            Toast.makeText(NewUserActivity.this, "Problema de registro", Toast.LENGTH_LONG).show();
-//                                        }else {
-//                                            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-//                                            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-//                                            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
-//                                            startActivity(intent);
-//                                        }
-//                                    }
-//                                });
+                            .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), NewUserActivity.this, NewUserActivity.this);
                 } else {
                     Toast.makeText(NewUserActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
                 }
@@ -135,19 +90,32 @@ public class NewUserActivity extends AppCompatActivity implements  FireBaseHandl
 
     @Override
     public void onCompleteSigning(boolean isSigned) {
+        boolean isSaved=false;
         if (isSigned) {
-            Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-            Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-            intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
-            startActivity(intent);
+            //GET CURRENT USER INFO
+            isSaved=FireBaseHandler.getInstance(NewUserActivity.this).saveUserObject(newUserObject);
+            if(isSaved){
+                Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
+                Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
+                intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
+                startActivity(intent);
+            }else{
+                Toast.makeText(NewUserActivity.this, "Error al Registrar", Toast.LENGTH_LONG).show();
+            }
         } else {
-            Toast.makeText(NewUserActivity.this, "Problema de Registro", Toast.LENGTH_LONG).show();
+            isSaved=false;
+            Toast.makeText(NewUserActivity.this, "Usuario Existente", Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+
 
 //    public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
 //        @Override
 //        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//            //this is what i need
 //            FirebaseUser user = firebaseAuth.getCurrentUser();
 //            if (user != null) {
 //                Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
