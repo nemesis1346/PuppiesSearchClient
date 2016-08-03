@@ -41,9 +41,7 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
     private EditText uPassword_repeat;
     private UserDatabase myDB;
     private EditText uAddress;
-    private DatabaseReference myfireDB;
-    private String IdFirebaseUser;
-    private FirebaseAuth mAuth;
+
     //private FirebaseAuth.AuthStateListener mAuthListener;
 
     private NewUserObject newUserObject;

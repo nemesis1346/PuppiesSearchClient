@@ -42,22 +42,23 @@ public class AccountActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         authEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-        myDB = new UserDatabase(this);
+
+        //INSTANCE OF LOCAL DATABASE
+        //myDB = new UserDatabase(this);
         //newUserObject=new newUserObject();
 
         mName = (TextView) findViewById(R.id.show_user_name);
         mEmail = (TextView) findViewById(R.id.show_email);
         mAddress= (TextView) findViewById(R.id.show_address);
-        //newUserObject = (NewUserObject) getIntent().getSerializableExtra(EXTRA_USERDATA_IN);
-//        mName.setText(newUserObject.getmName());
-        //       mEmail.setText(newUserObject.getmEmail());
-        retrieve = new String[]{
-                myDB.getAllDatabyEmail(authEmail)[0],
-                myDB.getAllDatabyEmail(authEmail)[1],
-                myDB.getAllDatabyEmail(authEmail)[2]};
-        mName.setText(retrieve[0]);
-        mEmail.setText(retrieve[1]);
-        mAddress.setText(retrieve[2]);
+
+        //PRIOR METHOD USIGN DATABASES
+//        retrieve = new String[]{
+//                myDB.getAllDatabyEmail(authEmail)[0],
+//                myDB.getAllDatabyEmail(authEmail)[1],
+//                myDB.getAllDatabyEmail(authEmail)[2]};
+//        mName.setText(retrieve[0]);
+//        mEmail.setText(retrieve[1]);
+//        mAddress.setText(retrieve[2]);
 
 
     }

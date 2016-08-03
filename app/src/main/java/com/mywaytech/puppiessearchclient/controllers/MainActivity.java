@@ -2,6 +2,7 @@ package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -107,16 +108,21 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
             case R.id.action_search:
                 showDialog();
                 return true;
-            case R.id.action_account:
-                intent = new Intent(MainActivity.this, AccountActivity.class);
-                intent.putExtra(AccountActivity.EXTRA_EMAIL, emailForAuth);
-                //  intent.putExtra(AccountActivity.EXTRA_EMAIL, email_second_method[1]);
-                startActivity(intent);
-                return true;
             case R.id.action_map:
                 intent = new Intent(MainActivity.this, MapActivity.class);
 //                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
                 startActivity(intent);
+                return true;
+            case R.id.menuoptions_account:
+                intent = new Intent(MainActivity.this, AccountActivity.class);
+                intent.putExtra(AccountActivity.EXTRA_EMAIL, emailForAuth);
+                startActivity(intent);
+                return true;
+            case R.id.menuoptions_settings:
+                intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menuoptions_logout:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

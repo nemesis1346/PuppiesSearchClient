@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="pref_key_account"
+        android:title="@string/txt_prefCat_account"
+        >
+
+        <PreferenceScreen
+            android:title="@string/txt_prefCat_account">
+            <Preference
+
+
+                android:title="@string/pref_title_username"/>
+            <Preference
+
+
+                android:title="@string/pref_title_email"/>
+        </PreferenceScreen>
+        <!--<Preference-->
+        <!--android:key="pref_key_sms_delete_limit"-->
+        <!--android:title="@string/pref_title_username" />-->
+        <!--<Preference-->
+        <!--android:key="pref_key_sms_delete_limit"-->
+        <!--android:title="@string/pref_title_email" />-->
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -21,6 +21,14 @@
     <string name="hint_password_repeat">Repita Contraseña</string>
     <string name="hint_address">Dirección</string>
     <string name="hint_name">Persona Responsable</string>
+    <string name="txt_menuoptions_account">Cuenta</string>
+    <string name="txt_menuoptions_settings">Preferencias</string>
+    <string name="txt_menuoptions_logout">Salir</string>
+    <string name="txt_prefCat_account">Cuenta</string>
+    <string name="pref_title_username">Nombre de Usuario</string>
+    <string name="pref_title_email">Correo Electrónico</string>
+    <string name="hint_search_map">Buscar...</string>
+    <string name="api_key">AIzaSyClj3BB5b-yMF5MP_Z5VljSKAufhZa06ZQ</string>
 
     <string-array name="users_10_lost">
         <item>sraguevara</item>

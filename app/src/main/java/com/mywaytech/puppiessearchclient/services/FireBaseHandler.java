@@ -92,7 +92,8 @@ public class FireBaseHandler{
 
     public boolean saveUserObject(NewUserObject newUserObject){
         String uid="";
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user= mFirebaseAuth.getCurrentUser();
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
             mFirebaseDatabase.child("users").child(uid).setValue(newUserObject);
