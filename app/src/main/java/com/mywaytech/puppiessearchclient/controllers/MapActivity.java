@@ -28,6 +28,8 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.LocationModel;
 import com.mywaytech.puppiessearchclient.services.LocationsAsyncTask;
 
+import java.util.Map;
+
 
 /**
  * Created by marco on 4/17/2016.
@@ -136,8 +138,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     @Override
     public void onFinishedSearch(LocationModel locationModel) {
+
         Log.d("onFinishedSearch", "Search finished:" + String.valueOf(locationModel.getLatitude()) + ", " + String.valueOf(locationModel.getLongitude()));
-        drawMapMarkers(locationModel);
+        //TODO: ASK IF THIS VALIDATION IS OK
+        if(locationModel.getLongitude()!=-1 && locationModel.getLatitude()!=-1){
+            drawMapMarkers(locationModel);
+        }else{
+            Toast.makeText(MapActivity.this, "Dirección no Encontrada", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 
