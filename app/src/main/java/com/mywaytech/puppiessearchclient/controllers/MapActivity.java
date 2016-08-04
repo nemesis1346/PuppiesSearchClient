@@ -2,7 +2,9 @@ package com.mywaytech.puppiessearchclient.controllers;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,7 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -34,7 +48,15 @@ import java.util.Map;
 /**
  * Created by marco on 4/17/2016.
  */
-public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationsAsyncTask.Callbacks {
+public class MapActivity extends BaseActivity implements
+        OnMapReadyCallback,
+        LocationsAsyncTask.Callbacks,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener
+
+{
+    private static final int REQUEST_CHECK_SETTINGS = 1;
     public static final int PERMISSIONS_MAP_ACTIVITY = 0;
     private GoogleMap mMap;
     private String[] permissionsArray = new String[]{
@@ -42,6 +64,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             Manifest.permission.ACCESS_COARSE_LOCATION};
 
     private int permissionCheck_FINE_LOCATIONS;
+    private LocationRequest mLocationRequest;
 
     private EditText searchText;
     private Button searchBtn;
@@ -51,6 +74,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient mClient;
+    private Location mCurrentLocation;
 
     @Override
     public int getToolbarTitle() {
@@ -77,7 +101,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         permissionCheck_FINE_LOCATIONS = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 
-        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        mClient =new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        createLocationRequest();
     }
 
     @Override
@@ -141,9 +171,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
         Log.d("onFinishedSearch", "Search finished:" + String.valueOf(locationModel.getLatitude()) + ", " + String.valueOf(locationModel.getLongitude()));
         //TODO: ASK IF THIS VALIDATION IS OK
-        if(locationModel.getLongitude()!=-1 && locationModel.getLatitude()!=-1){
+        if (locationModel.getLongitude() != -1 && locationModel.getLatitude() != -1) {
             drawMapMarkers(locationModel);
-        }else{
+        } else {
             Toast.makeText(MapActivity.this, "Dirección no Encontrada", Toast.LENGTH_LONG).show();
         }
 
@@ -174,15 +204,100 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     @Override
     public void onStart() {
-        super.onStart();
         mClient.connect();
+        super.onStart();
+
     }
 
     @Override
     public void onStop() {
-        super.onStop();
         mClient.disconnect();
+        super.onStop();
+
     }
+
+    public void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setSmallestDisplacement(100);
+        mLocationRequest.setNumUpdates(1);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest)
+                .setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+                final Status status = locationSettingsResult.getStatus();
+
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        if (mCurrentLocation == null) {
+                            startLocationUpdates();
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            status.startResolutionForResult(MapActivity.this, REQUEST_CHECK_SETTINGS);
+
+                        } catch (IntentSender.SendIntentException e) {
+
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        break;
+
+                }
+            }
+        });
+
+    }
+
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Log.d("startLocationUpdates",""+"startL");
+        LocationServices.FusedLocationApi.requestLocationUpdates(mClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        if (mCurrentLocation != null) {
+            Log.d("onLocationChanged","Current LocationEntity: " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
+            //TODO CHANGE THIS IN THE FUTURE
+            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
+            mMap.animateCamera(cameraUpdate);
+            mMap.moveCamera(cameraUpdate);
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 
 //    public LocationModel parseToLocationModel(String locationData) {
 //        LocationModel locationModelResult = new LocationModel();
