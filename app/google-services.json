@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "539840606577",
+    "firebase_url": "https://puppiessearch-7c275.firebaseio.com",
+    "project_id": "puppiessearch-7c275",
+    "storage_bucket": "puppiessearch-7c275.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539840606577:android:0f0fa70aa69d5329",
+        "android_client_info": {
+          "package_name": "com.mywaytech.puppiessearchclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539840606577-ecosf6lplt40avuvm72fnu3dkb3343s5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrcgnuUR289-W74czh5lwK6EqDrycoOfs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
