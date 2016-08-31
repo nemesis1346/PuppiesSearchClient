@@ -75,86 +75,8 @@ public class AdoptionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_adoption, container, false);
 
-        imagArray_10_adoption = new int[]{
-                R.drawable.pet17,
-                R.drawable.pet18,
-                R.drawable.pet19,
-                R.drawable.pet20,
-                R.drawable.pet21,
-                R.drawable.pet16,
-        };
-        mUser_10_adoption = getResources().getStringArray(R.array.users_10_adoption);
-        mAddress_10_adoption = getResources().getStringArray(R.array.address_10_adoption);
-        mComment_10_adoption = getResources().getStringArray(R.array.comment_10_adoption);
 
-        imagArray_20_adoption = new int[]{
-                R.drawable.pet17,
-                R.drawable.pet18,
-                R.drawable.pet19,
-                R.drawable.pet20,
-                R.drawable.pet21,
-                R.drawable.pet16,
-                R.drawable.pet15,
-                R.drawable.pet14,
-                R.drawable.pet13,
-                R.drawable.pet12,
-                R.drawable.pet11,
-                R.drawable.pet10,
-        };
-
-        mUser_20_adoption = getResources().getStringArray(R.array.users_20_adoption);
-        mAddress_20_adoption = getResources().getStringArray(R.array.address_20_adoption);
-        mComment_20_adoption = getResources().getStringArray(R.array.comment_20_adoption);
-
-        imagArray_30_adoption = new int[]{
-                R.drawable.pet17,
-                R.drawable.pet18,
-                R.drawable.pet19,
-                R.drawable.pet20,
-                R.drawable.pet21,
-                R.drawable.pet16,
-                R.drawable.pet15,
-                R.drawable.pet14,
-                R.drawable.pet13,
-                R.drawable.pet12,
-                R.drawable.pet11,
-                R.drawable.pet10,
-                R.drawable.pet9,
-                R.drawable.pet8,
-                R.drawable.pet7,
-                R.drawable.pet6,
-                R.drawable.pet2,
-                R.drawable.pet1,
-        };
-
-        mUser_30_adoption = getResources().getStringArray(R.array.users_30_adoption);
-        mAddress_30_adoption = getResources().getStringArray(R.array.address_30_adoption);
-        mComment_30_adoption = getResources().getStringArray(R.array.comment_30_adoption);
-
-        switch (mValue) {
-            case ARRAY0:
-                for (int i = 0; i < position_10.length; i++) {
-                    object_list.add(new UserPetObject(mUser_10_adoption[position_10[i]], mAddress_10_adoption[position_10[i]], imagArray_10_adoption[position_10[i]], mComment_10_adoption[position_10[i]]));
-                }
-                break;
-            case ARRAY1:
-                for (int i = 0; i < position_20.length; i++) {
-                    object_list.add(new UserPetObject(mUser_20_adoption[position_20[i]], mAddress_20_adoption[position_20[i]], imagArray_20_adoption[position_20[i]], mComment_20_adoption[position_20[i]]));
-                }
-                break;
-            case ARRAY2:
-                for (int i = 0; i < position_30.length; i++) {
-                    object_list.add(new UserPetObject(mUser_30_adoption[position_30[i]], mAddress_30_adoption[position_30[i]], imagArray_30_adoption[position_30[i]], mComment_30_adoption[position_30[i]]));
-                }
-                break;
-            default:
-                for (int i = 0; i < position_10.length; i++) {
-                    object_list.add(new UserPetObject(mUser_10_adoption[position_10[i]], mAddress_10_adoption[position_10[i]], imagArray_10_adoption[position_10[i]], mComment_10_adoption[position_10[i]]));
-                }
-                break;
-        }
-
-        wallAdapter = new WallAdapter(getContext(), object_list);
+        wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_adoption);

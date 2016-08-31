@@ -2,11 +2,14 @@ package com.mywaytech.puppiessearchclient.services;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +19,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.UserPetObject;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -26,12 +35,14 @@ public class FireBaseHandler{
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mFirebaseDatabase;
     private Context mContext;
-
+    private FirebaseStorage mFirebaseStorage;
+    private StorageReference mStorageRef;
 
     private FireBaseHandler(Context mContext) {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase= FirebaseDatabase.getInstance().getReference();
-
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mStorageRef = mFirebaseStorage.getReferenceFromUrl("gs://puppiessearch-7c275.appspot.com");
         this.mContext = mContext;
     }
 
@@ -105,5 +116,25 @@ public class FireBaseHandler{
 
     }
 
+    public void savePetObject(UserPetObject userPetObject){
+        String uid="";
+        FirebaseUser user= mFirebaseAuth.getCurrentUser();
+        if (user != null) {
+            uid = userPetObject.getuId();
+            mFirebaseDatabase.child("users").child(uid).setValue(userPetObject);
+            Toast.makeText(mContext, "Se guardó satisfactoriamente el reporte",Toast.LENGTH_SHORT).show();
+        }else{
+            Log.d("error in creation", ""+"error");
+            Toast.makeText(mContext, "Ocurrió un error el reporte",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public StorageReference imageReferenceInFireBase(UserPetObject userPetObject){
+        StorageReference mImageRef =  mStorageRef.child("images/petImage"+ userPetObject.getuId()+".jpg");
+        return mImageRef;
+    }
+
+
     //TODO getcurrentUserObject Method
+   // public List<>
 }

@@ -1,35 +1,35 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -56,6 +56,7 @@ public class NewPetActivity extends BaseActivity {
     private File file;
     private int callback;
     private String final_path;
+
 
     @Override
     public int getToolbarTitle() {
@@ -103,6 +104,8 @@ public class NewPetActivity extends BaseActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             btn_image.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             btn_image.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
+            //this is the global variable of the photo
             photo = (Bitmap) data.getExtras().get("data");
 
             file = new File(getBaseContext().getExternalFilesDir(null) + "/images");
@@ -125,6 +128,8 @@ public class NewPetActivity extends BaseActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            //TODO ANALIZE AND FIX THIS
             //userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), data.getSerializableExtra(EXTRA_PHOTO).toString(), newComment.getText().toString());
             //data.putExtra(MainActivity.EXTRA_NEWPET_DATA,userPetObject);
         }
@@ -150,10 +155,17 @@ public class NewPetActivity extends BaseActivity {
                 Toast.makeText(NewPetActivity.this, "Ingrese Campos", Toast.LENGTH_LONG).show();
             } else {
                 userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), final_path, newComment.getText().toString());
+//                userPetObject.setImageBitMap(photo);
+
+                byte[] imageByte = Utils.processImagePet(photo);
+                saveImageInFireBase(userPetObject, imageByte);
+
+                //TODO FIX THIS STRUCTURE TO PUT IT INTO THE RESULT OF THE TASK
                 switch (callback) {
                     case 1:
                         intent.putExtra(WallFragment.EXTRA_UPDATE_PET, userPetObject);
                         setResult(Activity.RESULT_OK, intent);
+                        FireBaseHandler.getInstance(NewPetActivity.this).savePetObject(userPetObject);
                         finish();
                         break;
                     case 2:
@@ -174,6 +186,29 @@ public class NewPetActivity extends BaseActivity {
             //startActivityForResult(intent, BACK_TOACTIVITY);
         }
     };
+
+
+    public void saveImageInFireBase(UserPetObject userPetObject, byte[] bitMap) {
+
+        String uniqueImageId = UUID.randomUUID().toString();
+        userPetObject.setuId(uniqueImageId);
+
+        StorageReference storageRef = FireBaseHandler.getInstance(NewPetActivity.this).imageReferenceInFireBase(userPetObject);
+        UploadTask uploadTask = storageRef.putBytes(bitMap);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(NewPetActivity.this, "No se guardo satisfactoriamente la imagen", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Toast.makeText(NewPetActivity.this, "Se guardo satisfactoriamente la imagen", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 
 }

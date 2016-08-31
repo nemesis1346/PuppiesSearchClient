@@ -1,16 +1,22 @@
 package com.mywaytech.puppiessearchclient.models;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by m.maigua on 4/14/2016.
  */
 public class UserPetObject implements Serializable {
+    private String uId;
     private String uName;
     private String uAddress;
     private int pImage;
     private String imagePath;
     private String uComment;
+    private String imageString;
+    //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
     public UserPetObject(String uName, String uAddress, int pImage, String uComment) {
         this.uName = uName;
@@ -24,8 +30,22 @@ public class UserPetObject implements Serializable {
         this.uAddress = uAddress;
         this.imagePath = imagePath;
         this.uComment = uComment;
+    }
 
+    public String getuId() {
+        return uId;
+    }
 
+    public void setuId(String uId) {
+        this.uId = uId;
+    }
+
+    public String getImageString() {
+        return imageString;
+    }
+
+    public void setImageString(String imageString) {
+        this.imageString = imageString;
     }
 
     public String getImagePath() {

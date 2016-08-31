@@ -78,91 +78,11 @@ public class WallFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
 
-        imagArray_10_lost = new int[]{
-                R.drawable.pet1,
-                R.drawable.pet2,
-                R.drawable.pet3,
-                R.drawable.pet4,
-                R.drawable.pet5,
-                R.drawable.pet6,
-        };
-
-        mUser_10_lost = getResources().getStringArray(R.array.users_10_lost);
-        mAddress_10_lost = getResources().getStringArray(R.array.address_10_lost);
-        mComent_10_lost = getResources().getStringArray(R.array.comment_10_lost);
-
-        imagArray_20_lost = new int[]{
-                R.drawable.pet1,
-                R.drawable.pet2,
-                R.drawable.pet3,
-                R.drawable.pet4,
-                R.drawable.pet5,
-                R.drawable.pet6,
-                R.drawable.pet7,
-                R.drawable.pet8,
-                R.drawable.pet9,
-                R.drawable.pet10,
-                R.drawable.pet11,
-                R.drawable.pet12,
-        };
-
-        mUser_20_lost = getResources().getStringArray(R.array.users_20_lost);
-        mAddress_20_lost = getResources().getStringArray(R.array.address_20_lost);
-        mComent_20_lost = getResources().getStringArray(R.array.comment_20_lost);
-
-        imagArray_30_lost = new int[]{
-                R.drawable.pet1,
-                R.drawable.pet2,
-                R.drawable.pet3,
-                R.drawable.pet4,
-                R.drawable.pet5,
-                R.drawable.pet6,
-                R.drawable.pet7,
-                R.drawable.pet8,
-                R.drawable.pet9,
-                R.drawable.pet10,
-                R.drawable.pet11,
-                R.drawable.pet12,
-                R.drawable.pet13,
-                R.drawable.pet14,
-                R.drawable.pet15,
-                R.drawable.pet16,
-                R.drawable.pet17,
-                R.drawable.pet18,
-        };
-
-        mUser_30_lost = getResources().getStringArray(R.array.users_30_lost);
-        mAddress_30_lost = getResources().getStringArray(R.array.address_30_lost);
-        mComent_30_lost = getResources().getStringArray(R.array.comment_30_lost);
-
-
-        switch (mValue) {
-            case ARRAY0:
-                for (int i = 0; i < position_10.length; i++) {
-                    object_list.add(new UserPetObject(mUser_10_lost[position_10[i]], mAddress_10_lost[position_10[i]], imagArray_10_lost[position_10[i]], mComent_10_lost[position_10[i]]));
-                }
-                break;
-            case ARRAY1:
-                for (int i = 0; i < position_20.length; i++) {
-                    object_list.add(new UserPetObject(mUser_20_lost[position_20[i]], mAddress_20_lost[position_20[i]], imagArray_20_lost[position_20[i]], mComent_20_lost[position_20[i]]));
-                }
-                break;
-            case ARRAY2:
-                for (int i = 0; i < position_30.length; i++) {
-                    object_list.add(new UserPetObject(mUser_30_lost[position_30[i]], mAddress_30_lost[position_30[i]], imagArray_30_lost[position_30[i]], mComent_30_lost[position_30[i]]));
-                }
-                break;
-            default:
-                for (int i = 0; i < position_10.length; i++) {
-                    object_list.add(new UserPetObject(mUser_10_lost[position_10[i]], mAddress_10_lost[position_10[i]], imagArray_10_lost[position_10[i]], mComent_10_lost[position_10[i]]));
-                }
-                break;
-        }
 
 //here must come the processing
      //   onActivityResult(PET_REQUEST,Activity.RESULT_OK,this);
 
-        wallAdapter = new WallAdapter(getContext(), object_list);
+        wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
 
