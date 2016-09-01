@@ -37,29 +37,9 @@ public class AdoptionFragment extends Fragment {
 
     private static final int PET_REQUEST = 0;
 
-    private int[] imagArray_10_adoption;
-    private String[] mUser_10_adoption;
-    private String[] mAddress_10_adoption;
-    private String[] mComment_10_adoption;
-
-    private int[] imagArray_20_adoption;
-    private String[] mUser_20_adoption;
-    private String[] mAddress_20_adoption;
-    private String[] mComment_20_adoption;
-
-    private int[] imagArray_30_adoption;
-    private String[] mUser_30_adoption;
-    private String[] mAddress_30_adoption;
-    private String[] mComment_30_adoption;
-
-    private int[] position_10 = new int[]{0, 1, 2, 3, 4, 5};
-    private int[] position_20 = new int[]{7, 1, 9, 3, 11, 5, 8, 2, 10, 4, 6, 0, 5};
-    private int[] position_30 = new int[]{14, 8, 2, 15, 9, 3, 16, 10, 4, 17, 11, 5, 12, 6, 13, 7, 1, 0};
-
     private int mValue;
     private UserPetObject newadoptPet;
     public static final String EXTRA_ADOPT_PET = "com.mywaytech.puppiessearchclient.extras.extra_adopt_pet";
-
 
 
     @Override

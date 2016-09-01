@@ -92,7 +92,6 @@ public class NewPetActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            //  intent.putExtra(NewPetActivity.EXTRA_PHOTO, file);
             startActivityForResult(intent, CAMERA_REQUEST);
         }
     };
@@ -100,7 +99,6 @@ public class NewPetActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             btn_image.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             btn_image.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -129,20 +127,7 @@ public class NewPetActivity extends BaseActivity {
                 e.printStackTrace();
             }
 
-            //TODO ANALIZE AND FIX THIS
-            //userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), data.getSerializableExtra(EXTRA_PHOTO).toString(), newComment.getText().toString());
-            //data.putExtra(MainActivity.EXTRA_NEWPET_DATA,userPetObject);
         }
-
-//        if (requestCode == BACK_TOACTIVITY && resultCode == Activity.RESULT_OK) {
-//            if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty()) {
-//                Toast.makeText(NewPetActivity.this, "Ingrese Campos", Toast.LENGTH_LONG).show();
-//            } else {
-//                userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), imageShow.getImageAlpha(), newComment.getText().toString());
-//                data.putExtra(MainActivity.EXTRA_NEWPET_DATA, userPetObject);
-//                startActivity(data);
-//            }
-//        }
 
     }
 
@@ -150,12 +135,10 @@ public class NewPetActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            //intent.putExtra(MainActivity.EXTRA_NEWPET_DATA, userPetObject);
             if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty() || final_path.isEmpty()) {
                 Toast.makeText(NewPetActivity.this, "Ingrese Campos", Toast.LENGTH_LONG).show();
             } else {
                 userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), final_path, newComment.getText().toString());
-//                userPetObject.setImageBitMap(photo);
 
                 byte[] imageByte = Utils.processImagePet(photo);
                 saveImageInFireBase(userPetObject, imageByte);
@@ -163,27 +146,21 @@ public class NewPetActivity extends BaseActivity {
                 //TODO FIX THIS STRUCTURE TO PUT IT INTO THE RESULT OF THE TASK
                 switch (callback) {
                     case 1:
-                        intent.putExtra(WallFragment.EXTRA_UPDATE_PET, userPetObject);
                         setResult(Activity.RESULT_OK, intent);
                         FireBaseHandler.getInstance(NewPetActivity.this).savePetObject(userPetObject);
                         finish();
                         break;
                     case 2:
-                        intent.putExtra(AdoptionFragment.EXTRA_ADOPT_PET, userPetObject);
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                         break;
                     default:
-                        intent.putExtra(WallFragment.EXTRA_UPDATE_PET, userPetObject);
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                         break;
                 }
 
             }
-
-
-            //startActivityForResult(intent, BACK_TOACTIVITY);
         }
     };
 
@@ -208,7 +185,5 @@ public class NewPetActivity extends BaseActivity {
             }
         });
     }
-
-
 
 }

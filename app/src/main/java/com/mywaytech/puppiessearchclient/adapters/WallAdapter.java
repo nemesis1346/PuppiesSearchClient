@@ -47,12 +47,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-
+        mListItems.get(position);
         holder.userName.setText(mListItems.get(position).getuName());
        // holder.petImage.setImageResource(mListItems.get(position).getpImage());
-        int width = holder.petImage.getWidth();
-        int height=holder.petImage.getHeight();
-
 
         if(mListItems.get(position).getImagePath()!=null) {
             File imgFile = new  File(mListItems.get(position).getImagePath());

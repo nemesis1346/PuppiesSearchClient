@@ -31,6 +31,8 @@ public class UserPetObject implements Serializable {
         this.imagePath = imagePath;
         this.uComment = uComment;
     }
+    public UserPetObject() {
+    }
 
     public String getuId() {
         return uId;

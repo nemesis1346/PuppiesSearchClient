@@ -33,17 +33,28 @@ import java.io.ByteArrayOutputStream;
 public class FireBaseHandler{
     private static FireBaseHandler instance = null;
     private FirebaseAuth mFirebaseAuth;
-    private DatabaseReference mFirebaseDatabase;
+    private DatabaseReference mFirebaseDatabaseReference;
     private Context mContext;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageRef;
 
+    public static final String OBJECT_USERS_NAME = "USERS";
+    public static final String OBJECT_PET_NAME = "PET_FOR_ADOPTION";
+
     private FireBaseHandler(Context mContext) {
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase= FirebaseDatabase.getInstance().getReference();
+        mFirebaseDatabaseReference= FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageRef = mFirebaseStorage.getReferenceFromUrl("gs://puppiessearch-7c275.appspot.com");
         this.mContext = mContext;
+    }
+
+    public DatabaseReference getFirebaseDatabaseReference() {
+        return mFirebaseDatabaseReference;
+    }
+
+    public void setFirebaseDatabaseReference(DatabaseReference firebaseDatabaseReference) {
+        mFirebaseDatabaseReference = firebaseDatabaseReference;
     }
 
     public synchronized static FireBaseHandler getInstance(Context context) {
@@ -107,7 +118,7 @@ public class FireBaseHandler{
         //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
-            mFirebaseDatabase.child("users").child(uid).setValue(newUserObject);
+            mFirebaseDatabaseReference.child("users").child(uid).setValue(newUserObject);
             return true;
         }else{
             Log.d("error in creation", ""+"error");
@@ -121,7 +132,7 @@ public class FireBaseHandler{
         FirebaseUser user= mFirebaseAuth.getCurrentUser();
         if (user != null) {
             uid = userPetObject.getuId();
-            mFirebaseDatabase.child("users").child(uid).setValue(userPetObject);
+            mFirebaseDatabaseReference.child(OBJECT_PET_NAME).child(uid).setValue(userPetObject);
             Toast.makeText(mContext, "Se guardó satisfactoriamente el reporte",Toast.LENGTH_SHORT).show();
         }else{
             Log.d("error in creation", ""+"error");

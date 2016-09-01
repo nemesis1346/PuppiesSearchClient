@@ -17,13 +17,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.reflect.TypeToken;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
 import com.mywaytech.puppiessearchclient.controllers.NewPetActivity;
 import com.mywaytech.puppiessearchclient.controllers.SearchDialog;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marco on 4/13/2016.
@@ -32,45 +41,25 @@ public class WallFragment extends Fragment {
 
     private static final String ARG_POSITION = "ARG POSITION";
     private static final String ARG_VALUE = "ARG VALUE";
-    public static final int ARRAY0 = 0;
-    public static final int ARRAY1 = 1;
-    public static final int ARRAY2 = 2;
-    private int mPosition;
+
     private int mValue;
     private FloatingActionButton btn_add_dog;
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
-    private ArrayList<UserPetObject> object_list;
+    private List<UserPetObject> pet_list;
+    private FireBaseHandler mFireBaseHandler;
+    private DatabaseReference mDatabaseReference;
 
-    private int[] imagArray_10_lost;
-    private String[] mUser_10_lost;
-    private String[] mAddress_10_lost;
-    private String[] mComent_10_lost;
-
-    private int[] imagArray_20_lost;
-    private String[] mUser_20_lost;
-    private String[] mAddress_20_lost;
-    private String[] mComent_20_lost;
     private static final int PET_REQUEST = 0;
-
-    private int[] imagArray_30_lost;
-    private String[] mUser_30_lost;
-    private String[] mAddress_30_lost;
-    private String[] mComent_30_lost;
-
-    private UserPetObject updatedPet;
-    public static final String EXTRA_UPDATE_PET = "com.mywaytech.puppiessearchclient.extras.extra_update_pet";
-
-    private int[] position_10 = new int[]{0, 1, 2, 3, 4, 5};
-    private int[] position_20 = new int[]{7, 1, 9, 3, 11, 5, 8, 2, 10, 4, 6, 0, 5};
-    private int[] position_30 = new int[]{14, 8, 2, 15, 9, 3, 16, 10, 4, 17, 11, 5, 12, 6, 13, 7, 1, 0};
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mValue = getArguments().getInt(ARG_VALUE);
-        object_list = new ArrayList<>();
+        pet_list = new ArrayList<>();
+        mFireBaseHandler = FireBaseHandler.getInstance(getContext());
+        mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_NAME);
+        mDatabaseReference.addValueEventListener(showFireBaseListener);
     }
 
     @Nullable
@@ -78,13 +67,10 @@ public class WallFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wall, container, false);
 
-
-//here must come the processing
-     //   onActivityResult(PET_REQUEST,Activity.RESULT_OK,this);
+        //here must come the processing
 
         wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
         mListView.setLayoutManager(linearLayoutManager);
@@ -99,19 +85,11 @@ public class WallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), NewPetActivity.class);
-            int pet_activity_value=1;
-            intent.putExtra(NewPetActivity.FRAGMENT_VALUE,pet_activity_value);
-            startActivityForResult(intent,PET_REQUEST);
+            int pet_activity_value = 1;
+            intent.putExtra(NewPetActivity.FRAGMENT_VALUE, pet_activity_value);
+            startActivityForResult(intent, PET_REQUEST);
         }
     };
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PET_REQUEST && resultCode == Activity.RESULT_OK) {
-          updatedPet= (UserPetObject) data.getSerializableExtra(EXTRA_UPDATE_PET);
-            wallAdapter.updateData(updatedPet);
-        }
-    }
 
     public static WallFragment newInstance(int position, int value) {
         WallFragment fragment = new WallFragment();
@@ -122,5 +100,23 @@ public class WallFragment extends Fragment {
         return fragment;
     }
 
+    private ValueEventListener showFireBaseListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            pet_list = new ArrayList<>();
+
+            for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
+                UserPetObject object = objectSnapshot.getValue(UserPetObject.class);
+                pet_list.add(object);
+            }
+            wallAdapter.setListItems(pet_list);
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
 }

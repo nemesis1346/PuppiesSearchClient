@@ -48,12 +48,10 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userPetObject = (UserPetObject) getIntent().getSerializableExtra(EXTRA_NEWPET_DATA);
         emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
         frag_val = getIntent().getIntExtra(EXTRA_FRAGMENT_VAL, 0);
 
         myDB = new UserDatabase(this);
-        //   email_second_method=new String[]{myDB.getLastRow()[0],myDB.getLastRow()[1],myDB.getLastRow()[2]};
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
