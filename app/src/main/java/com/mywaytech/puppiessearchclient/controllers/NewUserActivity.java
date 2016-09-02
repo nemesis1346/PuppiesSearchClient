@@ -2,33 +2,16 @@ package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
-import com.mywaytech.puppiessearchclient.services.UserDatabase;
-
-import java.util.UUID;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -39,7 +22,6 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
     private EditText uPassword;
     private Button uSignin;
     private EditText uPassword_repeat;
-    private UserDatabase myDB;
     private EditText uAddress;
 
     //private FirebaseAuth.AuthStateListener mAuthListener;
@@ -50,7 +32,6 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        myDB = new UserDatabase(this);
 
         setContentView(R.layout.activity_new_user);
         uName = (EditText) findViewById(R.id.edit_text_name);
@@ -95,7 +76,6 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
             if(isSaved){
                 Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
                 Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-                intent.putExtra(MainActivity.EXTRA_EMAIL_FORAUTH, myDB.getEmail(uEmail.getText().toString()));
                 startActivity(intent);
             }else{
                 Toast.makeText(NewUserActivity.this, "Error al Registrar", Toast.LENGTH_LONG).show();

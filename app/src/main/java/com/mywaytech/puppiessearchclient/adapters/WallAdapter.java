@@ -139,7 +139,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         }
     }
 
-
     public void setCallbacks(CallBacks callbacks) {
         this.callbacks = callbacks;
     }

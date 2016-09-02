@@ -2,7 +2,6 @@ package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,16 +15,13 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.UserPetObject;
-import com.mywaytech.puppiessearchclient.services.UserDatabase;
 
 /**
  * Created by m.maigua on 4/13/2016.
  */
 public class MainActivity extends BaseActivity implements SearchDialog.PassDataFragment {
 
-    public static final String EXTRA_USERDATA = "com.mywaytech.puppiessearchclient.extras.extra_userdata";
     public static final String EXTRA_EMAIL_FORAUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_forauth";
-    public static final String EXTRA_NEWPET_DATA = "com.mywaytech.puppiessearchclient.extras.extra_newpet_data";
 
     public static final String EXTRA_FRAGMENT_VAL = "com.mywaytech.puppiessearchclient.extras.extra_fragment_val";
 
@@ -35,12 +31,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     int value = -1;
 
     private String emailForAuth;
-    private NewUserObject newUserObject;
-    private UserPetObject userPetObject;
-
-    private String[] email_second_method;
-
-    private UserDatabase myDB;
 
     private int frag_val;
 
@@ -50,8 +40,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
         emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
         frag_val = getIntent().getIntExtra(EXTRA_FRAGMENT_VAL, 0);
-
-        myDB = new UserDatabase(this);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -108,7 +96,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 return true;
             case R.id.action_map:
                 intent = new Intent(MainActivity.this, MapActivity.class);
-//                intent.putExtra(FormActivity.EXTRA_NAME, "Marco");
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_account:
@@ -130,8 +117,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     public void showDialog() {
         FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
         SearchDialog searchDialog = SearchDialog.newInstance();
-
-//        searchDialog.setTargetFragment(,0);
 
         Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {

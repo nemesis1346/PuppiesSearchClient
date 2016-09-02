@@ -25,6 +25,12 @@
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:src="@drawable/ic_dog_clue" />
+
+        <include
+            layout="@layout/row_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
 </LinearLayout>

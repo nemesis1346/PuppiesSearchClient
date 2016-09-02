@@ -3,10 +3,12 @@ package com.mywaytech.puppiessearchclient.controllers.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +55,12 @@ public class WallFragment extends Fragment {
     private FireBaseHandler mFireBaseHandler;
     private DatabaseReference mDatabaseReference;
 
+    private ProgressBar mProgressBar;
+    private Button mRetryBtn;
+    private TextView mProgressTextInfo;
+    private ImageView mProgressErrorImg;
+
+
     private static final int PET_REQUEST = 0;
 
     @Override
@@ -69,6 +80,11 @@ public class WallFragment extends Fragment {
 
         //here must come the processing
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mRetryBtn = (Button) rootView.findViewById(R.id.btn_retry);
+        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
+        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
+        
         wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -78,6 +94,8 @@ public class WallFragment extends Fragment {
         btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_wall);
         btn_add_dog.setOnClickListener(addListener);
         mListView.setAdapter(wallAdapter);
+        wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
+        showProgress();
         return rootView;
     }
 
@@ -100,23 +118,72 @@ public class WallFragment extends Fragment {
         return fragment;
     }
 
+    public RecyclerView.AdapterDataObserver adapterOnChangeData = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            hideProgress();
+        }
+    };
+
     private ValueEventListener showFireBaseListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             pet_list = new ArrayList<>();
-
-            for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
-                UserPetObject object = objectSnapshot.getValue(UserPetObject.class);
-                pet_list.add(object);
-            }
             wallAdapter.setListItems(pet_list);
-
+            showProgress();
+            if (dataSnapshot != null) {
+                for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
+                    UserPetObject object = objectSnapshot.getValue(UserPetObject.class);
+                    pet_list.add(object);
+                }
+                wallAdapter.setListItems(pet_list);
+            } else {
+                showError(R.string.error_no_results_found);
+            }
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-
+            showErrorRetry();
         }
     };
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideProgress();
+    }
+
+    private void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressErrorImg.setVisibility(View.GONE);
+        mRetryBtn.setVisibility(View.GONE);
+        mProgressTextInfo.setText(R.string.pet_loading_message);
+    }
+
+    private void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.GONE);
+        mProgressErrorImg.setVisibility(View.GONE);
+        mRetryBtn.setVisibility(View.GONE);
+    }
+
+    public void showError(@StringRes int stringId) {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressErrorImg.setVisibility(View.VISIBLE);
+        mRetryBtn.setVisibility(View.GONE);
+        mProgressTextInfo.setText(stringId);
+    }
+
+    private void showErrorRetry() {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.GONE);
+        mProgressErrorImg.setVisibility(View.GONE);
+        mRetryBtn.setVisibility(View.VISIBLE);
+    }
 
 }

@@ -35,14 +35,10 @@ import java.util.UUID;
  * Created by m.maigua on 4/13/2016.
  */
 public class NewPetActivity extends BaseActivity {
-    public static final int FRAGOPTIONS1 = 01;
     private EditText newAddress;
     private EditText newComment;
     private EditText newResponsable;
-    private int newImage;
-    static int TAKE_PICTURE_PHOTO = 3;
     private static final int CAMERA_REQUEST = 0;
-    private static final int BACK_TOACTIVITY = 1;
     private Button btn_image;
     private Button btn_report;
 
