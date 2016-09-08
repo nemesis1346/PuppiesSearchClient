@@ -68,9 +68,9 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
     };
 
     @Override
-    public void onCompleteSigning(boolean isSigned) {
-        boolean isSaved=false;
-        if (isSigned) {
+    public void onCompleteSigning(boolean isCreated) {
+        boolean isSaved;
+        if (isCreated) {
             //GET CURRENT USER INFO
             isSaved=FireBaseHandler.getInstance(NewUserActivity.this).saveUserObject(newUserObject);
             if(isSaved){
@@ -82,7 +82,7 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
             }
         } else {
             isSaved=false;
-            Toast.makeText(NewUserActivity.this, "Usuario Existente", Toast.LENGTH_LONG).show();
+            Toast.makeText(NewUserActivity.this, "Email no Existente", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -12,18 +12,10 @@ public class UserPetObject implements Serializable {
     private String uId;
     private String uName;
     private String uAddress;
-    private int pImage;
     private String imagePath;
     private String uComment;
-    private String imageString;
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
-    public UserPetObject(String uName, String uAddress, int pImage, String uComment) {
-        this.uName = uName;
-        this.uAddress = uAddress;
-        this.pImage = pImage;
-        this.uComment = uComment;
-    }
 
     public UserPetObject(String uName,String uAddress,String imagePath, String uComment) {
         this.uName = uName;
@@ -42,13 +34,6 @@ public class UserPetObject implements Serializable {
         this.uId = uId;
     }
 
-    public String getImageString() {
-        return imageString;
-    }
-
-    public void setImageString(String imageString) {
-        this.imageString = imageString;
-    }
 
     public String getImagePath() {
         return imagePath;
@@ -74,13 +59,9 @@ public class UserPetObject implements Serializable {
         this.uAddress = uAddress;
     }
 
-    public int getpImage() {
-        return pImage;
-    }
 
-    public void setpImage(int pImage) {
-        this.pImage = pImage;
-    }
+
+
 
     public String getuComment() {
         return uComment;

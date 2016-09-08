@@ -84,7 +84,7 @@ public class WallFragment extends Fragment {
         mRetryBtn = (Button) rootView.findViewById(R.id.btn_retry);
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
-        
+
         wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 

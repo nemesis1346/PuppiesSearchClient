@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
@@ -37,7 +41,6 @@ import java.util.UUID;
 public class NewPetActivity extends BaseActivity {
     private EditText newAddress;
     private EditText newComment;
-    private EditText newResponsable;
     private static final int CAMERA_REQUEST = 0;
     private Button btn_image;
     private Button btn_report;
@@ -53,6 +56,10 @@ public class NewPetActivity extends BaseActivity {
     private int callback;
     private String final_path;
 
+    private FirebaseUser mCurrentUser;
+    private String mCurrentUserName;
+
+    private FirebaseAuth mFirebaseAuth;
 
     @Override
     public int getToolbarTitle() {
@@ -73,7 +80,6 @@ public class NewPetActivity extends BaseActivity {
 
         newAddress = (EditText) findViewById(R.id.edit_text_address_lost_activity);
         newComment = (EditText) findViewById(R.id.edit_text_comment_lost_activity);
-        newResponsable = (EditText) findViewById(R.id.edit_text_name_lost_activity);
 
         btn_image = (Button) findViewById(R.id.input_image);
         btn_report = (Button) findViewById(R.id.btn_reportar);
@@ -82,6 +88,21 @@ public class NewPetActivity extends BaseActivity {
 
         btn_image.setOnClickListener(addPhoto);
         btn_report.setOnClickListener(backToActivity);
+
+
+        mFirebaseAuth = FireBaseHandler.getInstance(this).getFirebaseAuth();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+
+        mCurrentUser = FireBaseHandler.getInstance(this).getFirebaseAuth().getCurrentUser();
+//        if(mCurrentUser!=null){
+//            for (UserInfo profile : mCurrentUser.getProviderData()) {
+////                mCurrentUserName = mCurrentUser.getDisplayName();
+//                mCurrentUserName=profile.getDisplayName();
+//            }
+//        }else{
+//            Toast.makeText(NewPetActivity.this, "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
+//            finish();
+//        }
     }
 
     public View.OnClickListener addPhoto = new View.OnClickListener() {
@@ -90,6 +111,20 @@ public class NewPetActivity extends BaseActivity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA_REQUEST);
         }
+    };
+
+    private FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            if (mCurrentUser != null) {
+                mCurrentUserName = mCurrentUser.getEmail();
+                Log.d("username: ", "" + mCurrentUserName);
+            } else {
+                Toast.makeText(NewPetActivity.this, "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+
     };
 
     @Override
@@ -131,10 +166,10 @@ public class NewPetActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            if (newResponsable.getText().toString().isEmpty() || newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty() || final_path.isEmpty()) {
+            if (newAddress.getText().toString().isEmpty() || newComment.getText().toString().isEmpty() || final_path.isEmpty()) {
                 Toast.makeText(NewPetActivity.this, "Ingrese Campos", Toast.LENGTH_LONG).show();
             } else {
-                userPetObject = new UserPetObject(newResponsable.getText().toString(), newAddress.getText().toString(), final_path, newComment.getText().toString());
+                userPetObject = new UserPetObject(mCurrentUserName, newAddress.getText().toString(), final_path, newComment.getText().toString());
 
                 byte[] imageByte = Utils.processImagePet(photo);
                 saveImageInFireBase(userPetObject, imageByte);
@@ -181,5 +216,7 @@ public class NewPetActivity extends BaseActivity {
             }
         });
     }
+
+
 
 }

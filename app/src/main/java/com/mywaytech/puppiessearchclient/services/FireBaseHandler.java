@@ -49,6 +49,14 @@ public class FireBaseHandler{
         this.mContext = mContext;
     }
 
+    public FirebaseAuth getFirebaseAuth() {
+        return mFirebaseAuth;
+    }
+
+    public void setFirebaseAuth(FirebaseAuth firebaseAuth) {
+        mFirebaseAuth = firebaseAuth;
+    }
+
     public DatabaseReference getFirebaseDatabaseReference() {
         return mFirebaseDatabaseReference;
     }
@@ -114,8 +122,8 @@ public class FireBaseHandler{
 
     public boolean saveUserObject(NewUserObject newUserObject){
         String uid="";
-        FirebaseUser user= mFirebaseAuth.getCurrentUser();
-        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        FirebaseUser user= mFirebaseAuth.getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
             mFirebaseDatabaseReference.child("users").child(uid).setValue(newUserObject);
