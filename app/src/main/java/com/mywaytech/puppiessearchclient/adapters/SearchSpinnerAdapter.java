@@ -31,16 +31,16 @@ public class SearchSpinnerAdapter extends ArrayAdapter<SearchRangeObject> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View transpositorItemViewDefault= LayoutInflater.from(context).inflate(R.layout.spinner_search,parent, false);
-        TextView arrayTranspositorItemViewDefault= (TextView) transpositorItemViewDefault.findViewById(R.id.spinner_search);
+        View transpositorItemViewDefault= LayoutInflater.from(context).inflate(R.layout.spinner_simple,parent, false);
+        TextView arrayTranspositorItemViewDefault= (TextView) transpositorItemViewDefault.findViewById(R.id.spinner_txt);
         arrayTranspositorItemViewDefault.setText(objects.get(position).getRange());
         return transpositorItemViewDefault;
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        View transpositorItemView=LayoutInflater.from(context).inflate(R.layout.spinner_search,parent,false);
-        TextView arrayTranspositorItemView= (TextView) transpositorItemView.findViewById(R.id.spinner_search);
+        View transpositorItemView=LayoutInflater.from(context).inflate(R.layout.spinner_simple,parent,false);
+        TextView arrayTranspositorItemView= (TextView) transpositorItemView.findViewById(R.id.spinner_txt);
         arrayTranspositorItemView.setText(objects.get(position).getRange());
         return transpositorItemView;
     }

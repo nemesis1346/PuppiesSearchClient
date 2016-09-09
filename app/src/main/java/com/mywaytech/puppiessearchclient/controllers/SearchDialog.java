@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.SearchSpinnerAdapter;
 import com.mywaytech.puppiessearchclient.models.SearchRangeObject;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
 
 import java.util.ArrayList;
 
@@ -60,9 +58,7 @@ public class SearchDialog extends DialogFragment {
         spinnerAdapter = (Spinner) view.findViewById(R.id.main_spinner);
         accept= (Button) view.findViewById(R.id.btn_ok);
         accept.setOnClickListener(backToActivity);
-        searchSpinnerAdapter = new SearchSpinnerAdapter(getContext(), R.layout.spinner_search, object_list);
-
-
+        searchSpinnerAdapter = new SearchSpinnerAdapter(getContext(), R.layout.spinner_simple, object_list);
 
         spinnerAdapter.setAdapter(searchSpinnerAdapter);
         return view;
