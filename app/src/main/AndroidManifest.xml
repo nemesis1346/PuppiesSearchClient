@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mywaytech.puppiessearchclient">
+          package="com.mywaytech.puppiessearchclient">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <application
@@ -10,25 +10,36 @@
         android:theme="@style/AppTheme">
         <activity android:name=".controllers.SplashScreenActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
         </activity>
-        <activity android:name=".controllers.NewUserActivity"></activity>
-        <activity android:name=".controllers.MainActivity"></activity>
-        <activity android:name=".controllers.LoginActivity"></activity>
-        <activity android:name=".controllers.NewPetActivity"></activity>
-        <activity android:name=".controllers.AccountActivity"></activity>
-        <activity android:name=".controllers.MapActivity"></activity>
+        <activity android:name=".controllers.NewUserActivity">
+        </activity>
+        <activity android:name=".controllers.MainActivity">
+        </activity>
+        <activity
+            android:name=".controllers.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity
+            android:name=".controllers.NewPetActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+        <activity android:name=".controllers.AccountActivity">
+        </activity>
+        <activity android:name=".controllers.MapActivity">
+        </activity>
 
-        <activity android:name=".controllers.PreferencesActivity"></activity>
+        <activity android:name=".controllers.PreferencesActivity">
+        </activity>
 
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
         <!--TODO: GET PRODUCTION API KEY-->
         <meta-data
@@ -37,6 +48,7 @@
 
 
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.mywaytech.puppiessearchclient.READ_CONTENT"/>

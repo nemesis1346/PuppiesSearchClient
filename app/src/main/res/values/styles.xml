@@ -8,4 +8,34 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="base_button" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:minHeight">@dimen/btn_min_heigth</item>
+        <item name="android:maxHeight">@dimen/btn_min_heigth</item>
+        <item name="android:minWidth">@dimen/btn_min_width</item>
+        <item name="android:maxWidth">@dimen/btn_min_width</item>
+        <item name="android:layout_margin">@dimen/margin_button</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="base_edit_text" parent="Base.V7.Widget.AppCompat.EditText">
+    <item name="android:minHeight">48dp</item>
+        <item name="android:maxHeight">48dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="main_edit_text" parent="@style/base_edit_text">
+    </style>
+
+    <style
+        name="main_button"
+        parent="@style/base_button">
+    </style>
+
+    <dimen name="btn_min_width">100dp</dimen>
+    <dimen name="btn_min_heigth">48dp</dimen>
+    <dimen name="margin_button">10dp</dimen>
+
 </resources>

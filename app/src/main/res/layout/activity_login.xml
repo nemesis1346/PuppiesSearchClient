@@ -56,27 +56,19 @@
 
                 <Button
                     android:id="@+id/btn_login"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    style="@style/main_button"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
-                    android:gravity="center_vertical"
-                    android:text="@string/btn_login"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorAccent"/>
+                    android:text="@string/btn_login"/>
 
                 <Button
                     android:id="@+id/btn_new_user"
-                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    style="@style/main_button"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimaryDark"
-                    android:gravity="center_vertical"
-                    android:text="@string/btn_new_user"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorAccent"/>
+                    android:text="@string/btn_new_user"/>
             </LinearLayout>
         </RelativeLayout>
 
