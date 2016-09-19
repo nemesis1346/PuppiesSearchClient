@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by Marco on 4/13/2016.
  */
-public class WallFragment extends Fragment {
+public class WallLostFragment extends Fragment {
 
     private static final String ARG_POSITION = "ARG POSITION";
     private static final String ARG_VALUE = "ARG VALUE";
@@ -47,13 +47,24 @@ public class WallFragment extends Fragment {
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
+
+    public static WallLostFragment newInstance(int position, int value) {
+        WallLostFragment fragment = new WallLostFragment();
+        Bundle arg = new Bundle();
+        arg.putInt(ARG_VALUE, value);
+        arg.putInt(ARG_POSITION, position);
+        fragment.setArguments(arg);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mValue = getArguments().getInt(ARG_VALUE);
         pet_list = new ArrayList<>();
         mFireBaseHandler = FireBaseHandler.getInstance(getContext());
-        mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_NAME);
+        mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_LOST);
         mDatabaseReference.addValueEventListener(showFireBaseListener);
     }
 
@@ -83,15 +94,6 @@ public class WallFragment extends Fragment {
     }
 
 
-
-    public static WallFragment newInstance(int position, int value) {
-        WallFragment fragment = new WallFragment();
-        Bundle arg = new Bundle();
-        arg.putInt(ARG_VALUE, value);
-        arg.putInt(ARG_POSITION, position);
-        fragment.setArguments(arg);
-        return fragment;
-    }
 
     public RecyclerView.AdapterDataObserver adapterOnChangeData = new RecyclerView.AdapterDataObserver() {
         @Override

@@ -34,6 +34,9 @@
     <string name="error_no_results_found">No existen resultados</string>
     <string name="pet_loading_message">Cargando mascotas...</string>
     <string name="validation_error_message">Ingrese Campos</string>
+    <string name="success_image_saved">No se guardo satisfactoriamente la imagen</string>
+    <string name="failure_image_saved">Se guardo satisfactoriamente la imagen</string>
+    <string name="report_title">Nuevo Reporte</string>
 
     <string-array name="users_10_lost">
         <item>sraguevara</item>

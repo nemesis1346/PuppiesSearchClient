@@ -14,7 +14,7 @@
         <item name="android:minWidth">@dimen/btn_min_width</item>
         <item name="android:maxWidth">@dimen/btn_min_width</item>
         <item name="android:layout_margin">@dimen/margin_button</item>
-        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimary</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:layout_centerHorizontal">true</item>

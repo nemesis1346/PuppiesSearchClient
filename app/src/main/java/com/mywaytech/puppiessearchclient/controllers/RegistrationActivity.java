@@ -33,7 +33,7 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.activity_new_user);
+        setContentView(R.layout.activity_registration);
         uName = (EditText) findViewById(R.id.edit_text_name);
         uEmail = (EditText) findViewById(R.id.edit_text_mail);
         uPassword = (EditText) findViewById(R.id.edit_text_password);
