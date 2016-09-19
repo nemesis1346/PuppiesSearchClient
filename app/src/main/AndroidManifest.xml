@@ -16,7 +16,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".controllers.NewUserActivity">
+        <activity android:name=".controllers.RegistrationActivity">
         </activity>
         <activity android:name=".controllers.MainActivity">
         </activity>
@@ -25,7 +25,7 @@
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
-            android:name=".controllers.NewPetActivity"
+            android:name=".controllers.ReportActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity android:name=".controllers.AccountActivity">

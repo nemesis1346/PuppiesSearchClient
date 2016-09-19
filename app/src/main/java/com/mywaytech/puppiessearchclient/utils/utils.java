@@ -3,10 +3,6 @@ package com.mywaytech.puppiessearchclient.utils;
 import android.graphics.Bitmap;
 import android.util.Base64;
 
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
-
 import java.io.ByteArrayOutputStream;
 
 /**

@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by m.maigua on 4/14/2016.
  */
-public class UserPetObject implements Serializable {
+public class ReportObject implements Serializable {
     private String uId;
     private String uName;
     private String uAddress;
@@ -17,13 +17,13 @@ public class UserPetObject implements Serializable {
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public UserPetObject(String uName,String uAddress,String imagePath, String uComment) {
+    public ReportObject(String uName, String uAddress, String imagePath, String uComment) {
         this.uName = uName;
         this.uAddress = uAddress;
         this.imagePath = imagePath;
         this.uComment = uComment;
     }
-    public UserPetObject() {
+    public ReportObject() {
     }
 
     public String getuId() {

@@ -1,20 +1,17 @@
 package com.mywaytech.puppiessearchclient.adapters;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.models.ReportObject;
 
 import java.io.File;
 import java.util.List;
@@ -24,10 +21,10 @@ import java.util.List;
  */
 public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder> {
     private Context mContext;
-    private List<UserPetObject> mListItems;
+    private List<ReportObject> mListItems;
     private CallBacks callbacks;
 
-    public WallAdapter(Context mContext, List<UserPetObject> mListItems) {
+    public WallAdapter(Context mContext, List<ReportObject> mListItems) {
         this.mContext = mContext;
         this.mListItems = mListItems;
     }
@@ -39,7 +36,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
     }
 
-    public void setListItems(List<UserPetObject> newListItems) {
+    public void setListItems(List<ReportObject> newListItems) {
         mListItems.clear();
         mListItems.addAll(newListItems);
         notifyDataSetChanged();
@@ -102,11 +99,11 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     }
 
     public interface CallBacks {
-        public void onClickListener(UserPetObject listItem);
+        public void onClickListener(ReportObject listItem);
     }
 
-    public void updateData(UserPetObject userPetObject){
-        mListItems.add(0,userPetObject);
+    public void updateData(ReportObject reportObject){
+        mListItems.add(0, reportObject);
         notifyDataSetChanged();
     }
 }

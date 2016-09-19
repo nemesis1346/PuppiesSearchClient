@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.controllers;
+package com.mywaytech.puppiessearchclient.widgets;
 
 import android.content.Context;
 import android.graphics.Typeface;

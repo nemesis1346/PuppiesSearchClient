@@ -1,15 +1,8 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,23 +12,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.reflect.TypeToken;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
-import com.mywaytech.puppiessearchclient.controllers.NewPetActivity;
-import com.mywaytech.puppiessearchclient.controllers.SearchDialog;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +35,10 @@ public class WallFragment extends Fragment {
     private static final String ARG_VALUE = "ARG VALUE";
 
     private int mValue;
-    private FloatingActionButton btn_add_dog;
+
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
-    private List<UserPetObject> pet_list;
+    private List<ReportObject> pet_list;
     private FireBaseHandler mFireBaseHandler;
     private DatabaseReference mDatabaseReference;
 
@@ -59,9 +46,6 @@ public class WallFragment extends Fragment {
     private Button mRetryBtn;
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
-
-
-    private static final int PET_REQUEST = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,29 +69,20 @@ public class WallFragment extends Fragment {
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
-        wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
+        wallAdapter = new WallAdapter(getContext(), new ArrayList<ReportObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
         mListView.setLayoutManager(linearLayoutManager);
 
-        btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_wall);
-        btn_add_dog.setOnClickListener(addListener);
+
         mListView.setAdapter(wallAdapter);
         wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
         showProgress();
         return rootView;
     }
 
-    public View.OnClickListener addListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getContext(), NewPetActivity.class);
-            int pet_activity_value = 1;
-            intent.putExtra(NewPetActivity.FRAGMENT_VALUE, pet_activity_value);
-            startActivityForResult(intent, PET_REQUEST);
-        }
-    };
+
 
     public static WallFragment newInstance(int position, int value) {
         WallFragment fragment = new WallFragment();
@@ -134,7 +109,7 @@ public class WallFragment extends Fragment {
             showProgress();
             if (dataSnapshot != null) {
                 for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
-                    UserPetObject object = objectSnapshot.getValue(UserPetObject.class);
+                    ReportObject object = objectSnapshot.getValue(ReportObject.class);
                     pet_list.add(object);
                 }
                 wallAdapter.setListItems(pet_list);

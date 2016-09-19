@@ -2,30 +2,22 @@ package com.mywaytech.puppiessearchclient.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
-
-import java.io.ByteArrayOutputStream;
+import com.mywaytech.puppiessearchclient.models.ReportObject;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -135,12 +127,12 @@ public class FireBaseHandler{
 
     }
 
-    public void savePetObject(UserPetObject userPetObject){
+    public void savePetObject(ReportObject reportObject){
         String uid="";
         FirebaseUser user= mFirebaseAuth.getCurrentUser();
         if (user != null) {
-            uid = userPetObject.getuId();
-            mFirebaseDatabaseReference.child(OBJECT_PET_NAME).child(uid).setValue(userPetObject);
+            uid = reportObject.getuId();
+            mFirebaseDatabaseReference.child(OBJECT_PET_NAME).child(uid).setValue(reportObject);
             Toast.makeText(mContext, "Se guardó satisfactoriamente el reporte",Toast.LENGTH_SHORT).show();
         }else{
             Log.d("error in creation", ""+"error");
@@ -148,8 +140,8 @@ public class FireBaseHandler{
         }
     }
 
-    public StorageReference imageReferenceInFireBase(UserPetObject userPetObject){
-        StorageReference mImageRef =  mStorageRef.child("images/petImage"+ userPetObject.getuId()+".jpg");
+    public StorageReference imageReferenceInFireBase(ReportObject reportObject){
+        StorageReference mImageRef =  mStorageRef.child("images/petImage"+ reportObject.getuId()+".jpg");
         return mImageRef;
     }
 

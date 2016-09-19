@@ -1,23 +1,17 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
-import com.mywaytech.puppiessearchclient.controllers.NewPetActivity;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
+import com.mywaytech.puppiessearchclient.models.ReportObject;
 
 import java.util.ArrayList;
 
@@ -27,27 +21,13 @@ import java.util.ArrayList;
 public class AdoptionFragment extends Fragment {
     private static final String ARG_POSITION = "ARG POSITION";
     private static final String ARG_VALUE = "ARG VALUE";
-    public static final int ARRAY0 = 0;
-    public static final int ARRAY1 = 1;
-    public static final int ARRAY2 = 2;
-    private FloatingActionButton btn_add_dog;
+
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
-    private ArrayList<UserPetObject> object_list;
-
-    private static final int PET_REQUEST = 0;
-
-    private int mValue;
-    private UserPetObject newadoptPet;
-    public static final String EXTRA_ADOPT_PET = "com.mywaytech.puppiessearchclient.extras.extra_adopt_pet";
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mValue = getArguments().getInt(ARG_VALUE);
-        object_list = new ArrayList<>();
-
     }
 
     @Nullable
@@ -55,8 +35,7 @@ public class AdoptionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_adoption, container, false);
 
-
-        wallAdapter = new WallAdapter(getContext(), new ArrayList<UserPetObject>());
+        wallAdapter = new WallAdapter(getContext(), new ArrayList<ReportObject>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_adoption);
@@ -64,28 +43,11 @@ public class AdoptionFragment extends Fragment {
 
         mListView.setAdapter(wallAdapter);
 
-        btn_add_dog = (FloatingActionButton) rootView.findViewById(R.id.fab_add_dog_adoption);
-        btn_add_dog.setOnClickListener(addListener_adoption);
+
         return rootView;
     }
 
-    public View.OnClickListener addListener_adoption = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int adoption_activity_value=2;
-            Intent intent = new Intent(getContext(), NewPetActivity.class);
-            intent.putExtra(NewPetActivity.FRAGMENT_VALUE,adoption_activity_value);
-            startActivityForResult(intent, PET_REQUEST);
-        }
-    };
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode ==PET_REQUEST && resultCode == Activity.RESULT_OK) {
-            newadoptPet = (UserPetObject) data.getSerializableExtra(EXTRA_ADOPT_PET);
-            wallAdapter.updateData(newadoptPet);
-        }
-    }
 
     public static AdoptionFragment newInstance(int position, int value) {
         AdoptionFragment fragment = new AdoptionFragment();
@@ -95,6 +57,5 @@ public class AdoptionFragment extends Fragment {
         fragment.setArguments(arg);
         return fragment;
     }
-
 
 }

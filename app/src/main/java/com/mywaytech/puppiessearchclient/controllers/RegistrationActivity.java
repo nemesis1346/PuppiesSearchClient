@@ -16,7 +16,7 @@ import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class NewUserActivity extends AppCompatActivity implements FireBaseHandler.CallbackSign {
+public class RegistrationActivity extends AppCompatActivity implements FireBaseHandler.CallbackSign {
     private EditText uName;
     private EditText uEmail;
     private EditText uPassword;
@@ -52,15 +52,15 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
 
             //PERSISTENCE METHOD
             if (uName.getText().toString().isEmpty() || uEmail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty() || uPassword_repeat.getText().toString().isEmpty() || uAddress.getText().toString().isEmpty()) {
-                Toast.makeText(NewUserActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
             } else {
                 if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
                     //TODO FIRST, VALIDATE THE EXISTENCE OF CURRENT USER
                     //FIREBASE INTEND
-                    FireBaseHandler.getInstance(NewUserActivity.this)
-                            .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), NewUserActivity.this, NewUserActivity.this);
+                    FireBaseHandler.getInstance(RegistrationActivity.this)
+                            .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), RegistrationActivity.this, RegistrationActivity.this);
                 } else {
-                    Toast.makeText(NewUserActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegistrationActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -72,17 +72,17 @@ public class NewUserActivity extends AppCompatActivity implements FireBaseHandle
         boolean isSaved;
         if (isCreated) {
             //GET CURRENT USER INFO
-            isSaved=FireBaseHandler.getInstance(NewUserActivity.this).saveUserObject(newUserObject);
+            isSaved=FireBaseHandler.getInstance(RegistrationActivity.this).saveUserObject(newUserObject);
             if(isSaved){
-                Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
-                Toast.makeText(NewUserActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                Toast.makeText(RegistrationActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
                 startActivity(intent);
             }else{
-                Toast.makeText(NewUserActivity.this, "Error al Registrar", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationActivity.this, "Error al Registrar", Toast.LENGTH_LONG).show();
             }
         } else {
             isSaved=false;
-            Toast.makeText(NewUserActivity.this, "Email no Existente", Toast.LENGTH_LONG).show();
+            Toast.makeText(RegistrationActivity.this, "Email no Existente", Toast.LENGTH_LONG).show();
         }
     }
 

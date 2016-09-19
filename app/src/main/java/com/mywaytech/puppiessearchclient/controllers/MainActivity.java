@@ -3,18 +3,18 @@ package com.mywaytech.puppiessearchclient.controllers;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
-import com.mywaytech.puppiessearchclient.models.UserPetObject;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -25,10 +25,14 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
     public static final String EXTRA_FRAGMENT_VAL = "com.mywaytech.puppiessearchclient.extras.extra_fragment_val";
 
+    private static final int PET_REQUEST = 0;
+
     public static final int FRAG0_POS = 0;
     public static final int FRAG1_POS = 1;
     private TabLayout tabLayout;
     int value = -1;
+
+    private FloatingActionButton btn_add_dog;
 
     private String emailForAuth;
 
@@ -37,6 +41,9 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        btn_add_dog = (FloatingActionButton) findViewById(R.id.fab_add_dog_wall);
+        btn_add_dog.setOnClickListener(addListener);
 
         emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
         frag_val = getIntent().getIntExtra(EXTRA_FRAGMENT_VAL, 0);
@@ -67,7 +74,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         });
 
 
-        switch(frag_val){
+        switch (frag_val) {
             case 1:
                 selectTab(FRAG0_POS, 0);
                 break;
@@ -86,6 +93,16 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         getMenuInflater().inflate(R.menu.menu_item_layout, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    public View.OnClickListener addListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+            int pet_activity_value = 1;
+            intent.putExtra(ReportActivity.FRAGMENT_VALUE, pet_activity_value);
+            startActivityForResult(intent, PET_REQUEST);
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,6 +125,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_logout:
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -144,9 +162,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 fragment = WallFragment.newInstance(position, value);
                 ft.replace(R.id.container, fragment).commit();
                 break;
-
         }
-
     }
 
     @Override
@@ -170,7 +186,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
 }

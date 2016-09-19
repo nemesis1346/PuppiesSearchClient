@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements FireBaseHandler.
     public View.OnClickListener newUserListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(LoginActivity.this, NewUserActivity.class);
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
             startActivity(intent);
         }
     };
