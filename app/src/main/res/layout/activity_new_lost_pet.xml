@@ -14,10 +14,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
+            android:layout_marginBottom="@dimen/material_design_large_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin_large"
+            android:layout_marginRight="@dimen/activity_horizontal_margin_large"
+            android:layout_marginTop="@dimen/activity_vertical_margin_large">
 
             <ImageView
                 android:id="@+id/start_image"
@@ -30,7 +30,7 @@
 
             <Button
                 android:id="@+id/input_image"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/start_image"
                 android:text="@string/input_pet_image"
@@ -45,34 +45,32 @@
 <!--TODO: EDIT THE REST OF THE EDIT TEXT WITH STYLES-->
             <EditText
                 android:id="@+id/edit_text_address_lost_activity"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/input_image"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/material_design_margin"
                 android:hint="@string/hint_location"
                 android:inputType="text"/>
 
             <EditText
                 android:id="@+id/edit_text_comment_lost_activity"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_text_address_lost_activity"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/material_design_margin"
                 android:hint="@string/hint_comment"
                 android:inputType="text"
                 style="@style/main_edit_text"/>
 
             <Spinner
                 android:id="@+id/spinner_type"
-                android:layout_marginTop="15dp"
-                android:layout_width="300dp"
+                android:layout_marginTop="@dimen/material_design_margin"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/edit_text_comment_lost_activity">
-
             </Spinner>
-
 
             <Button
                 android:id="@+id/btn_reportar"

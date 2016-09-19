@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/material_design_margin"
+    android:orientation="vertical">
 
     <TextView
-        android:textSize="18dp"
-        android:textStyle="bold"
         android:id="@+id/item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
-
+        android:layout_marginBottom="@dimen/material_design_margin"
+        android:textSize="@dimen/item_font_title_size"
+        android:textStyle="bold"/>
 
     <ImageView
         android:id="@+id/item_dog_image"
@@ -20,28 +21,28 @@
         android:layout_below="@id/item_name"/>
 
     <TextView
-        android:layout_marginTop="5dp"
         android:id="@+id/item_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_dog_image"
+        android:layout_marginTop="@dimen/material_design_margin"
         android:textSize="16dp"/>
 
 
     <com.mywaytech.puppiessearchclient.controllers.MyCustomTextView
-        android:layout_below="@id/item_address"
-        android:layout_marginTop="5dp"
         android:id="@+id/item_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:textStyle="italic"
-        android:layout_marginBottom="8dp"
-        />
+        android:layout_below="@id/item_address"
+        android:layout_marginBottom="@dimen/material_design_margin"
+        android:layout_marginTop="@dimen/material_design_margin"
+        android:textSize="@dimen/item_font_title_size"
+        android:textStyle="italic"/>
 
     <View
-        android:layout_below="@+id/item_comment"
+        android:id="@+id/item_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/item_comment"
         android:background="@color/colorAccent"/>
 </RelativeLayout>
