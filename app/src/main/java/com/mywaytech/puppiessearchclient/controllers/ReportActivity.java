@@ -27,7 +27,5 @@ public class ReportActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, ReportFragment.newInstance());
         ft.commit();
-
     }
-
 }

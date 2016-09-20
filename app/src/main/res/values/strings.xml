@@ -37,6 +37,9 @@
     <string name="success_image_saved">No se guardo satisfactoriamente la imagen</string>
     <string name="failure_image_saved">Se guardo satisfactoriamente la imagen</string>
     <string name="report_title">Nuevo Reporte</string>
+    <string name="login_error_validation_message">No ha ingresado Usuario o Contraseña</string>
+    <string name="login_error_noidentified">Usuario no Identificado</string>
+    <string name="login_identified">Usuario Identificado</string>
 
     <string-array name="users_10_lost">
         <item>sraguevara</item>

@@ -1,5 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,10 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
     //private FirebaseAuth.AuthStateListener mAuthListener;
 
     private NewUserObject newUserObject;
+
+    public static Intent newIntent(Context context){
+        return new Intent(context, RegistrationActivity.class);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

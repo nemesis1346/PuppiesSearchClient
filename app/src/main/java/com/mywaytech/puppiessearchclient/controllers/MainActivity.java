@@ -1,5 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,6 +38,10 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     private String emailForAuth;
 
     private int frag_val;
+
+    public static Intent newIntent(Context context){
+        return new Intent(context, MainActivity.class);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
