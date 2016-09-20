@@ -89,7 +89,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public View.OnClickListener newUserListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = RegistrationActivity.newIntent(getContext());
+            Intent intent = RegistrationActivity.newIntent(getActivity());
             startActivity(intent);
         }
     };
