@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 showDialog();
                 return true;
             case R.id.action_map:
-                intent = new Intent(MainActivity.this, MapActivity.class);
+                intent = MapActivity.newIntent(MainActivity.this);
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_account:

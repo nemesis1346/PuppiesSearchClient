@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.LoginFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, ReportFragment.newInstance());
+        ft.replace(R.id.fragment_container, LoginFragment.newInstance());
         ft.commit();
     }
 }

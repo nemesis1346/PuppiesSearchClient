@@ -1,7 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -12,14 +11,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -46,7 +50,7 @@ import com.mywaytech.puppiessearchclient.services.LocationsAsyncTask;
 /**
  * Created by Marco on 9/19/2016.
  */
-public class MapFragment extends Fragment implements
+public class MapPuppiesFragment extends Fragment implements
         OnMapReadyCallback,
         LocationsAsyncTask.Callbacks,
         GoogleApiClient.ConnectionCallbacks,
@@ -70,28 +74,40 @@ public class MapFragment extends Fragment implements
     private GoogleApiClient mClient;
     private Location mCurrentLocation;
 
-    public static MapFragment newInstance(){
+    public static MapPuppiesFragment newInstance() {
         Bundle args = new Bundle();
-        MapFragment fragment = new MapFragment();
+        MapPuppiesFragment fragment = new MapPuppiesFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_map,container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.main_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.report_title);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         searchText = (EditText) rootView.findViewById(R.id.edit_text_search_puppy);
         searchBtn = (Button) rootView.findViewById(R.id.btn_search);
 
         searchBtn.setOnClickListener(searchAddress);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map_puppies);
-        mapFragment
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_puppies);
+        mapFragment.getMapAsync(this);
 
-        permissionCheck_FINE_LOCATIONS = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        permissionCheck_FINE_LOCATIONS = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
 
-        mClient =new GoogleApiClient.Builder(this)
+        mClient = new GoogleApiClient.Builder(getContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -115,28 +131,39 @@ public class MapFragment extends Fragment implements
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onFinishedSearch(LocationModel locationModel) {
         Log.d("onFinishedSearch", "Search finished:" + String.valueOf(locationModel.getLatitude()) + ", " + String.valueOf(locationModel.getLongitude()));
         //TODO: ASK IF THIS VALIDATION IS OK
         if (locationModel.getLongitude() != -1 && locationModel.getLatitude() != -1) {
             drawMapMarkers(locationModel);
         } else {
-            Toast.makeText(MapActivity.this, "Dirección no Encontrada", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Dirección no Encontrada", Toast.LENGTH_LONG).show();
         }
     }
 
     private View.OnClickListener searchAddress = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
                 String addressInput = searchText.getText().toString();
-                LocationsAsyncTask locationsAsyncTask = new LocationsAsyncTask(MapActivity.this);
-                locationsAsyncTask.setCallback(MapActivity.this);
+                LocationsAsyncTask locationsAsyncTask = new LocationsAsyncTask(getContext());
+                locationsAsyncTask.setCallback(MapPuppiesFragment.this);
                 locationsAsyncTask.execute(addressInput);
             } else {
-                Toast.makeText(MapActivity.this, "No hay conexion a Internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "No hay conexion a Internet", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -157,6 +184,7 @@ public class MapFragment extends Fragment implements
         mClient.disconnect();
         super.onStop();
     }
+
     public void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
@@ -186,7 +214,7 @@ public class MapFragment extends Fragment implements
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
-                            status.startResolutionForResult(MapActivity.this, REQUEST_CHECK_SETTINGS);
+                            status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
 
                         } catch (IntentSender.SendIntentException e) {
 
@@ -198,11 +226,13 @@ public class MapFragment extends Fragment implements
             }
         });
     }
+
     public void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Log.d("startLocationUpdates",""+"startL");
+        Log.d("startLocationUpdates", "" + "startL");
         LocationServices.FusedLocationApi.requestLocationUpdates(mClient, mLocationRequest, this);
     }
 
@@ -215,7 +245,7 @@ public class MapFragment extends Fragment implements
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         if (mCurrentLocation != null) {
-            Log.d("onLocationChanged","Current LocationEntity: " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
+            Log.d("onLocationChanged", "Current LocationEntity: " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
             //TODO CHANGE THIS IN THE FUTURE
             LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
@@ -233,13 +263,13 @@ public class MapFragment extends Fragment implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
             } else {
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         permissionsArray,
                         PERMISSIONS_MAP_ACTIVITY);
             }
