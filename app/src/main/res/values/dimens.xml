@@ -11,4 +11,5 @@
     <dimen name="activity_horizontal_margin_large">48dp</dimen>
 
     <dimen name="item_font_title_size">14dp</dimen>
+    <dimen name="user_image_size">30dp</dimen>
 </resources>

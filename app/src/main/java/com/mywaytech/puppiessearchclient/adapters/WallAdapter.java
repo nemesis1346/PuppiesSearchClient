@@ -16,6 +16,8 @@ import com.mywaytech.puppiessearchclient.models.ReportObject;
 import java.io.File;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by Marco on 4/15/2016.
  */
@@ -58,6 +60,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         }
         holder.userAddres.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
+        holder.mUserPictureContainer.setImageResource(R.drawable.ic_user_picture);
 
     }
 
@@ -75,10 +78,12 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         private ImageView petImage;
         private TextView userAddres;
         private TextView userComment;
+        private CircleImageView mUserPictureContainer;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
+            mUserPictureContainer = (CircleImageView) itemView.findViewById(R.id.image_userPicture_container);
             userName = (TextView) itemView.findViewById(R.id.item_name);
             petImage= (ImageView) itemView.findViewById(R.id.item_dog_image);
             userAddres= (TextView) itemView.findViewById(R.id.item_address);
