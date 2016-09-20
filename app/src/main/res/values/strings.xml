@@ -40,6 +40,10 @@
     <string name="login_error_validation_message">No ha ingresado Usuario o Contraseña</string>
     <string name="login_error_noidentified">Usuario no Identificado</string>
     <string name="login_identified">Usuario Identificado</string>
+    <string name="close_session_message">¿Está seguro que quiere cerrar sesión?</string>
+    <string name="close_session_title">Cerrar Sesión</string>
+    <string name="btn_yes">Si</string>
+    <string name="btn_no">No</string>
 
     <string-array name="users_10_lost">
         <item>sraguevara</item>

@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.View;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallAdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallLostFragment;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -119,8 +121,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_account:
-                intent = new Intent(MainActivity.this, AccountActivity.class);
-                intent.putExtra(AccountActivity.EXTRA_EMAIL, emailForAuth);
+                intent = AccountActivity.newIntent(MainActivity.this);
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_settings:
@@ -128,7 +129,18 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_logout:
-                finish();
+                new AlertDialogUtils.Builder(this)
+                        .setResourceMessage(R.string.close_session_message)
+                        .setTitle(R.string.close_session_title)
+                        .setPositiveText(R.string.btn_yes)
+                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setNegativeText(R.string.btn_no)
+                        .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

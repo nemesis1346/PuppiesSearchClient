@@ -27,4 +27,6 @@ public class Utils {
         String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
         return imageFile;
     }
+
+
 }

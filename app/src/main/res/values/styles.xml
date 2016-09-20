@@ -34,6 +34,28 @@
         parent="@style/base_button">
     </style>
 
+
+    <style name="AlertDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:windowTitleStyle">@style/AlertDialogTitleStyle</item>
+    </style>
+
+    <style name="AlertDialogTitleStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+    <style name="ErrorDialogTitleStyle">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="ErrorDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+        <item name="android:windowTitleStyle">@style/ErrorDialogTitleStyle</item>
+    </style>
+
     <dimen name="btn_min_width">100dp</dimen>
     <dimen name="btn_min_heigth">48dp</dimen>
     <dimen name="margin_button">10dp</dimen>
