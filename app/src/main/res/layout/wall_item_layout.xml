@@ -12,35 +12,62 @@
         android:id="@+id/item_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="@dimen/material_design_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
 
-        <android.support.v4.widget.CircleImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_userPicture_container"
             android:layout_width="@dimen/user_image_size"
             android:layout_height="@dimen/user_image_size"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/material_design_margin"
             app:civ_border_color="@color/colorPrimary"
-            app:civ_border_width="4dp"/>
+            app:civ_border_width="2dp"/>
 
         <TextView
             android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/material_design_margin"
+            android:layout_gravity="center_vertical"
             android:textSize="@dimen/item_font_title_size"
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/item_dog_image"
-        android:layout_width="match_parent"
+    <!--<com.github.siyamed.shapeimageview.RoundedImageView-->
+    <!--android:id="@+id/item_dog_image"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="300dp"-->
+    <!--app:siRadius="6dp"-->
+    <!--app:siBorderWidth="2dp"-->
+    <!--app:siBorderColor="@color/colorPrimary"-->
+    <!--app:siSquare="true"-->
+    <!--android:layout_below="@+id/item_header"/>-->
+    <LinearLayout
+        android:id="@+id/item_dog_image_layout"
+        android:layout_width="200dp"
         android:layout_height="300dp"
-        android:layout_below="@id/item_header"/>
+        android:layout_below="@id/item_header"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp"
+        android:background="@drawable/item_wall_border"
+        >
+
+        <ImageView
+            android:id="@+id/item_dog_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/screen"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/item_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_dog_image"
+        android:layout_below="@id/item_dog_image_layout"
         android:layout_marginTop="@dimen/material_design_margin"
         android:textSize="16dp"/>
 

@@ -35,6 +35,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.google.android.gms:play-services-appindexing:9.0.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 }
 apply plugin: 'com.google.gms.google-services'
