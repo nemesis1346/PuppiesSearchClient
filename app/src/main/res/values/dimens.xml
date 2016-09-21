@@ -12,4 +12,6 @@
 
     <dimen name="item_font_title_size">14dp</dimen>
     <dimen name="user_image_size">40dp</dimen>
+    <dimen name="user_image_size_registration">175dp</dimen>
+    <dimen name="activity_horizontal_margin_huge">96dp</dimen>
 </resources>

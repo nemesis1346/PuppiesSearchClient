@@ -1,95 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-
-        <RelativeLayout
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin_large"
-            android:layout_marginRight="@dimen/activity_horizontal_margin_large"
-            android:layout_marginTop="@dimen/activity_vertical_margin_large">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/start_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_design_large_margin"
-                android:src="@drawable/initial_dog_image"/>
+        </FrameLayout>
 
-            <EditText
-                android:id="@+id/edit_text_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/start_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_design_margin"
-                android:hint="@string/hint_username"
-                android:inputType="text"/>
-
-
-            <EditText
-                android:id="@+id/edit_text_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_name"
-                android:layout_centerHorizontal="true"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"/>
-
-            <EditText
-                android:id="@+id/edit_text_password_repeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_password"
-                android:layout_centerHorizontal="true"
-                android:hint="@string/hint_password_repeat"
-                android:inputType="textPassword"/>
-
-            <EditText
-                android:id="@+id/edit_text_mail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_password_repeat"
-                android:layout_centerHorizontal="true"
-                android:hint="@string/hint_mail"
-                android:inputType="textEmailAddress"/>
-
-            <EditText
-                android:id="@+id/edit_text_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_mail"
-                android:layout_centerHorizontal="true"
-                android:hint="@string/hint_address"
-                android:inputType="text"/>
+        <android.support.v7.widget.ButtonBarLayout
+            android:id="@+id/button_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin_huge">
 
             <Button
-                android:id="@+id/btn_singin"
-                android:layout_width="match_parent"
+                android:id="@+id/btn_back"
+                style="@style/main_button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_address"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_design_margin"
-                android:background="@color/colorPrimary"
-                android:gravity="center_vertical"
-                android:text="@string/btn_signin"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
+                android:layout_weight="1"
+                android:text="@string/btn_back"/>
 
+            <Button
+                android:id="@+id/btn_foward"
+                style="@style/main_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_foward"/>
+        </android.support.v7.widget.ButtonBarLayout>
+    </RelativeLayout>
 
-        </RelativeLayout>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

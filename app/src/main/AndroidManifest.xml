@@ -16,8 +16,9 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".controllers.RegistrationActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden">
+        <activity
+            android:name=".controllers.RegistrationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity android:name=".controllers.MainActivity">
         </activity>
@@ -37,6 +38,8 @@
         <activity android:name=".controllers.PreferencesActivity">
         </activity>
 
+        <activity android:name=".controllers.UserPictureRegistrationActivity">
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
