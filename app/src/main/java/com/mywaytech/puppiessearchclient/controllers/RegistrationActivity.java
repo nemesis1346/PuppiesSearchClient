@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -36,8 +38,6 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_registration);
         uName = (EditText) findViewById(R.id.edit_text_name);
         uEmail = (EditText) findViewById(R.id.edit_text_mail);
@@ -55,9 +55,12 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
             //EXTRAS METHOD
             newUserObject = new NewUserObject(uName.getText().toString(), uEmail.getText().toString(), uPassword.getText().toString());
 
-            //PERSISTENCE METHOD
             if (uName.getText().toString().isEmpty() || uEmail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty() || uPassword_repeat.getText().toString().isEmpty() || uAddress.getText().toString().isEmpty()) {
-                Toast.makeText(RegistrationActivity.this, "No ha ingresado alguno de los campos", Toast.LENGTH_LONG).show();
+                new AlertDialogUtils.Builder(RegistrationActivity.this)
+                        .setResourceMessage(R.string.message_validation_error)
+                        .setPositiveText(R.string.btn_ok)
+                        .setTitle(R.string.error_title)
+                        .show();
             } else {
                 if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
                     //TODO FIRST, VALIDATE THE EXISTENCE OF CURRENT USER
@@ -65,9 +68,12 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
                     FireBaseHandler.getInstance(RegistrationActivity.this)
                             .fireBaseSignIn(uEmail.getText().toString(), uPassword.getText().toString(), RegistrationActivity.this, RegistrationActivity.this);
                 } else {
-                    Toast.makeText(RegistrationActivity.this, "Contraseña no coincide", Toast.LENGTH_LONG).show();
+                    new AlertDialogUtils.Builder(RegistrationActivity.this)
+                            .setResourceMessage(R.string.message_validation_password)
+                            .setPositiveText(R.string.btn_ok)
+                            .setTitle(R.string.error_title)
+                            .show();
                 }
-
             }
         }
     };
@@ -79,20 +85,32 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
             //GET CURRENT USER INFO
             isSaved=FireBaseHandler.getInstance(RegistrationActivity.this).saveUserObject(newUserObject);
             if(isSaved){
-                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                Toast.makeText(RegistrationActivity.this, "Usuario Registrado", Toast.LENGTH_LONG).show();
-                startActivity(intent);
+
+                new AlertDialogUtils.Builder(RegistrationActivity.this)
+                        .setResourceMessage(R.string.registration_success)
+                        .setPositiveText(R.string.btn_ok)
+                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+
             }else{
-                Toast.makeText(RegistrationActivity.this, "Error al Registrar", Toast.LENGTH_LONG).show();
+                new AlertDialogUtils.Builder(RegistrationActivity.this)
+                        .setResourceMessage(R.string.registration_failure)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
             }
         } else {
-            isSaved=false;
-            Toast.makeText(RegistrationActivity.this, "Email no Existente", Toast.LENGTH_LONG).show();
+            new AlertDialogUtils.Builder(RegistrationActivity.this)
+                    .setResourceMessage(R.string.registration_failure)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
         }
     }
-
-
-
 
 
 //    public FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -123,18 +141,6 @@ public class RegistrationActivity extends AppCompatActivity implements FireBaseH
 //    };
 
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mAuth.addAuthStateListener(mAuthListener);
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        if (mAuthListener != null) {
-//            mAuth.removeAuthStateListener(mAuthListener);
-//        }
-//    }
+
 
 }

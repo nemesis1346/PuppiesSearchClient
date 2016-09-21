@@ -70,7 +70,10 @@
                     android:layout_weight="1"
                     android:text="@string/btn_new_user"/>
             </LinearLayout>
+
         </RelativeLayout>
+
+
 
     </LinearLayout>
 </ScrollView>

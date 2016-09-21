@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +35,8 @@ import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
+import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.File;
@@ -77,6 +81,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private String mSpinnerValue;
 
+    private ProgressDialogFragment mProgressfragment;
 
     public static ReportFragment newInstance() {
         Bundle args = new Bundle();
@@ -160,6 +165,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 mCurrentUserName = mCurrentUser.getEmail();
                 Log.d("username: ", "" + mCurrentUserName);
             } else {
+
                 Toast.makeText(getContext(), "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }
@@ -210,7 +216,10 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                     newComment.getText().toString().isEmpty() ||
                     final_path.isEmpty() || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
 
-                Toast.makeText(getActivity(),getResources().getString(R.string.validation_error_message), Toast.LENGTH_LONG).show();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.validation_error_message)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
 
             } else {
                 mReportObject = new ReportObject(mCurrentUserName, newAddress.getText().toString(), final_path, newComment.getText().toString());
@@ -218,7 +227,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 byte[] imageByte = Utils.processImagePet(photo);
                 saveImageInFireBase(mReportObject, imageByte);
 
-
+                showProgress();
                 FireBaseHandler.getInstance(getActivity()).savePetObject(mReportObject, mSpinnerValue);
 
 
@@ -236,15 +245,28 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.success_image_saved), Toast.LENGTH_SHORT).show();
+                hideProgress();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.failure_report_saved)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(getActivity(), getResources().getString(R.string.failure_image_saved), Toast.LENGTH_SHORT).show();
-                getActivity().finish();
+                hideProgress();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.success_report_saved)
+                        .setPositiveText(R.string.btn_ok)
+                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().finish();
 
+                            }
+                        })
+                        .show();
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
     }
@@ -259,6 +281,22 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         mSpinnerValue = mTypeSpinner.getSelectedItem().toString();
+    }
+
+    private void showProgress() {
+        View customView = LayoutInflater.from(getContext()).inflate(R.layout.row_progress, null);
+        TextView message = (TextView) customView.findViewById(R.id.text_progress_info);
+        message.setText(R.string.report_progress);
+        mProgressfragment = new ProgressDialogUtils.Builder(getContext())
+                .setCustomView(customView)
+                .show();
+
+    }
+
+    private void hideProgress() {
+        if(mProgressfragment!=null && mProgressfragment.isVisible()){
+            mProgressfragment.dismiss();
+        }
     }
 }
 

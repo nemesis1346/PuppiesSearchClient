@@ -82,7 +82,7 @@
                 android:layout_below="@+id/edit_text_address"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/material_design_margin"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/colorPrimary"
                 android:gravity="center_vertical"
                 android:text="@string/btn_signin"
                 android:textAlignment="center"

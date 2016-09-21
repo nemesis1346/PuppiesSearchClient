@@ -1,10 +1,12 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,11 +26,13 @@ import com.mywaytech.puppiessearchclient.controllers.LoginActivity;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
+import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 
 /**
  * Created by Marco on 9/19/2016.
  */
-public class LoginFragment extends Fragment implements FireBaseHandler.CallbackLogin{
+public class LoginFragment extends Fragment implements FireBaseHandler.CallbackLogin {
 
     private EditText uMail;
     private EditText uPassword;
@@ -33,11 +40,18 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private Button bNewUser;
     private FirebaseAuth mAuth;
 
-    public static LoginFragment newInstance(){
+    private ProgressBar mProgressBar;
+    private Button mRetryBtn;
+    private TextView mProgressTextInfo;
+    private ImageView mProgressErrorImg;
+
+    private ProgressDialogFragment mProgressfragment;
+
+    public static LoginFragment newInstance() {
         Bundle args = new Bundle();
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
-        return  fragment;
+        return fragment;
     }
 
     @Override
@@ -49,28 +63,44 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mRetryBtn = (Button) rootView.findViewById(R.id.btn_retry);
+        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
+        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
+
         uMail = (EditText) rootView.findViewById(R.id.edit_text_mail_input);
         uPassword = (EditText) rootView.findViewById(R.id.edit_text_password);
         bLogin = (Button) rootView.findViewById(R.id.btn_login);
         bLogin.setOnClickListener(LoginListener);
         bNewUser = (Button) rootView.findViewById(R.id.btn_new_user);
         bNewUser.setOnClickListener(newUserListener);
+
         return rootView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideProgress();
+    }
 
     public View.OnClickListener LoginListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             //VALIDATION LOGIC
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
-                Toast.makeText(getActivity(), R.string.login_error_validation_message, Toast.LENGTH_LONG).show();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.login_error_validation_message)
+                        .show();
             } else {
                 //FIREBASE SIGN METHOD
+                showProgress();
                 FireBaseHandler.getInstance(getActivity())
                         .fireBaseLogin(uMail.getText().toString(),
                                 uPassword.getText().toString(),
                                 getActivity(), LoginFragment.this);
+
             }
         }
     };
@@ -78,11 +108,23 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     @Override
     public void onCompleteLogging(boolean isLogged) {
         if (isLogged) {
-            Intent intent = MainActivity.newIntent(getActivity());
-            Toast.makeText(getActivity(), R.string.login_identified, Toast.LENGTH_LONG).show();
-            startActivity(intent);
+            hideProgress();
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.login_identified)
+                    .setPositiveText(R.string.btn_ok)
+                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = MainActivity.newIntent(getActivity());
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
         } else {
-            Toast.makeText(getActivity(),R.string.login_error_noidentified, Toast.LENGTH_LONG).show();
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.login_not_identified)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
         }
     }
 
@@ -122,4 +164,22 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
             // mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
+
+    private void showProgress() {
+        View customView = LayoutInflater.from(getContext()).inflate(R.layout.row_progress, null);
+        TextView message = (TextView) customView.findViewById(R.id.text_progress_info);
+        message.setText(R.string.login_text);
+        mProgressfragment = new ProgressDialogUtils.Builder(getContext())
+                .setCustomView(customView)
+                .show();
+
+    }
+
+    private void hideProgress() {
+        if(mProgressfragment!=null && mProgressfragment.isVisible()){
+            mProgressfragment.dismiss();
+        }
+    }
+
 }

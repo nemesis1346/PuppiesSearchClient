@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,13 +42,17 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
     private int frag_val;
 
-    public static Intent newIntent(Context context){
+    public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.main_activity_title);
 
         btn_add_dog = (FloatingActionButton) findViewById(R.id.fab_add_dog_wall);
         btn_add_dog.setOnClickListener(addListener);
@@ -129,18 +134,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_logout:
-                new AlertDialogUtils.Builder(this)
-                        .setResourceMessage(R.string.close_session_message)
-                        .setTitle(R.string.close_session_title)
-                        .setPositiveText(R.string.btn_yes)
-                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .setNegativeText(R.string.btn_no)
-                        .show();
+               onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -181,15 +175,25 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     }
 
     @Override
-    public int getToolbarTitle() {
-        return R.string.main_activity_title;
+    public void onBackPressed() {
+        logout();
     }
 
-    @Override
-    public int getContentResource() {
-        return R.layout.activity_main_layout;
-    }
+    public void logout(){
+        new AlertDialogUtils.Builder(this)
+                .setResourceMessage(R.string.close_session_message)
+                .setTitle(R.string.close_session_title)
+                .setPositiveText(R.string.btn_yes)
+                .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeText(R.string.btn_no)
+                .show();
 
+    }
 
     @Override
     public void backData(int value) {
@@ -198,9 +202,5 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
         selectTab(tabLayout.getSelectedTabPosition(), value);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+
 }

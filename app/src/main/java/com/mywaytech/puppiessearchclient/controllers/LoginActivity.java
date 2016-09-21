@@ -22,7 +22,7 @@ import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

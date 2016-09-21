@@ -19,7 +19,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.AlertDialogFragme
 public class AlertDialogUtils {
     public static class Builder {
 
-        public static final String DIALOG_TAG = "com.bayteq.digitalbankingmultiowner.controllers.fragments.alertdialogfragment";
+        public static final String DIALOG_TAG = "com.mywaytech.puppiessearchclient.controllers.fragments.ProgressDialogFragment";
 
         private Context mContext;
         private int mTitle;

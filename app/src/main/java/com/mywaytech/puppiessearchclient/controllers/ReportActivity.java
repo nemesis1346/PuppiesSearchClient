@@ -14,7 +14,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends BaseActivity {
 
     public static Intent newIntent(Context context) {
         return new Intent(context, ReportActivity.class);
