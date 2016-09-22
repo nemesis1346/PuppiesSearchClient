@@ -10,6 +10,11 @@ public class NewUserObject implements  Serializable {
     private String mEmail;
     private String mPassword;
 
+
+    public NewUserObject(){
+
+    }
+
     public NewUserObject(String mName, String mEmail, String mPassword) {
         this.mName = mName;
         this.mEmail = mEmail;

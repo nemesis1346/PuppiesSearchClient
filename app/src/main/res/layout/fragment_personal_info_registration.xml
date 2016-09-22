@@ -75,19 +75,6 @@
                 android:hint="@string/hint_address"
                 android:inputType="text"/>
 
-            <Button
-                android:id="@+id/btn_singin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_text_address"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_design_margin"
-                android:background="@color/colorPrimary"
-                android:gravity="center_vertical"
-                android:text="@string/btn_signin"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
-
 
         </RelativeLayout>
 

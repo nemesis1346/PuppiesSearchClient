@@ -187,7 +187,9 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
                 .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        Intent mainIntent = new Intent().setClass(
+                                MainActivity.this, LoginActivity.class);
+                        startActivity(mainIntent);
                     }
                 })
                 .setNegativeText(R.string.btn_no)

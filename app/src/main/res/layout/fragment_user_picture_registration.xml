@@ -39,31 +39,6 @@
                 app:layout_anchorGravity="bottom|right|end"
                 app:srcCompat="@drawable/ic_camera"/>
 
-            <LinearLayout
-                android:layout_marginTop="@dimen/activity_horizontal_margin_large"
-                android:id="@+id/layout_buttons"
-                android:layout_below="@+id/image_userPicture_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
-
-                <Button
-                    android:id="@+id/btn_back"
-                    android:layout_width="0dp"
-                    style="@style/main_button"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_back"/>
-
-                <Button
-                    android:id="@+id/btn_foward"
-                    android:layout_width="0dp"
-                    style="@style/main_button"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_foward"/>
-            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>
