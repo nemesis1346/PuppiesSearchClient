@@ -1,7 +1,11 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,9 @@ import android.widget.Button;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
+
+import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,6 +28,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Marco on 21/9/2016.
  */
 public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
+
+    private static final int CAMERA_REQUEST = 0;
+
+    private Bitmap mPhoto;
+    private File mFile;
+    private String mFinalPath = "";
+
     private Button mBtnBack;
     private Button mBtnForward;
     private CircleImageView mUserPicture;
@@ -53,15 +67,35 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
     }
 
 
+
+
     private View.OnClickListener mBtnActionButton = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
         }
     };
 
     @Override
     public boolean isFormReady() {
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            //this is the global variable of the photo
+            mPhoto = (Bitmap) data.getExtras().get("data");
+
+            mFile = PhotoUtils.setPhotoFile(getContext());
+            mFinalPath = mFile.getPath();
+
+            if (PhotoUtils.photoResultProcessing(getContext(), mPhoto,mFinalPath) != null) {
+                mUserPicture.setImageBitmap(PhotoUtils.photoResultProcessing(getContext(), mPhoto, mFinalPath));
+                mUserPicture.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 }

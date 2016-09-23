@@ -17,7 +17,8 @@ public class ReportObject implements Serializable {
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public ReportObject(String uName, String uAddress, String imagePath, String uComment) {
+    public ReportObject(String uid,String uName, String uAddress, String imagePath, String uComment) {
+        this.uId = uid;
         this.uName = uName;
         this.uAddress = uAddress;
         this.imagePath = imagePath;
@@ -33,7 +34,6 @@ public class ReportObject implements Serializable {
     public void setuId(String uId) {
         this.uId = uId;
     }
-
 
     public String getImagePath() {
         return imagePath;

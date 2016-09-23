@@ -134,6 +134,11 @@ public class FireBaseHandler {
     public void savePetObject(ReportObject reportObject, String mType) {
         String uid = "";
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        Log.d("report uname: ",""+reportObject.getuName());
+        Log.d("report upath: ",""+reportObject.getImagePath());
+
+        reportObject.setImagePath("asdas");
+
         if (user != null) {
             uid = reportObject.getuId();
             switch (mType) {
@@ -151,8 +156,8 @@ public class FireBaseHandler {
         }
     }
 
-    public StorageReference imageReferenceInFireBase(ReportObject reportObject) {
-        StorageReference mImageRef = mStorageRef.child("images/petImage" + reportObject.getuId() + ".jpg");
+    public StorageReference imageReferenceInFireBase(String imageId) {
+        StorageReference mImageRef = mStorageRef.child("images/petImage" + imageId + ".jpg");
         return mImageRef;
     }
 

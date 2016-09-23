@@ -37,7 +37,7 @@ import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
-import com.mywaytech.puppiessearchclient.utils.Utils;
+import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,12 +65,13 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public static final String TYPE_PET_LOST = "LOST";
     public static final String TYPE_PET_ADOPTION = "ADOPTION";
 
-    private Bitmap photo;
+    private Bitmap mPhoto;
+    private Bitmap mTemporalPhoto;
     private ReportObject mReportObject;
 
-    private File file;
+    private File mFile;
     private int callback;
-    private String final_path = "";
+    private String mFinalPath = "";
 
     private FirebaseUser mCurrentUser;
     private String mCurrentUserName;
@@ -82,6 +83,9 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     private String mSpinnerValue;
 
     private ProgressDialogFragment mProgressfragment;
+
+    private StorageReference mStorageRef;
+    private String mImageFirebasepPath;
 
     public static ReportFragment newInstance() {
         Bundle args = new Bundle();
@@ -142,7 +146,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-                case android.R.id.home:
+            case android.R.id.home:
                 getActivity().finish();
                 return true;
             default:
@@ -179,30 +183,21 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             btn_image.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             btn_image.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
-            //this is the global variable of the photo
-            photo = (Bitmap) data.getExtras().get("data");
+            //FIXME this is the global variable of the photo LOCAL
+            mTemporalPhoto = (Bitmap) data.getExtras().get("data");
+//
+//            mFile = PhotoUtils.setPhotoFile(getContext());
+//            mFinalPath = mFile.getPath();
 
-            file = new File(getContext().getExternalFilesDir(null) + "/images");
-            if (!file.isDirectory()) {
-                file.mkdir();
-            }
+            //TODO CHECK IF THIS NEW METHOD IS GOING TO WORK
+//            mStorageRef = FireBaseHandler.getInstance(getActivity()).imageReferenceInFireBase(reportObject);
+//            mImageFirebasepPath  = mStorageRef.getPath();
 
-            file = new File(getContext().getExternalFilesDir(null) + "/images", "img_" + System.currentTimeMillis() + ".jpg");
-            final_path = file.getPath();
-            try {
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                imageShow.setImageBitmap(photo);
+
+            if (mTemporalPhoto != null) {
+                imageShow.setImageBitmap(mTemporalPhoto);
                 imageShow.setVisibility(View.VISIBLE);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-
         }
 
     }
@@ -210,11 +205,9 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public View.OnClickListener backToActivity = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-
             if (newAddress.getText().toString().isEmpty() ||
                     newComment.getText().toString().isEmpty() ||
-                    final_path.isEmpty() || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
+                    mTemporalPhoto==null || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
 
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.validation_error_message)
@@ -222,26 +215,31 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                         .show();
 
             } else {
-                mReportObject = new ReportObject(mCurrentUserName, newAddress.getText().toString(), final_path, newComment.getText().toString());
+                String uniqueId = UUID.randomUUID().toString();
 
-                byte[] imageByte = Utils.processImagePet(photo);
-                saveImageInFireBase(mReportObject, imageByte);
+                mStorageRef = FireBaseHandler.getInstance(getActivity()).imageReferenceInFireBase(uniqueId);
+                mImageFirebasepPath = mStorageRef.getPath();
+
+                mReportObject = new ReportObject(
+                        uniqueId,
+                        mCurrentUserName,
+                        newAddress.getText().toString(),
+                        mImageFirebasepPath,
+                        newComment.getText().toString());
+
+
+                byte[] imageByte = PhotoUtils.processImagePet(mTemporalPhoto);
+                saveImageInFireBase(imageByte);
 
                 showProgress();
                 FireBaseHandler.getInstance(getActivity()).savePetObject(mReportObject, mSpinnerValue);
-
-
             }
         }
     };
 
-    public void saveImageInFireBase(ReportObject reportObject, byte[] bitMap) {
+    public void saveImageInFireBase(byte[] bitMap) {
 
-        String uniqueImageId = UUID.randomUUID().toString();
-        reportObject.setuId(uniqueImageId);
-
-        StorageReference storageRef = FireBaseHandler.getInstance(getActivity()).imageReferenceInFireBase(reportObject);
-        UploadTask uploadTask = storageRef.putBytes(bitMap);
+        UploadTask uploadTask = mStorageRef.putBytes(bitMap);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -290,11 +288,10 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         mProgressfragment = new ProgressDialogUtils.Builder(getContext())
                 .setCustomView(customView)
                 .show();
-
     }
 
     private void hideProgress() {
-        if(mProgressfragment!=null && mProgressfragment.isVisible()){
+        if (mProgressfragment != null && mProgressfragment.isVisible()) {
             mProgressfragment.dismiss();
         }
     }
