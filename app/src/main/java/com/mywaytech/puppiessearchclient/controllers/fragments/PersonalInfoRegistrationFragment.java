@@ -23,10 +23,6 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
     private EditText uPassword_repeat;
     private EditText uAddress;
 
-
-    //private FirebaseAuth.AuthStateListener mAuthListener;
-
-
     private NewUserObject mNewUserObject;
 
     public static final String ARG_NEW_USER_OBJECT = "arg_new_wer_object";
@@ -69,7 +65,6 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
         }
         return rootView;
     }
-
 
     @Override
     public boolean isFormReady() {

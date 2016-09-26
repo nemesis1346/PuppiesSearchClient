@@ -6,20 +6,37 @@ import java.io.Serializable;
  * Created by Marco on 4/19/2016.
  */
 public class NewUserObject implements Serializable {
+    private String mUid;
     private String mName;
     private String mEmail;
     private String mPassword;
     private String mUserImagePath;
     private String mAddress;
 
-    public NewUserObject(){
+    public NewUserObject() {
 
     }
 
-    public NewUserObject(String mName, String mEmail, String mPassword) {
-        this.mName = mName;
-        this.mEmail = mEmail;
-        this.mPassword = mPassword;
+    public NewUserObject(String name,
+                         String email,
+                         String password,
+                         String address,
+                         String userImagePath,
+                         String uid) {
+        this.mName = name;
+        this.mEmail = email;
+        this.mPassword = password;
+        this.mAddress = address;
+        this.mUserImagePath = userImagePath;
+        this.mUid = uid;
+    }
+
+    public String getUid() {
+        return mUid;
+    }
+
+    public void setUid(String uid) {
+        mUid = uid;
     }
 
     public String getUserImagePath() {

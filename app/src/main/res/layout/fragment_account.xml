@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical" android:layout_width="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <include layout="@layout/toolbar_layout"></include>
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/initial_dog_image"
-        android:layout_margin="10dp"/>
+        android:layout_width="@dimen/user_image_size"
+        android:layout_height="@dimen/user_image_size"
+        android:layout_gravity="center_vertical"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="2dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

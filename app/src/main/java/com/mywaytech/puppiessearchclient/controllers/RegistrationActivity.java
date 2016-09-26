@@ -23,6 +23,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.PersonalInfoRegis
 import com.mywaytech.puppiessearchclient.controllers.fragments.ProgressDialogFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.RegistrationBaseFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.UserPictureRegistrationFragment;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
@@ -191,6 +192,8 @@ public class RegistrationActivity extends BaseActivity implements
     public void validateRegistration() {
         if (mObjectflag && mUserPictureFlag) {
             hideProgress();
+            UserSessionManager.getInstance(this).saveLocalUser(mNewUserObject);
+
             new AlertDialogUtils.Builder(this)
                     .setResourceMessage(R.string.registration_success)
                     .setPositiveText(R.string.btn_ok)

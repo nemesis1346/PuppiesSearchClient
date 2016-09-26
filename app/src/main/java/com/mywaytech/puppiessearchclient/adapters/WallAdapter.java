@@ -60,7 +60,8 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
        // holder.petImage.setImageResource(mListItems.get(position).getpImage());
 
         Log.d("path wall: ",""+ mListItems.get(position).getImagePath());
-        StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(mContext).getmStorageRef().child(mListItems.get(position).getImagePath());
+        StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(mContext)
+                .getmStorageRef().child(mListItems.get(position).getImagePath());
 
 //        final long ONE_MEGABYTE = 1024 * 1024;
                 final long ONE_MEGABYTE = 1024 * 1024 * 2;

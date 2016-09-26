@@ -133,7 +133,7 @@ public class FireBaseHandler {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
-            mFirebaseDatabaseReference.child("users").child(uid).setValue(newUserObject);
+            mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(uid).setValue(newUserObject);
             return true;
         } else {
             Log.d("error in creation", "" + "error");

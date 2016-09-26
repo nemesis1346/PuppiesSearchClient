@@ -124,7 +124,6 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
                 mUserPicture.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
     public interface UserPictureImageCallback {

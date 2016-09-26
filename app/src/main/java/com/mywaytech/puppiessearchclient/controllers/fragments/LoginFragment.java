@@ -17,12 +17,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
+import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
@@ -43,7 +50,11 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
+    private NewUserObject mNewUserObject;
+
     private ProgressDialogFragment mProgressfragment;
+
+    private DatabaseReference mDatabaseReference;
 
     public static LoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -107,6 +118,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public void onCompleteLogging(boolean isLogged) {
         if (isLogged) {
             hideProgress();
+
             new AlertDialogUtils.Builder(getContext())
                     .setResourceMessage(R.string.login_identified)
                     .setPositiveText(R.string.btn_ok)
@@ -175,7 +187,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     }
 
     private void hideProgress() {
-        if(mProgressfragment!=null && mProgressfragment.isVisible()){
+        if (mProgressfragment != null && mProgressfragment.isVisible()) {
             mProgressfragment.dismiss();
         }
     }
