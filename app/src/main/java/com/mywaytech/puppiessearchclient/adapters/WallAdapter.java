@@ -62,7 +62,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         Log.d("path wall: ",""+ mListItems.get(position).getImagePath());
         StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(mContext).getmStorageRef().child(mListItems.get(position).getImagePath());
 
-        final long ONE_MEGABYTE = 1024 * 1024;
+//        final long ONE_MEGABYTE = 1024 * 1024;
+                final long ONE_MEGABYTE = 1024 * 1024 * 2;
+
         mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -78,9 +80,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                 // Handle any errors
             }
         });
-
-
-
 
 //        if(mListItems.get(position).getImagePath()!=null) {
 //            File imgFile = new  File(mListItems.get(position).getImagePath());
@@ -102,8 +101,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-
-
         private TextView userName;
         private ImageView petImage;
         private TextView userAddres;

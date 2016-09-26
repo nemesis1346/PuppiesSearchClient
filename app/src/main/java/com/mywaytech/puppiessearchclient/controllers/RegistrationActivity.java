@@ -3,7 +3,9 @@ package com.mywaytech.puppiessearchclient.controllers;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,6 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.PersonalInfoRegistrationFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ProgressDialogFragment;
@@ -20,12 +26,16 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.UserPictureRegist
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
+import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class RegistrationActivity extends BaseActivity implements RegistrationBaseFragment.PersonalInfoRegistrationCallback, FireBaseHandler.CallbackSign {
+public class RegistrationActivity extends BaseActivity implements
+        RegistrationBaseFragment.PersonalInfoRegistrationCallback,
+        FireBaseHandler.CallbackSign,
+        UserPictureRegistrationFragment.UserPictureImageCallback {
 
     protected int mCurrentPageNumber;
 
@@ -36,10 +46,17 @@ public class RegistrationActivity extends BaseActivity implements RegistrationBa
     public static final int PAGE_PERSONAL_INFO = 0;
     public static final int PAGE_USER_PICTURE = 1;
 
+    private Bitmap mUserPicture;
+
     public static final int NUM_PAGES = 2;
+
+    private StorageReference mStorageRef;
 
     private Button mBtnNext;
     private Button mBtnBack;
+
+    private boolean mObjectflag;
+    private boolean mUserPictureFlag;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, RegistrationActivity.class);
@@ -136,31 +153,57 @@ public class RegistrationActivity extends BaseActivity implements RegistrationBa
 
     @Override
     public void onCompleteSigning(boolean isCreated) {
-        boolean isSaved;
         if (isCreated) {
             //GET CURRENT USER INFO
-            isSaved = FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);
-            if (isSaved) {
-                hideProgress();
-                new AlertDialogUtils.Builder(this)
-                        .setResourceMessage(R.string.registration_success)
-                        .setPositiveText(R.string.btn_ok)
-                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = MainActivity.newIntent(RegistrationActivity.this);
-                                startActivity(intent);
-                            }
-                        })
-                        .show();
+            //TODO SAVE IMAGE
+            mStorageRef = FireBaseHandler.getInstance(this).userPictureReferenceFireBase(mNewUserObject.getUserImagePath());
+            byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
+            saveImageInFireBase(imageByte);
 
-            } else {
-                new AlertDialogUtils.Builder(this)
-                        .setResourceMessage(R.string.registration_failure)
-                        .setPositiveText(R.string.btn_ok)
-                        .show();
-            }
+            mObjectflag = FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);
+//            validateRegistration();
         } else {
+            new AlertDialogUtils.Builder(this)
+                    .setResourceMessage(R.string.registration_failure)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
+        }
+    }
+
+    public void saveImageInFireBase(byte[] bitMap) {
+
+        UploadTask uploadTask = mStorageRef.putBytes(bitMap);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mUserPictureFlag = false;
+                validateRegistration();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                mUserPictureFlag = true;
+                validateRegistration();
+            }
+        });
+    }
+
+    public void validateRegistration() {
+        if (mObjectflag && mUserPictureFlag) {
+            hideProgress();
+            new AlertDialogUtils.Builder(this)
+                    .setResourceMessage(R.string.registration_success)
+                    .setPositiveText(R.string.btn_ok)
+                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = MainActivity.newIntent(RegistrationActivity.this);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+        } else {
+            hideProgress();
             new AlertDialogUtils.Builder(this)
                     .setResourceMessage(R.string.registration_failure)
                     .setPositiveText(R.string.btn_ok)
@@ -182,5 +225,10 @@ public class RegistrationActivity extends BaseActivity implements RegistrationBa
         if (mProgressfragment != null && mProgressfragment.isVisible()) {
             mProgressfragment.dismiss();
         }
+    }
+
+    @Override
+    public void userPictureImageResult(Bitmap userPicture) {
+        mUserPicture = userPicture;
     }
 }

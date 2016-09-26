@@ -2,12 +2,13 @@ package com.mywaytech.puppiessearchclient.services;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,9 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -126,7 +130,6 @@ public class FireBaseHandler {
 
     public boolean saveUserObject(NewUserObject newUserObject) {
         String uid = "";
-//        FirebaseUser user= mFirebaseAuth.getCurrentUser();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
@@ -139,12 +142,11 @@ public class FireBaseHandler {
 
     }
 
-    public void savePetObject(ReportObject reportObject, String mType) {
+    public boolean savePetObject(ReportObject reportObject, String mType) {
         String uid = "";
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         Log.d("report uname: ",""+reportObject.getuName());
         Log.d("report upath: ",""+reportObject.getImagePath());
-
 
         if (user != null) {
             uid = reportObject.getuId();
@@ -156,15 +158,21 @@ public class FireBaseHandler {
                     mFirebaseDatabaseReference.child(OBJECT_PET_ADOPTION).child(uid).setValue(reportObject);
                     break;
             }
-            Toast.makeText(mContext, "Se guardó satisfactoriamente el reporte", Toast.LENGTH_SHORT).show();
+            return true;
+
         } else {
             Log.d("error in creation", "" + "error");
-            Toast.makeText(mContext, "Ocurrió un error el reporte", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
     public StorageReference imageReferenceInFireBase(String imageId) {
         StorageReference mImageRef = mStorageRef.child("images/petImage" + imageId + ".jpg");
+        return mImageRef;
+    }
+
+    public StorageReference userPictureReferenceFireBase(String imagePath){
+        StorageReference mImageRef = mStorageRef.child(imagePath);
         return mImageRef;
     }
 

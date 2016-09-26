@@ -93,7 +93,7 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
                 mNewUserObject.setmName(uName.getText().toString());
                 mNewUserObject.setmEmail(uEmail.getText().toString());
                 mNewUserObject.setmPassword(uPassword.getText().toString());
-
+                mNewUserObject.setAddress(uAddress.getText().toString());
                 mPersonalInfoRegistrationCallback.updateRegistrationModel(mNewUserObject);
 
                 return true;

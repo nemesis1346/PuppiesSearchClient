@@ -5,11 +5,12 @@ import java.io.Serializable;
 /**
  * Created by Marco on 4/19/2016.
  */
-public class NewUserObject implements  Serializable {
+public class NewUserObject implements Serializable {
     private String mName;
     private String mEmail;
     private String mPassword;
-
+    private String mUserImagePath;
+    private String mAddress;
 
     public NewUserObject(){
 
@@ -19,6 +20,14 @@ public class NewUserObject implements  Serializable {
         this.mName = mName;
         this.mEmail = mEmail;
         this.mPassword = mPassword;
+    }
+
+    public String getUserImagePath() {
+        return mUserImagePath;
+    }
+
+    public void setUserImagePath(String userImagePath) {
+        mUserImagePath = userImagePath;
     }
 
     public String getmName() {
@@ -43,5 +52,13 @@ public class NewUserObject implements  Serializable {
 
     public void setmPassword(String mPassword) {
         this.mPassword = mPassword;
+    }
+
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(String address) {
+        mAddress = address;
     }
 }

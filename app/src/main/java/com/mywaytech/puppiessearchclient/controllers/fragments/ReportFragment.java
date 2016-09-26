@@ -88,6 +88,9 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     private StorageReference mStorageRef;
     private String mImageFirebasepPath;
 
+    private boolean mImageFlag = false;
+    private boolean mReportFlag = false;
+
     public static ReportFragment newInstance() {
         Bundle args = new Bundle();
         ReportFragment fragment = new ReportFragment();
@@ -200,7 +203,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         public void onClick(View v) {
             if (newAddress.getText().toString().isEmpty() ||
                     newComment.getText().toString().isEmpty() ||
-                    mTemporalPhoto==null || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
+                    mTemporalPhoto == null || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
 
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.validation_error_message)
@@ -210,7 +213,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             } else {
                 String uniqueId = UUID.randomUUID().toString();
 
-//                mStorageRef = FireBaseHandler.getInstance().imageReferenceInFireBase(uniqueId);
+                mStorageRef = FireBaseHandler.getInstance(getContext()).imageReferenceInFireBase(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
                 mReportObject = new ReportObject(
@@ -225,7 +228,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 saveImageInFireBase(imageByte);
 
                 showProgress();
-                FireBaseHandler.getInstance(getActivity()).savePetObject(mReportObject, mSpinnerValue);
+                mReportFlag = FireBaseHandler.getInstance(getActivity()).savePetObject(mReportObject, mSpinnerValue);
             }
         }
     };
@@ -236,28 +239,14 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                hideProgress();
-                new AlertDialogUtils.Builder(getContext())
-                        .setResourceMessage(R.string.failure_report_saved)
-                        .setPositiveText(R.string.btn_ok)
-                        .show();
+                mImageFlag = false;
+                validateReport();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                hideProgress();
-                new AlertDialogUtils.Builder(getContext())
-                        .setResourceMessage(R.string.success_report_saved)
-                        .setPositiveText(R.string.btn_ok)
-                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getActivity().finish();
-
-                            }
-                        })
-                        .show();
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                mImageFlag = true;
+                validateReport();
             }
         });
     }
@@ -286,6 +275,28 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     private void hideProgress() {
         if (mProgressfragment != null && mProgressfragment.isVisible()) {
             mProgressfragment.dismiss();
+        }
+    }
+
+    private void validateReport() {
+        if (mImageFlag && mReportFlag) {
+            hideProgress();
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.success_report_saved)
+                    .setPositiveText(R.string.btn_ok)
+                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().finish();
+                        }
+                    })
+                    .show();
+        } else {
+            hideProgress();
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.failure_report_saved)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
         }
     }
 }

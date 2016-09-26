@@ -18,18 +18,22 @@ import android.widget.Button;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 
 import java.io.File;
+import java.io.Serializable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Marco on 21/9/2016.
  */
-public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
+public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
 
     private static final int CAMERA_REQUEST = 0;
+
+    public UserPictureImageCallback mUserPictureImageCallback;
 
     private Bitmap mPhoto;
     private File mFile;
@@ -39,17 +43,23 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
     private Button mBtnForward;
     private CircleImageView mUserPicture;
     private FloatingActionButton mFloatingActionButton;
+    private NewUserObject mNewUserObject;
 
-    public static UserPictureRegistrationFragment newInstance(NewUserObject userObject){
-        Bundle args =new Bundle();
+    public static final String ARG_NEW_USER_OBJECT = "arg_new_user_object";
+
+
+    public static UserPictureRegistrationFragment newInstance(NewUserObject userObject) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_NEW_USER_OBJECT, userObject);
         UserPictureRegistrationFragment fragment = new UserPictureRegistrationFragment();
         fragment.setArguments(args);
-        return  fragment;
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mNewUserObject = (NewUserObject) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -57,16 +67,14 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_picture_registration,container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user_picture_registration, container, false);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.image_userPicture_container);
         mUserPicture.setImageResource(R.drawable.ic_user_picture);
+        mUserPicture.setOnClickListener(mBtnActionButton);
         mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.icon_add_user_picture);
         mFloatingActionButton.setOnClickListener(mBtnActionButton);
-
         return rootView;
     }
-
-
 
 
     private View.OnClickListener mBtnActionButton = new View.OnClickListener() {
@@ -78,8 +86,31 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
     };
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mUserPictureImageCallback = (UserPictureImageCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mUserPictureImageCallback = null;
+    }
+
+    @Override
     public boolean isFormReady() {
-        return true;
+        if (mPhoto != null) {
+            String mUserImagePath = "userPicture/user" + mNewUserObject.getmEmail() + ".jpg";
+            mNewUserObject.setUserImagePath(mUserImagePath);
+            mUserPictureImageCallback.userPictureImageResult(mPhoto);
+            return true;
+        } else {
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.user_picture_lack)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
+            return false;
+        }
     }
 
     @Override
@@ -88,14 +119,15 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment{
             //this is the global variable of the photo
             mPhoto = (Bitmap) data.getExtras().get("data");
 
-            mFile = PhotoUtils.setPhotoFile(getContext());
-            mFinalPath = mFile.getPath();
-
-            if (PhotoUtils.photoResultProcessing(getContext(), mPhoto,mFinalPath) != null) {
-                mUserPicture.setImageBitmap(PhotoUtils.photoResultProcessing(getContext(), mPhoto, mFinalPath));
+            if (mPhoto != null) {
+                mUserPicture.setImageBitmap(mPhoto);
                 mUserPicture.setVisibility(View.VISIBLE);
             }
         }
 
+    }
+
+    public interface UserPictureImageCallback {
+        void userPictureImageResult(Bitmap userPicture);
     }
 }

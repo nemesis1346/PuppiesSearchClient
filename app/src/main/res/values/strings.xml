@@ -59,6 +59,9 @@
     <string name="btn_back">Atras</string>
     <string name="btn_foward">Adelante</string>
     <string name="registration_text">Registrando....</string>
+    <string name="resport_successfully_saved">Se guardó satisfactoriamente el reporte</string>
+    <string name="report_failure">Ocurrió un error en el reporte</string>
+    <string name="user_picture_lack">Tómese una foto por favor</string>
 
 
 </resources>
