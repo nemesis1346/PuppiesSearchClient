@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -135,10 +136,10 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         mTypeSpinner.setOnItemSelectedListener(this);
 
 
-        mFirebaseAuth = FireBaseHandler.getInstance(getContext()).getFirebaseAuth();
+        mFirebaseAuth = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
 
-        mCurrentUser = FireBaseHandler.getInstance(getContext()).getFirebaseAuth().getCurrentUser();
+        mCurrentUser = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth().getCurrentUser();
         return rootView;
     }
 
@@ -170,7 +171,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 Log.d("username: ", "" + mCurrentUserName);
             } else {
 
-                Toast.makeText(getContext(), "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }
         }
@@ -185,14 +186,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
             //FIXME this is the global variable of the photo LOCAL
             mTemporalPhoto = (Bitmap) data.getExtras().get("data");
-//
-//            mFile = PhotoUtils.setPhotoFile(getContext());
-//            mFinalPath = mFile.getPath();
-
-            //TODO CHECK IF THIS NEW METHOD IS GOING TO WORK
-//            mStorageRef = FireBaseHandler.getInstance(getActivity()).imageReferenceInFireBase(reportObject);
-//            mImageFirebasepPath  = mStorageRef.getPath();
-
 
             if (mTemporalPhoto != null) {
                 imageShow.setImageBitmap(mTemporalPhoto);
@@ -217,8 +210,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             } else {
                 String uniqueId = UUID.randomUUID().toString();
 
-                mStorageRef = FireBaseHandler.getInstance(getActivity()).imageReferenceInFireBase(uniqueId);
-                mImageFirebasepPath = mStorageRef.getPath();
+//                mStorageRef = FireBaseHandler.getInstance().imageReferenceInFireBase(uniqueId);
+                mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
                 mReportObject = new ReportObject(
                         uniqueId,

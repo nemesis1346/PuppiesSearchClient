@@ -35,12 +35,20 @@ public class FireBaseHandler {
     public static final String OBJECT_PET_LOST = "PET_FOR_ADOPTION";
     public static final String OBJECT_PET_ADOPTION = "PET_FOR_RESCUE";
 
-    private FireBaseHandler(Context mContext) {
+    private FireBaseHandler(Context context) {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageRef = mFirebaseStorage.getReferenceFromUrl("gs://puppiessearch-7c275.appspot.com");
-        this.mContext = mContext;
+        this.mContext =context;
+    }
+
+    public StorageReference getmStorageRef() {
+        return mStorageRef;
+    }
+
+    public void setmStorageRef(StorageReference mStorageRef) {
+        this.mStorageRef = mStorageRef;
     }
 
     public FirebaseAuth getFirebaseAuth() {
@@ -137,7 +145,6 @@ public class FireBaseHandler {
         Log.d("report uname: ",""+reportObject.getuName());
         Log.d("report upath: ",""+reportObject.getImagePath());
 
-        reportObject.setImagePath("asdas");
 
         if (user != null) {
             uid = reportObject.getuId();

@@ -59,7 +59,7 @@ public class WallAdoptionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pet_list = new ArrayList<>();
-        mFireBaseHandler = FireBaseHandler.getInstance(getContext());
+        mFireBaseHandler = FireBaseHandler.getInstance(getActivity());
         mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_ADOPTION);
         mDatabaseReference.addValueEventListener(showFireBaseListener);
     }

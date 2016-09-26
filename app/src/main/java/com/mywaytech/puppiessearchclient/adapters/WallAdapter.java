@@ -3,7 +3,10 @@ package com.mywaytech.puppiessearchclient.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.List;
 
@@ -46,26 +54,47 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
-        mListItems.get(position);
+    public void onBindViewHolder(final ItemViewHolder holder, final int position) {
+
         holder.userName.setText(mListItems.get(position).getuName());
        // holder.petImage.setImageResource(mListItems.get(position).getpImage());
 
-        if(mListItems.get(position).getImagePath()!=null) {
-            File imgFile = new  File(mListItems.get(position).getImagePath());
+        Log.d("path wall: ",""+ mListItems.get(position).getImagePath());
+        StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(mContext).getmStorageRef().child(mListItems.get(position).getImagePath());
 
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                holder.petImage.setImageBitmap(myBitmap);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                Log.d("result bytes: ",""+ bytes);
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                holder.petImage.setImageBitmap(bitmap);
             }
-        }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
+
+
+
+//        if(mListItems.get(position).getImagePath()!=null) {
+//            File imgFile = new  File(mListItems.get(position).getImagePath());
+//
+//            if(imgFile.exists()){
+//                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                holder.petImage.setImageBitmap(myBitmap);
+//            }
+//        }
         holder.userAddres.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
         holder.mUserPictureContainer.setImageResource(R.drawable.ic_user_picture);
 
     }
-
-
 
     @Override
     public int getItemCount() {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.LoginFragment;
 
 import java.util.Timer;
 import java.util.TimerTask;

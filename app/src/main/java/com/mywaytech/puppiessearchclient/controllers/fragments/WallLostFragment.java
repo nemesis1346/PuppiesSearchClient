@@ -63,7 +63,7 @@ public class WallLostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mValue = getArguments().getInt(ARG_VALUE);
         pet_list = new ArrayList<>();
-        mFireBaseHandler = FireBaseHandler.getInstance(getContext());
+        mFireBaseHandler = FireBaseHandler.getInstance(getActivity());
         mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_LOST);
         mDatabaseReference.addValueEventListener(showFireBaseListener);
     }
