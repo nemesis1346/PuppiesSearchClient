@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
@@ -37,9 +41,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class AccountFragment extends Fragment {
 
-    public static final String EXTRA_USERDATA_IN = "com.mywaytech.puppiessearchclient.extras.extra_userdata_in";
-    public static final String EXTRA_EMAIL = "com.mywaytech.puppiessearchclient.extras.extra_email";
-
     private NewUserObject mNewUserObject;
 
     private TextView mName;
@@ -47,12 +48,9 @@ public class AccountFragment extends Fragment {
     private TextView mAddress;
     private CircleImageView mUserPicture;
 
-    private String authEmail;
-
-    private String[] retrieve;
-
-    private DatabaseReference mDatabaseReference;
-    private StorageReference mStorageReference;
+    private ProgressBar mProgressBar;
+    private TextView mProgressTextInfo;
+    private ImageView mProgressErrorImg;
 
     public static AccountFragment newInstance(){
         Bundle args = new Bundle();
@@ -73,25 +71,25 @@ public class AccountFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_account, container, false);
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.main_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.report_title);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.myAccountTitle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
+        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
+
 
         mName = (TextView) rootView.findViewById(R.id.show_user_name);
         mEmail = (TextView) rootView.findViewById(R.id.show_email);
         mAddress= (TextView) rootView.findViewById(R.id.show_address);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.account_image);
 
-        FirebaseUser user=FireBaseHandler.getInstance(getContext()).getFirebaseAuth().getCurrentUser();
-
-        mDatabaseReference= FireBaseHandler.getInstance(getContext()).getFirebaseDatabaseReference();
-        mDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME)
-                .child(user.getUid())
+        showProgress();
+        FireBaseHandler.getInstance(getContext()).getUserPictureFirebaseDatabaseReference()
                 .addListenerForSingleValueEvent(mAccountFirebaseListener);
 
         return rootView;
     }
-
-
 
     private ValueEventListener mAccountFirebaseListener = new ValueEventListener() {
         @Override
@@ -108,16 +106,16 @@ public class AccountFragment extends Fragment {
             mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
-                    // Data for "images/island.jpg" is returns, use this as needed
-                    Log.d("result bytes: ",""+ bytes);
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     mUserPicture.setImageBitmap(bitmap);
+                    hideProgress();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle any errors
+                    showError(R.string.error_no_results_found);
                 }
             });
         }
@@ -128,9 +126,6 @@ public class AccountFragment extends Fragment {
         }
     };
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -140,6 +135,24 @@ public class AccountFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setText(R.string.pet_loading_message);
+    }
+
+    private void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.GONE);
+    }
+
+    private void showError(@StringRes int stringId) {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressErrorImg.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setText(stringId);
     }
 
 }

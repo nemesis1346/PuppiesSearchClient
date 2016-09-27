@@ -13,10 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
@@ -39,8 +37,6 @@ public class WallLostFragment extends Fragment {
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
     private List<ReportObject> pet_list;
-    private FireBaseHandler mFireBaseHandler;
-    private DatabaseReference mDatabaseReference;
 
     private ProgressBar mProgressBar;
     private Button mRetryBtn;
@@ -63,9 +59,8 @@ public class WallLostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mValue = getArguments().getInt(ARG_VALUE);
         pet_list = new ArrayList<>();
-        mFireBaseHandler = FireBaseHandler.getInstance(getActivity());
-        mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_LOST);
-        mDatabaseReference.addValueEventListener(showFireBaseListener);
+        FireBaseHandler.getInstance(getContext()).getLostPetFirebaseDatabaseReference()
+                .addValueEventListener(showFireBaseListener);
     }
 
     @Nullable
@@ -85,7 +80,6 @@ public class WallLostFragment extends Fragment {
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
         mListView.setLayoutManager(linearLayoutManager);
-
 
         mListView.setAdapter(wallAdapter);
         wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
@@ -125,7 +119,6 @@ public class WallLostFragment extends Fragment {
             showErrorRetry();
         }
     };
-
 
     @Override
     public void onPause() {

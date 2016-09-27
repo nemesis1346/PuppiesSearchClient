@@ -14,4 +14,5 @@
     <dimen name="user_image_size">40dp</dimen>
     <dimen name="user_image_size_registration">175dp</dimen>
     <dimen name="activity_horizontal_margin_huge">96dp</dimen>
+    <dimen name="user_image_size_myaccount">120dp</dimen>
 </resources>

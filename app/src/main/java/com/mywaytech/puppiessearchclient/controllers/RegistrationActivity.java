@@ -157,7 +157,7 @@ public class RegistrationActivity extends BaseActivity implements
         if (isCreated) {
             //GET CURRENT USER INFO
             //TODO SAVE IMAGE
-            mStorageRef = FireBaseHandler.getInstance(this).userPictureReferenceFireBase(mNewUserObject.getUserImagePath());
+            mStorageRef = FireBaseHandler.getInstance(this).getUserPictureFirebaseStorageReference(mNewUserObject.getUserImagePath());
             byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
             saveImageInFireBase(imageByte);
 

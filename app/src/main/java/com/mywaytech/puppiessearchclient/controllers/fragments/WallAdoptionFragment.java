@@ -36,9 +36,6 @@ public class WallAdoptionFragment extends Fragment {
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
 
-    private FireBaseHandler mFireBaseHandler;
-    private DatabaseReference mDatabaseReference;
-
     private List<ReportObject> pet_list;
 
     private ProgressBar mProgressBar;
@@ -59,9 +56,9 @@ public class WallAdoptionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pet_list = new ArrayList<>();
-        mFireBaseHandler = FireBaseHandler.getInstance(getActivity());
-        mDatabaseReference = mFireBaseHandler.getFirebaseDatabaseReference().child(FireBaseHandler.OBJECT_PET_ADOPTION);
-        mDatabaseReference.addValueEventListener(showFireBaseListener);
+
+        FireBaseHandler.getInstance(getContext()).getAdoptionPetFirebaseDatabaseReference()
+                .addValueEventListener(showFireBaseListener);
     }
 
     @Nullable

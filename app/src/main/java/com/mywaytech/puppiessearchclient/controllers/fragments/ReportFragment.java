@@ -1,11 +1,9 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -41,9 +39,6 @@ import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -213,7 +208,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             } else {
                 String uniqueId = UUID.randomUUID().toString();
 
-                mStorageRef = FireBaseHandler.getInstance(getContext()).imageReferenceInFireBase(uniqueId);
+                mStorageRef = FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
                 mReportObject = new ReportObject(

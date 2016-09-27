@@ -23,6 +23,7 @@
             android:layout_height="@dimen/user_image_size"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/material_design_margin"
+            android:src="@drawable/ic_user_picture"
             app:civ_border_color="@color/colorPrimary"
             app:civ_border_width="2dp"/>
 
@@ -41,16 +42,29 @@
         android:layout_height="300dp"
         android:layout_below="@id/item_header"
         android:layout_centerHorizontal="true"
-        android:padding="2dp"
         android:background="@drawable/item_wall_border"
-        >
+        android:padding="2dp">
 
-        <ImageView
-            android:id="@+id/item_dog_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/screen"/>
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/item_dog_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+            <include
+                layout="@layout/row_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <TextView
