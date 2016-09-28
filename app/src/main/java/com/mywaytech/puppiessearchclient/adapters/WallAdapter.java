@@ -3,6 +3,7 @@ package com.mywaytech.puppiessearchclient.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -108,9 +110,18 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         });
 
         holder.userName.setText(mListItems.get(position).getuName());
-        holder.userEmail.setText(mListItems.get(position).getuEmail());
         holder.userAddress.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
+
+        holder.userEmail.setText(mListItems.get(position).getuEmail());
+        holder.userEmail.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        holder.userEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.openEmail(v.getContext(),new String[]{mListItems.get(position).getuEmail()},null,null);
+            }
+        });
+
 
     }
 

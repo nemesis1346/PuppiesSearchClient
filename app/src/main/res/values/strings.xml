@@ -63,6 +63,7 @@
     <string name="report_failure">Ocurrió un error en el reporte</string>
     <string name="user_picture_lack">Tómese una foto por favor</string>
     <string name="login_firebase_error">Error interno</string>
+    <string name="select_email_title">Mandar Correo...</string>
 
 
 </resources>
