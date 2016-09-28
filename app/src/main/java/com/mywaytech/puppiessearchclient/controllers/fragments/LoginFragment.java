@@ -85,6 +85,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         bNewUser = (Button) rootView.findViewById(R.id.btn_new_user);
         bNewUser.setOnClickListener(newUserListener);
 
+
         return rootView;
     }
 
@@ -117,19 +118,32 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     @Override
     public void onCompleteLogging(boolean isLogged) {
         if (isLogged) {
-            hideProgress();
-
-            new AlertDialogUtils.Builder(getContext())
-                    .setResourceMessage(R.string.login_identified)
-                    .setPositiveText(R.string.btn_ok)
-                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+            FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = MainActivity.newIntent(getActivity());
-                            startActivity(intent);
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            NewUserObject mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
+                            UserSessionManager.getInstance(getContext()).saveLocalUser(mNewUserObject);
+                            hideProgress();
+                            new AlertDialogUtils.Builder(getContext())
+                                    .setResourceMessage(R.string.login_identified)
+                                    .setPositiveText(R.string.btn_ok)
+                                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = MainActivity.newIntent(getActivity());
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .show();
                         }
-                    })
-                    .show();
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
         } else {
             new AlertDialogUtils.Builder(getContext())
                     .setResourceMessage(R.string.login_not_identified)

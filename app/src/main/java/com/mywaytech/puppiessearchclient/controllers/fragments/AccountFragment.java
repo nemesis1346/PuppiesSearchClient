@@ -9,7 +9,6 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,15 +19,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
-import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
@@ -85,7 +80,7 @@ public class AccountFragment extends Fragment {
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.account_image);
 
         showProgress();
-        FireBaseHandler.getInstance(getContext()).getUserPictureFirebaseDatabaseReference()
+        FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
                 .addListenerForSingleValueEvent(mAccountFirebaseListener);
 
         return rootView;

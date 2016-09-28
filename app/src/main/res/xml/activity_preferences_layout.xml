@@ -6,14 +6,10 @@
         android:title="@string/txt_prefCat_account"
         >
 
-        <PreferenceScreen
+        <Preference
             android:key="preference_key_account"
             android:title="@string/txt_prefCat_account">
-            <Preference
-                android:title="@string/pref_title_username"/>
-            <Preference
-                android:title="@string/pref_title_email"/>
-        </PreferenceScreen>
+        </Preference>
 
     </PreferenceCategory>
 

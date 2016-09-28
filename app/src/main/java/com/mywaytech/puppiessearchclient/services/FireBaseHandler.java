@@ -116,6 +116,7 @@ public class FireBaseHandler {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
+            newUserObject.setUid(user.getUid());
             mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(uid).setValue(newUserObject);
             return true;
         } else {
@@ -157,11 +158,11 @@ public class FireBaseHandler {
         return mStorageRef.child(imagePath);
     }
 
-    public StorageReference getUserPictureFirebaseStorageReference(String imagePath) {
+    public StorageReference getUserObjectFirebaseStorageReference(String imagePath) {
         return mStorageRef.child(imagePath);
     }
 
-    public DatabaseReference getUserPictureFirebaseDatabaseReference() {
+    public DatabaseReference getUserObjectFirebaseDatabaseReference() {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(user.getUid());
     }

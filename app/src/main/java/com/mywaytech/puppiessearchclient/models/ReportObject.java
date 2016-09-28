@@ -14,17 +14,27 @@ public class ReportObject implements Serializable {
     private String uAddress;
     private String imagePath;
     private String uComment;
+    private String uEmail;
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public ReportObject(String uid,String uName, String uAddress, String imagePath, String uComment) {
+    public ReportObject(String uid,String uName, String uAddress, String imagePath, String uComment, String uEmail) {
         this.uId = uid;
         this.uName = uName;
         this.uAddress = uAddress;
         this.imagePath = imagePath;
         this.uComment = uComment;
+        this.uEmail = uEmail;
     }
     public ReportObject() {
+    }
+
+    public String getuEmail() {
+        return uEmail;
+    }
+
+    public void setuEmail(String uEmail) {
+        this.uEmail = uEmail;
     }
 
     public String getuId() {

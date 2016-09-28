@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
+import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
@@ -71,6 +73,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private FirebaseUser mCurrentUser;
     private String mCurrentUserName;
+    private NewUserObject mNewUserObject;
 
     private FirebaseAuth mFirebaseAuth;
 
@@ -137,7 +140,11 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         mFirebaseAuth = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
 
+        //TODO IT MIGHT BE UNNECESARY
         mCurrentUser = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth().getCurrentUser();
+
+        mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
+
         return rootView;
     }
 
@@ -213,10 +220,13 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
                 mReportObject = new ReportObject(
                         uniqueId,
-                        mCurrentUserName,
+                        mNewUserObject.getmName(),
                         newAddress.getText().toString(),
                         mImageFirebasepPath,
-                        newComment.getText().toString());
+                        newComment.getText().toString(),
+                        mNewUserObject.getmEmail()
+
+                );
 
 
                 byte[] imageByte = PhotoUtils.processImagePet(mTemporalPhoto);

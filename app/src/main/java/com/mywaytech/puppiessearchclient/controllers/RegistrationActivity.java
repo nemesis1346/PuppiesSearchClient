@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
@@ -157,7 +158,7 @@ public class RegistrationActivity extends BaseActivity implements
         if (isCreated) {
             //GET CURRENT USER INFO
             //TODO SAVE IMAGE
-            mStorageRef = FireBaseHandler.getInstance(this).getUserPictureFirebaseStorageReference(mNewUserObject.getUserImagePath());
+            mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath());
             byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
             saveImageInFireBase(imageByte);
 

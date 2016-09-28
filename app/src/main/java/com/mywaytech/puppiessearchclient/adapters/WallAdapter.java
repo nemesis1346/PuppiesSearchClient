@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
@@ -60,7 +57,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         showProgress(holder);
 
-         FireBaseHandler.getInstance(mContext).getUserPictureFirebaseDatabaseReference()
+         FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReference()
                  .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -69,7 +66,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                         final long ONE_MEGABYTE = 1024 * 1024;
 
                         FireBaseHandler.getInstance(mContext)
-                                .getUserPictureFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
@@ -111,7 +108,8 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         });
 
         holder.userName.setText(mListItems.get(position).getuName());
-        holder.userAddres.setText(mListItems.get(position).getuAddress());
+        holder.userEmail.setText(mListItems.get(position).getuEmail());
+        holder.userAddress.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
 
     }
@@ -147,8 +145,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         private TextView userName;
         private ImageView petImage;
-        private TextView userAddres;
+        private TextView userAddress;
         private TextView userComment;
+        private TextView userEmail;
         private CircleImageView mUserPictureContainer;
 
         public ItemViewHolder(View itemView) {
@@ -160,9 +159,12 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
             mUserPictureContainer = (CircleImageView) itemView.findViewById(R.id.image_userPicture_container);
             userName = (TextView) itemView.findViewById(R.id.item_name);
+            userEmail = (TextView) itemView.findViewById(R.id.item_email);
             petImage = (ImageView) itemView.findViewById(R.id.item_dog_image);
-            userAddres = (TextView) itemView.findViewById(R.id.item_address);
+            userAddress = (TextView) itemView.findViewById(R.id.item_address);
             userComment = (TextView) itemView.findViewById(R.id.item_comment);
+
+
             if (callbacks != null) {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
