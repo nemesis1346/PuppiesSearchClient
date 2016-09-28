@@ -23,7 +23,7 @@ import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class MainActivity extends BaseActivity implements SearchDialog.PassDataFragment {
+public class MainActivity extends BaseActivity {
 
     public static final String EXTRA_EMAIL_FORAUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_forauth";
 
@@ -118,15 +118,8 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.action_search:
-                showDialog();
-                return true;
             case R.id.action_map:
                 intent = MapActivity.newIntent(MainActivity.this);
-                startActivity(intent);
-                return true;
-            case R.id.menuoptions_account:
-                intent = AccountActivity.newIntent(MainActivity.this);
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_settings:
@@ -139,19 +132,6 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void showDialog() {
-        FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-        SearchDialog searchDialog = SearchDialog.newInstance();
-
-        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft3.remove(prev);
-        }
-        ft3.addToBackStack(null);
-
-        searchDialog.show(ft3, "dialog");
     }
 
 
@@ -197,12 +177,7 @@ public class MainActivity extends BaseActivity implements SearchDialog.PassDataF
 
     }
 
-    @Override
-    public void backData(int value) {
-        Log.d("backdata", "" + value);
-        this.value = value;
-        selectTab(tabLayout.getSelectedTabPosition(), value);
-    }
+
 
 
 }

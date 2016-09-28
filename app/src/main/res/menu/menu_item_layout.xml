@@ -2,11 +2,6 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/action_search"
-        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_map"
@@ -22,11 +17,6 @@
         android:title="@string/action_map"
         app:showAsAction="ifRoom|withText">
         <menu>
-            <item
-                android:id="@+id/menuoptions_account"
-                android:title="@string/txt_menuoptions_account"
-                />
-
             <item
                 android:id="@+id/menuoptions_settings"
                 android:title="@string/txt_menuoptions_settings"
