@@ -34,6 +34,8 @@ import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+
 /**
  * Created by Marco on 9/19/2016.
  */
@@ -55,9 +57,12 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private ProgressDialogFragment mProgressfragment;
 
     private DatabaseReference mDatabaseReference;
+    private boolean mNotificacionFlag;
 
-    public static LoginFragment newInstance() {
+    private static final String ARG_NOTIFICATION_FLAG = "arg_notification_flag";
+    public static LoginFragment newInstance(boolean notificationFlag) {
         Bundle args = new Bundle();
+        args.putBoolean(ARG_NOTIFICATION_FLAG,notificationFlag);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
@@ -66,6 +71,11 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mNotificacionFlag = getArguments().getBoolean(ARG_NOTIFICATION_FLAG);
+        if(mNotificacionFlag){
+            showProgress();
+            authenticateUser();
+        }
     }
 
     @Nullable
@@ -206,4 +216,24 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         }
     }
 
+    private void authenticateUser(){
+        FireBaseHandler.getInstance(getContext()).getFirebaseAuth().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    hideProgress();
+                    startActivity(MainActivity.newIntent(getContext()));
+                    Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    hideProgress();
+                    new AlertDialogUtils.Builder(getContext())
+                            .setResourceMessage(R.string.login_not_identified)
+                            .setPositiveText(R.string.btn_ok)
+                            .show();
+                    Log.d("logout", "onAuthStateChanged:signed_out");
+                }
+            }
+        });
+    }
 }

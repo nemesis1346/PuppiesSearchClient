@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.LoginActivity;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
 
 import java.util.Map;
@@ -30,11 +31,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             sendNotificationToSystem(remoteMessage.getNotification());
         }
     }
-
     private void sendNotificationToSystem(RemoteMessage.Notification notification){
         try{
-
             Intent mainActivityIntent = MainActivity.newIntent(this);
+            mainActivityIntent.putExtra(LoginActivity.EXTRA_NOTIFICATION_FLAG, true);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, mainActivityIntent,
                     PendingIntent.FLAG_ONE_SHOT);
 
