@@ -52,6 +52,7 @@ public class ProgressDialogUtils {
                 }
                 progressFragment = ProgressDialogFragment.newInstance(mProgressMessage);
                 progressFragment.setCustomView(mCustomView);
+                progressFragment.setCancelable(false);
                 progressFragment.setStyle(R.style.AlertDialogTheme);
                 progressFragment.show(ft, DIALOG_TAG);
             } catch (IllegalStateException ex) {

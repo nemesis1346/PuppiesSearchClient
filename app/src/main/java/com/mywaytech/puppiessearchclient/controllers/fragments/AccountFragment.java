@@ -135,7 +135,7 @@ public class AccountFragment extends Fragment {
     private void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressTextInfo.setVisibility(View.VISIBLE);
-        mProgressTextInfo.setText(R.string.pet_loading_message);
+        mProgressTextInfo.setText(R.string.pet_loading_user_picture);
     }
 
     private void hideProgress() {

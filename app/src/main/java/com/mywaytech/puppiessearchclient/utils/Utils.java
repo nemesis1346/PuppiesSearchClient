@@ -16,7 +16,6 @@ public class Utils {
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emails == null ? new String[]{} : emails);
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject == null ? "" : subject);
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message == null ? "" : message);
-
         context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.select_email_title)));
     }
 

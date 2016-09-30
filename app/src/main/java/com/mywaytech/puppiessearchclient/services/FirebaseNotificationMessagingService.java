@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.LoginActivity;
@@ -20,9 +21,10 @@ import java.util.UUID;
 /**
  * Created by Marco on 28/9/2016.
  */
-public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FirebaseNotificationMessagingService extends FirebaseMessagingService {
 
     private static int mCounter=0;
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -33,7 +35,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
     private void sendNotificationToSystem(RemoteMessage.Notification notification){
         try{
-            Intent mainActivityIntent = MainActivity.newIntent(this);
+            Intent mainActivityIntent = LoginActivity.newIntent(this);
+            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             mainActivityIntent.putExtra(LoginActivity.EXTRA_NOTIFICATION_FLAG, true);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, mainActivityIntent,
                     PendingIntent.FLAG_ONE_SHOT);

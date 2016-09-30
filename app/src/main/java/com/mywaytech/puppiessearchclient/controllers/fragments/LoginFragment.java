@@ -72,6 +72,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNotificacionFlag = getArguments().getBoolean(ARG_NOTIFICATION_FLAG);
+        Log.d("flag not: ",""+mNotificacionFlag);
         if(mNotificacionFlag){
             showProgress();
             authenticateUser();

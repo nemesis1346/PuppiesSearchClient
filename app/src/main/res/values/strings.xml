@@ -64,6 +64,7 @@
     <string name="user_picture_lack">Tómese una foto por favor</string>
     <string name="login_firebase_error">Error interno</string>
     <string name="select_email_title">Mandar Correo...</string>
+    <string name="pet_loading_user_picture">Cargando imagen...</string>
 
 
 </resources>

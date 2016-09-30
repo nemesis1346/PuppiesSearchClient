@@ -251,6 +251,9 @@ public class MapPuppiesFragment extends Fragment implements
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
             mMap.animateCamera(cameraUpdate);
             mMap.moveCamera(cameraUpdate);
+
+            float zoomLevel = 16; //This goes up to 21
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
         }
     }
 
