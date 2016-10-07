@@ -94,7 +94,7 @@ public class MapPuppiesFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.main_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.report_title);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.mapactivity_title);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         searchText = (EditText) rootView.findViewById(R.id.edit_text_search_puppy);

@@ -139,6 +139,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                             new AlertDialogUtils.Builder(getContext())
                                     .setResourceMessage(R.string.login_identified)
                                     .setPositiveText(R.string.btn_ok)
+                                    .setIsCancelable(false)
                                     .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -158,6 +159,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         } else {
             new AlertDialogUtils.Builder(getContext())
                     .setResourceMessage(R.string.login_not_identified)
+                    .setIsCancelable(false)
                     .setPositiveText(R.string.btn_ok)
                     .show();
         }
@@ -230,6 +232,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                     hideProgress();
                     new AlertDialogUtils.Builder(getContext())
                             .setResourceMessage(R.string.login_not_identified)
+                            .setIsCancelable(false)
                             .setPositiveText(R.string.btn_ok)
                             .show();
                     Log.d("logout", "onAuthStateChanged:signed_out");

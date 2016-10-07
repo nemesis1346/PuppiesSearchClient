@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Best Friend</string>
+    <string name="app_name">Salvame</string>
     <string name="hint_username">Nombre del Usuario</string>
     <string name="hint_mail">Email</string>
     <string name="hint_password">Contraseña</string>
@@ -65,6 +65,57 @@
     <string name="login_firebase_error">Error interno</string>
     <string name="select_email_title">Mandar Correo...</string>
     <string name="pet_loading_user_picture">Cargando imagen...</string>
+    <string name="txt_prefCat_contact_us">Contáctanos</string>
+    <string name="txt_prefCat_about">Acerca de la App</string>
+    <string name="txt_menuoptions_contact_us">Contáctanos</string>
+    <string name="contact_us_title">Contáctanos</string>
+    <string name="action_contact_us">Contactanos</string>
 
+
+    <!--STRINGS FOR CONTACT_US-->
+    <string-array name="contact_us_name_array">
+        <item name="contact_gora_name">Fundación Gora</item>
+        <item name="contact_mov_machala_name">Movimiento Conciencia Animal-Machala</item>
+        <item name="contact_segunda_oportunidad_name">Segunda Oportunidad</item>
+        <item name="contact_pae_name">PAE-Protección Animal Ecuador</item>
+        <item name="contact_defensa_animal_name">Defensa de la Vida Animal</item>
+        <item name="contact_urbanimal_name">Urbanimal-Centro de Rescate del Municipio de Quito</item>
+    </string-array>
+
+    <string-array name="contact_us_address_array">
+        <item name="contact_gora_address">Las toronjas E12-161 y Av. el Inca, Quito-Ecuador</item>
+        <item name="contact_mov_machala_address"></item>
+        <item name="contact_segunda_oportunidad_address"></item>
+        <item name="contact_pae_address">Antonio de Ulloa N34-85 y Rumipamba, Quito-Ecuador</item>
+        <item name="contact_defensa_animal_address"></item>
+        <item name="contact_urbanimal_address">Parroquia Calderón, calle de las semillas</item>
+    </string-array>
+
+    <string-array name="contact_us_cellphone_array">
+        <item name="contact_gora_cellphone">0998387738</item>
+        <item name="contact_mov_machala_cellphone">072933603</item>
+        <item name="contact_segunda_oportunidad_cellphone">0998416222</item>
+        <item name="contact_pae_cellphone">023319522</item>
+        <item name="contact_defensa_animal_cellphone">0977409808</item>
+        <item name="contact_urbanimal_cellphone">082825393</item>
+    </string-array>
+
+    <string-array name="contact_us_email_array">
+        <item name="contact_gora_email"></item>
+        <item name="contact_mov_machala_email"></item>
+        <item name="contact_segunda_oportunidad_email"></item>
+        <item name="contact_pae_email">info@pae.ec</item>
+        <item name="contact_defensa_animal_email">defensavidaanimal@gmail.com</item>
+        <item name="contact_urbanimal_email">urbanimal.quito@gmail.com</item>
+    </string-array>
+
+    <string-array name="contact_us_link_array">
+        <item name="contact_gora_link"></item>
+        <item name="contact_mov_machala_link"></item>
+        <item name="contact_segunda_oportunidad_link"></item>
+        <item name="contact_pae_link">http://www.pae.ec/</item>
+        <item name="contact_defensa_animal_link">http://defensavidaanimal.blogspot.com/</item>
+        <item name="contact_urbanimal_link">http://urbanimalquito.blogspot.com/</item>
+    </string-array>
 
 </resources>

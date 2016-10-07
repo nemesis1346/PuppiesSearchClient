@@ -118,6 +118,10 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case R.id.action_contact_us:
+                intent = ContactUsActivity.newIntent(MainActivity.this);
+                startActivity(intent);
+                return true;
             case R.id.action_map:
                 intent = MapActivity.newIntent(MainActivity.this);
                 startActivity(intent);

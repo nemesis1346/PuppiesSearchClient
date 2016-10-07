@@ -11,6 +11,13 @@
             android:title="@string/txt_prefCat_account">
         </Preference>
 
+
+        <Preference
+            android:key="preference_key_about"
+            android:title="@string/txt_prefCat_about">
+        </Preference>
+
+
     </PreferenceCategory>
 
 </PreferenceScreen>

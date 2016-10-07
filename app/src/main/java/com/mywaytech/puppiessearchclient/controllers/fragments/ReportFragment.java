@@ -288,6 +288,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             hideProgress();
             new AlertDialogUtils.Builder(getContext())
                     .setResourceMessage(R.string.success_report_saved)
+                    .setIsCancelable(false)
                     .setPositiveText(R.string.btn_ok)
                     .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                         @Override
@@ -300,6 +301,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             hideProgress();
             new AlertDialogUtils.Builder(getContext())
                     .setResourceMessage(R.string.failure_report_saved)
+                    .setIsCancelable(false)
                     .setPositiveText(R.string.btn_ok)
                     .show();
         }
