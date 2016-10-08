@@ -72,6 +72,12 @@
     <string name="action_contact_us">Contactanos</string>
 
 
+    <!--STRINGS FOR ABOUT-->
+    <string name="txt_company_link">http://mywaytriplive.wixsite.com/mywaytech</string>
+    <string name="txt_company_name">MyWay Tech</string>
+    <string name="txt_company_email">marco.maigua1346@gmail.com</string>
+    <string name="txt_company_phone">0996643586</string>
+
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">
         <item name="contact_gora_name">Fundación Gora</item>
