@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/toolbar_layout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,28 +14,63 @@
 
         <ImageView
             android:id="@+id/image_company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="@dimen/material_design_margin"/>
 
         <TextView
             android:id="@+id/txt_company_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/material_design_margin"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/about_company_title_size"/>
 
-        <TextView
-            android:id="@+id/txt_company_email"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/material_design_margin">
+            <ImageView
+                android:src="@drawable/ic_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/material_design_margin"/>
+            <TextView
+                android:id="@+id/txt_company_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_company_phone"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/material_design_margin">
+            <ImageView
+                android:src="@drawable/ic_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/material_design_margin"/>
+            <TextView
+                android:id="@+id/txt_company_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_company_link"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/ic_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/material_design_margin"/>
+            <TextView
+                android:id="@+id/txt_company_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

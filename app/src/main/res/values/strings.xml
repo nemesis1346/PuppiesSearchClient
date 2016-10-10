@@ -77,6 +77,9 @@
     <string name="txt_company_name">MyWay Tech</string>
     <string name="txt_company_email">marco.maigua1346@gmail.com</string>
     <string name="txt_company_phone">0996643586</string>
+    <string name="select_phone_title">Seleccione App</string>
+    <string name="select_browser_title">Seleccione navegador..</string>
+    <string name="aboutTitle">Acerca de la App</string>
 
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">
