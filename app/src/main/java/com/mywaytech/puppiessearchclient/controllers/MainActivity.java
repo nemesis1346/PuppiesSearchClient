@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.FilterFragment;
@@ -186,14 +188,39 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showDialog() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        FilterFragment filterFragment = FilterFragment.newInstance();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        filterFragment.show(ft, "dialog");
+
+        final ListView mChoiceListView = new ListView(this);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice);
+        mChoiceListView.setAdapter(arrayAdapter);
+
+        new AlertDialogUtils.Builder(this)
+                .setTitle(R.string.txt_title_choice)
+                .setPositiveText(R.string.btn_ok)
+                .setCustomView(mChoiceListView)
+                .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setIsCancelable(false)
+                .setNegativeText(R.string.btn_cancel)
+                .setNegativeButtonListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
+
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        FilterFragment filterFragment = FilterFragment.newInstance();
+//        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+//        if (prev != null) {
+//            ft.remove(prev);
+//        }
+//        ft.addToBackStack(null);
+//        filterFragment.show(ft, "dialog");
     }
 
 }

@@ -81,6 +81,8 @@
     <string name="select_browser_title">Seleccione navegador..</string>
     <string name="aboutTitle">Acerca de la App</string>
     <string name="action_filter">Filtro</string>
+    <string name="txt_title_choice">Seleccionar</string>
+    <string name="btn_cancel">Cancelar</string>
 
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">

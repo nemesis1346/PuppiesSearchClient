@@ -1,8 +1,10 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -40,19 +42,11 @@ public class FilterFragment extends DialogFragment  {
         mFilterDialogCallbacks=null;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        int style = DialogFragment.STYLE_NO_TITLE;
-        int theme = android.R.style.Theme_Holo_Light_Dialog;
-        setStyle(style, theme);
-    }
 
-    @Nullable
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_filter_diaglog, container, false);
-        return rootView;
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
     }
 
     public interface FilterDialogCallbacks{
