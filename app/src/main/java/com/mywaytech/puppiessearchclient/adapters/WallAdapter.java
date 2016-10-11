@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserObject;
 import com.mywaytech.puppiessearchclient.models.ReportObject;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
@@ -61,33 +63,33 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
          FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReference()
                  .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        NewUserObject mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
+                     @Override
+                     public void onDataChange(DataSnapshot dataSnapshot) {
+                         NewUserObject mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
 
-                        final long ONE_MEGABYTE = 1024 * 1024;
+                         final long ONE_MEGABYTE = 1024 * 1024;
 
-                        FireBaseHandler.getInstance(mContext)
-                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
-                                .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
-                                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                holder.mUserPictureContainer.setImageBitmap(bitmap);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        });
-                    }
+                         FireBaseHandler.getInstance(mContext)
+                                 .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                             @Override
+                             public void onSuccess(byte[] bytes) {
+                                 ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                 holder.mUserPictureContainer.setImageBitmap(bitmap);
+                             }
+                         }).addOnFailureListener(new OnFailureListener() {
+                             @Override
+                             public void onFailure(@NonNull Exception exception) {
+                             }
+                         });
+                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                     @Override
+                     public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                     }
+                 });
 
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
@@ -113,6 +115,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         holder.userAddress.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
 
+        holder.type.setText(mListItems.get(position).getuType());
         holder.userEmail.setText(mListItems.get(position).getuEmail());
         holder.userEmail.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         holder.userEmail.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +124,17 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                 Utils.openEmail(v.getContext(),new String[]{mListItems.get(position).getuEmail()},null,null);
             }
         });
+
+        switch(mListItems.get(position).getuType()){
+            case ReportFragment.TYPE_PET_ADOPTION:
+                holder.typeBackground.setBackgroundResource(R.color.red);
+                break;
+            case ReportFragment.TYPE_PET_LOST:
+                holder.typeBackground.setBackgroundResource(R.color.yellow);
+                break;
+            default:
+                break;
+        }
 
 
     }
@@ -161,6 +175,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         private TextView userEmail;
         private CircleImageView mUserPictureContainer;
 
+        private TextView type;
+        private LinearLayout typeBackground;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
 
@@ -174,7 +191,8 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             petImage = (ImageView) itemView.findViewById(R.id.item_dog_image);
             userAddress = (TextView) itemView.findViewById(R.id.item_address);
             userComment = (TextView) itemView.findViewById(R.id.item_comment);
-
+            type = (TextView) itemView.findViewById(R.id.item_type);
+            typeBackground = (LinearLayout) itemView.findViewById(R.id.layout_type_date);
 
             if (callbacks != null) {
                 itemView.setOnClickListener(new View.OnClickListener() {

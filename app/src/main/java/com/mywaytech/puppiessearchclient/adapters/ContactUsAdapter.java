@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.ContactUsModel;
 
 import java.util.List;
@@ -18,6 +19,11 @@ import java.util.List;
  */
 public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.ContactUsViewHolder> {
 
+    public static final String TYPE_PHONE = "PHONE";
+    public static final String TYPE_ADDRESS = "ADDRESS";
+    public static final String TYPE_EMAIL = "EMAIL";
+    public static final String TYPE_LINK = "LINK";
+
     private Context mContext;
     private List<ContactUsModel> mContactUsModelList;
 
@@ -25,7 +31,6 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
         this.mContext = context;
         this.mContactUsModelList = contactUsModels;
     }
-
 
     @Override
     public ContactUsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,6 +49,8 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
     }
 
     public static class ContactUsViewHolder extends RecyclerView.ViewHolder {
+        private OnContactClickListener mOnContactClickListener;
+
         private TextView mName;
         private TextView mAddress;
         private TextView mEmail;
@@ -67,8 +74,6 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             mEmailImage = (ImageView) itemView.findViewById(R.id.ic_email);
             mPhoneImage = (ImageView) itemView.findViewById(R.id.ic_phone);
             mLinkImage = (ImageView) itemView.findViewById(R.id.ic_link);
-
-
         }
 
         public void bindContacts(final ContactUsModel contactUsModel) {
@@ -80,6 +85,14 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             if(!contactUsModel.getAddress().equals("")){
                 mAddress.setText(contactUsModel.getAddress());
                 mAddressImage.setImageResource(R.drawable.ic_address);
+                mAddress.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnContactClickListener != null) {
+                            mOnContactClickListener.onClick(contactUsModel.getAddress(), TYPE_ADDRESS);
+                        }
+                    }
+                });
             }else{
                 mAddress.setVisibility(View.GONE);
                 mAddressImage.setVisibility(View.GONE);
@@ -87,6 +100,14 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             if(!contactUsModel.getEmailText().equals("")){
                 mEmail.setText(contactUsModel.getEmailText());
                 mEmailImage.setImageResource(R.drawable.ic_email);
+                mEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnContactClickListener != null) {
+                            mOnContactClickListener.onClick(contactUsModel.getEmailText(), TYPE_EMAIL);
+                        }
+                    }
+                });
             }else{
                 mEmail.setVisibility(View.GONE);
                 mEmailImage.setVisibility(View.GONE);
@@ -94,6 +115,14 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             if(!contactUsModel.getCellphone().equals("")){
                 mPhone.setText(contactUsModel.getCellphone());
                 mPhoneImage.setImageResource(R.drawable.ic_phone);
+                mPhone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnContactClickListener != null) {
+                            mOnContactClickListener.onClick(contactUsModel.getCellphone(), TYPE_PHONE);
+                        }
+                    }
+                });
             }else{
                 mPhone.setVisibility(View.GONE);
                 mPhoneImage.setVisibility(View.GONE);
@@ -101,11 +130,24 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             if(!contactUsModel.getLink().equals("")){
                 mLink.setText(contactUsModel.getLink());
                 mLinkImage.setImageResource(R.drawable.ic_link);
+                mLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mOnContactClickListener != null) {
+                            mOnContactClickListener.onClick(contactUsModel.getLink(), TYPE_LINK);
+                        }
+                    }
+                });
             }else{
                 mLink.setVisibility(View.GONE);
                 mLinkImage.setVisibility(View.GONE);
             }
 
+
         }
+    }
+
+    public interface OnContactClickListener{
+        void onClick(String input, String type);
     }
 }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.ContactUsAdapter;
 import com.mywaytech.puppiessearchclient.models.ContactUsModel;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Created by nemesis1346 on 7/10/2016.
  */
-public class ContactUsFragment extends Fragment {
+public class ContactUsFragment extends Fragment implements ContactUsAdapter.OnContactClickListener{
 
     private String[] mAddress;
     private String[] mName;
@@ -118,4 +119,22 @@ public class ContactUsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(String input, String type) {
+        switch(type){
+            case ContactUsAdapter.TYPE_ADDRESS:
+                break;
+            case ContactUsAdapter.TYPE_EMAIL:
+                Utils.openEmail(getContext(),new String[]{input},null, null);
+                break;
+            case ContactUsAdapter.TYPE_LINK:
+                Utils.openBrowser(getContext(), input);
+                break;
+            case ContactUsAdapter.TYPE_PHONE:
+                Utils.openPhone(getContext(), input);
+                break;
+            default:
+                break;
+        }
+    }
 }

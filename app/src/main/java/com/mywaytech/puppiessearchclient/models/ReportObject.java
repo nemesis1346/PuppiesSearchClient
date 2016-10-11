@@ -15,6 +15,7 @@ public class ReportObject implements Serializable {
     private String imagePath;
     private String uComment;
     private String uEmail;
+    private String uType;
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
@@ -27,6 +28,14 @@ public class ReportObject implements Serializable {
         this.uEmail = uEmail;
     }
     public ReportObject() {
+    }
+
+    public String getuType() {
+        return uType;
+    }
+
+    public void setuType(String uType) {
+        this.uType = uType;
     }
 
     public String getuEmail() {

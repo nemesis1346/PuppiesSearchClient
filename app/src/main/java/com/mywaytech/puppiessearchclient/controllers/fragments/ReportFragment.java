@@ -62,6 +62,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public static final String TYPE_PET_SELECT_DEFAULT = "Seleccione Tipo";
     public static final String TYPE_PET_LOST = "LOST";
     public static final String TYPE_PET_ADOPTION = "ADOPTION";
+    public static final String TYPE_PET_NEW = "NEWS";
 
     private Bitmap mPhoto;
     private Bitmap mTemporalPhoto;
