@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.FilterFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallAdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallLostFragment;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
@@ -118,6 +119,9 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case R.id.action_filter:
+                showDialog();
+                return true;
             case R.id.action_contact_us:
                 intent = ContactUsActivity.newIntent(MainActivity.this);
                 startActivity(intent);
@@ -131,7 +135,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 return true;
             case R.id.menuoptions_logout:
-               onBackPressed();
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -163,7 +167,7 @@ public class MainActivity extends BaseActivity {
         logout();
     }
 
-    public void logout(){
+    public void logout() {
         new AlertDialogUtils.Builder(this)
                 .setResourceMessage(R.string.close_session_message)
                 .setTitle(R.string.close_session_title)
@@ -181,7 +185,15 @@ public class MainActivity extends BaseActivity {
 
     }
 
-
-
+    public void showDialog() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FilterFragment filterFragment = FilterFragment.newInstance();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        filterFragment.show(ft, "dialog");
+    }
 
 }

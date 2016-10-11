@@ -80,6 +80,7 @@
     <string name="select_phone_title">Seleccione App</string>
     <string name="select_browser_title">Seleccione navegador..</string>
     <string name="aboutTitle">Acerca de la App</string>
+    <string name="action_filter">Filtro</string>
 
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">
