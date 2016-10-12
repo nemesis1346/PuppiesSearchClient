@@ -46,10 +46,12 @@
                 android:inputType="textPassword"/>
 
             <LinearLayout
+                android:id="@+id/btn_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_text_password"
                 android:layout_marginTop="@dimen/material_design_margin"
+                android:layout_marginBottom="@dimen/material_design_margin"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -76,7 +78,9 @@
                 android:id="@+id/sign_in_google_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/btn_bar_layout"
+                android:layout_marginBottom="@dimen/material_design_margin"/>
         </RelativeLayout>
 
 

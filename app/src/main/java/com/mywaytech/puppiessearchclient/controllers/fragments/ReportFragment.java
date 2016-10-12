@@ -33,8 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
-import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
+import com.mywaytech.puppiessearchclient.models.ReportModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
@@ -66,7 +66,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private Bitmap mPhoto;
     private Bitmap mTemporalPhoto;
-    private ReportObject mReportObject;
+    private ReportModel mReportModel;
 
     private File mFile;
     private int callback;
@@ -74,7 +74,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private FirebaseUser mCurrentUser;
     private String mCurrentUserName;
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     private FirebaseAuth mFirebaseAuth;
 
@@ -219,7 +219,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 mStorageRef = FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
-                mReportObject = new ReportObject(
+                mReportModel = new ReportModel(
                         uniqueId,
                         mNewUserObject.getmName(),
                         newAddress.getText().toString(),
@@ -234,7 +234,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 saveImageInFireBase(imageByte);
 
                 showProgress();
-                mReportFlag = FireBaseHandler.getInstance(getActivity()).savePetObject(mReportObject, mSpinnerValue);
+                mReportFlag = FireBaseHandler.getInstance(getActivity()).savePetObject(mReportModel, mSpinnerValue);
             }
         }
     };

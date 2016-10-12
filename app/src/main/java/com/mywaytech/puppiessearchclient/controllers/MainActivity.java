@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.controllers.fragments.FilterFragment;
+import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallAdoptionFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallLostFragment;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by m.maigua on 4/13/2016.
@@ -190,8 +192,15 @@ public class MainActivity extends BaseActivity {
     public void showDialog() {
 
         final ListView mChoiceListView = new ListView(this);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice);
+        List<String> optionsFilter = new ArrayList<String>();
+        optionsFilter.add(ReportFragment.TYPE_PET_ADOPTION);
+        optionsFilter.add(ReportFragment.TYPE_PET_LOST);
+        optionsFilter.add(ReportFragment.TYPE_PET_NEW);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, optionsFilter);
+        mChoiceListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mChoiceListView.setAdapter(arrayAdapter);
+
 
         new AlertDialogUtils.Builder(this)
                 .setTitle(R.string.txt_title_choice)
@@ -213,14 +222,6 @@ public class MainActivity extends BaseActivity {
                 })
                 .show();
 
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        FilterFragment filterFragment = FilterFragment.newInstance();
-//        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//        filterFragment.show(ft, "dialog");
     }
 
 }

@@ -83,6 +83,7 @@
     <string name="action_filter">Filtro</string>
     <string name="txt_title_choice">Seleccionar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="action_settings">Configuración</string>
 
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">

@@ -24,7 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
 import java.io.ByteArrayInputStream;
@@ -36,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class AccountFragment extends Fragment {
 
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     private TextView mName;
     private TextView mEmail;
@@ -89,7 +89,7 @@ public class AccountFragment extends Fragment {
     private ValueEventListener mAccountFirebaseListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
+            mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
             mName.setText(mNewUserObject.getmName());
             mEmail.setText(mNewUserObject.getmEmail());
             mAddress.setText(mNewUserObject.getAddress());

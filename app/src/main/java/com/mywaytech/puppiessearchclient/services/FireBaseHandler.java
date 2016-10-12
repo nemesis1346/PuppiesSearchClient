@@ -15,8 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
-import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
+import com.mywaytech.puppiessearchclient.models.ReportModel;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -111,7 +111,7 @@ public class FireBaseHandler {
     }
 
 
-    public boolean saveUserObject(NewUserObject newUserObject) {
+    public boolean saveUserObject(NewUserModel newUserObject) {
         String uid = "";
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -126,20 +126,20 @@ public class FireBaseHandler {
 
     }
 
-    public boolean savePetObject(ReportObject reportObject, String mType) {
+    public boolean savePetObject(ReportModel reportModel, String mType) {
         String uid = "";
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        Log.d("report uname: ", "" + reportObject.getuName());
-        Log.d("report upath: ", "" + reportObject.getImagePath());
+        Log.d("report uname: ", "" + reportModel.getuName());
+        Log.d("report upath: ", "" + reportModel.getImagePath());
 
         if (user != null) {
-            uid = reportObject.getuId();
+            uid = reportModel.getuId();
             switch (mType) {
                 case ReportFragment.TYPE_PET_LOST:
-                    mFirebaseDatabaseReference.child(OBJECT_PET_LOST).child(uid).setValue(reportObject);
+                    mFirebaseDatabaseReference.child(OBJECT_PET_LOST).child(uid).setValue(reportModel);
                     break;
                 case ReportFragment.TYPE_PET_ADOPTION:
-                    mFirebaseDatabaseReference.child(OBJECT_PET_ADOPTION).child(uid).setValue(reportObject);
+                    mFirebaseDatabaseReference.child(OBJECT_PET_ADOPTION).child(uid).setValue(reportModel);
                     break;
             }
             return true;

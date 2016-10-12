@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.AccountFragment;
-import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
 
 /**
  * Created by marco on 4/17/2016.

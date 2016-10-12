@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
 /**
@@ -23,11 +23,11 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
     private EditText uPassword_repeat;
     private EditText uAddress;
 
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     public static final String ARG_NEW_USER_OBJECT = "arg_new_wer_object";
 
-    public static PersonalInfoRegistrationFragment newInstance(NewUserObject newUserObject) {
+    public static PersonalInfoRegistrationFragment newInstance(NewUserModel newUserObject) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_NEW_USER_OBJECT, newUserObject);
         PersonalInfoRegistrationFragment fragment = new PersonalInfoRegistrationFragment();
@@ -38,7 +38,7 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNewUserObject = (NewUserObject) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
+        mNewUserObject = (NewUserModel) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
     }
 
     @Nullable

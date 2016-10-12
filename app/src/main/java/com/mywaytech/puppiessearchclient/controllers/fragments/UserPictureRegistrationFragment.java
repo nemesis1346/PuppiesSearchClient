@@ -8,21 +8,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
-import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 
 import java.io.File;
-import java.io.Serializable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,12 +39,12 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
     private Button mBtnForward;
     private CircleImageView mUserPicture;
     private FloatingActionButton mFloatingActionButton;
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     public static final String ARG_NEW_USER_OBJECT = "arg_new_user_object";
 
 
-    public static UserPictureRegistrationFragment newInstance(NewUserObject userObject) {
+    public static UserPictureRegistrationFragment newInstance(NewUserModel userObject) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_NEW_USER_OBJECT, userObject);
         UserPictureRegistrationFragment fragment = new UserPictureRegistrationFragment();
@@ -59,7 +55,7 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNewUserObject = (NewUserObject) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
+        mNewUserObject = (NewUserModel) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }

@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by m.maigua on 4/14/2016.
  */
-public class ReportObject implements Serializable {
+public class ReportModel implements Serializable {
     private String uId;
     private String uName;
     private String uAddress;
@@ -16,10 +16,11 @@ public class ReportObject implements Serializable {
     private String uComment;
     private String uEmail;
     private String uType;
+    private String uDate;
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public ReportObject(String uid,String uName, String uAddress, String imagePath, String uComment, String uEmail) {
+    public ReportModel(String uid, String uName, String uAddress, String imagePath, String uComment, String uEmail) {
         this.uId = uid;
         this.uName = uName;
         this.uAddress = uAddress;
@@ -27,7 +28,15 @@ public class ReportObject implements Serializable {
         this.uComment = uComment;
         this.uEmail = uEmail;
     }
-    public ReportObject() {
+    public ReportModel() {
+    }
+
+    public String getuDate() {
+        return uDate;
+    }
+
+    public void setuDate(String uDate) {
+        this.uDate = uDate;
     }
 
     public String getuType() {

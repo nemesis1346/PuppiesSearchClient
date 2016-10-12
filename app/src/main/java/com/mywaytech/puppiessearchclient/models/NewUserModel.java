@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Marco on 4/19/2016.
  */
-public class NewUserObject implements Serializable {
+public class NewUserModel implements Serializable {
     private String mUid;
     private String mName;
     private String mEmail;
@@ -13,16 +13,16 @@ public class NewUserObject implements Serializable {
     private String mUserImagePath;
     private String mAddress;
 
-    public NewUserObject() {
+    public NewUserModel() {
 
     }
 
-    public NewUserObject(String name,
-                         String email,
-                         String password,
-                         String address,
-                         String userImagePath,
-                         String uid) {
+    public NewUserModel(String name,
+                        String email,
+                        String password,
+                        String address,
+                        String userImagePath,
+                        String uid) {
         this.mName = name;
         this.mEmail = email;
         this.mPassword = password;

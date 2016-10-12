@@ -1,11 +1,9 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
-import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 
 /**
  * Created by Marco on 22/9/2016.
@@ -18,7 +16,7 @@ public abstract class RegistrationBaseFragment extends Fragment {
 
 
     public interface PersonalInfoRegistrationCallback {
-        void updateRegistrationModel(NewUserObject newUserObject);
+        void updateRegistrationModel(NewUserModel newUserObject);
     }
 
     @Override

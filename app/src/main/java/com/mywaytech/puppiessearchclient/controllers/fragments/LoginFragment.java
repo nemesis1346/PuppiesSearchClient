@@ -1,12 +1,10 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,16 +25,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
-import com.mywaytech.puppiessearchclient.adapters.ContactUsAdapter;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
-
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
  * Created by Marco on 9/19/2016.
@@ -56,7 +49,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     private ProgressDialogFragment mProgressfragment;
 
@@ -160,7 +153,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            NewUserObject mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
+                            NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
                             UserSessionManager.getInstance(getContext()).saveLocalUser(mNewUserObject);
                             hideProgress();
                             new AlertDialogUtils.Builder(getContext())

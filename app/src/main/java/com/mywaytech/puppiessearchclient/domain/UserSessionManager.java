@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 
 /**
  * Created by Marco on 26/9/2016.
@@ -18,7 +18,7 @@ public class UserSessionManager {
     private static final String KEY_USER = "com.mywaytech.puppiessearchclient.preferences.keys.user";
 
     private Context mContext;
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
     private static UserSessionManager sInstance;
 
     public static UserSessionManager getInstance(Context context){
@@ -32,7 +32,7 @@ public class UserSessionManager {
         mContext = context;
     }
 
-    public void logged(NewUserObject newUserObject, boolean saveUserLocally){
+    public void logged(NewUserModel newUserObject, boolean saveUserLocally){
         if(newUserObject == null){
             return;
         }
@@ -43,7 +43,7 @@ public class UserSessionManager {
         }
         mNewUserObject = newUserObject;
     }
-    public void saveLocalUser(NewUserObject newUserObject) {
+    public void saveLocalUser(NewUserModel newUserObject) {
         Gson gson = new Gson();
         String userString = gson.toJson(newUserObject);
         SharedPreferences sharedPref = mContext.getSharedPreferences(PREFERENCES_USER, Context.MODE_PRIVATE);
@@ -70,14 +70,14 @@ public class UserSessionManager {
      * @return the user model found in preferences, if it cant find it it returns null
      */
     @Nullable
-    public NewUserObject getLocalUser() {
-        NewUserObject userModel = null;
+    public NewUserModel getLocalUser() {
+        NewUserModel userModel = null;
         SharedPreferences sharedPref = mContext.getSharedPreferences(PREFERENCES_USER, Context.MODE_PRIVATE);
         String userString = sharedPref.getString(KEY_USER, null);
 
         if (userString != null) {
             Gson gson = new Gson();
-            userModel = gson.fromJson(userString, NewUserObject.class);
+            userModel = gson.fromJson(userString, NewUserModel.class);
         }
         return userModel;
     }

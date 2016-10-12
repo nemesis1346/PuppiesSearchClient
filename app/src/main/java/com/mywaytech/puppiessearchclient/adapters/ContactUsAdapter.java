@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,12 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
 
     private Context mContext;
     private List<ContactUsModel> mContactUsModelList;
+    private static OnContactClickListener mOnContactClickListener;
 
-    public ContactUsAdapter(Context context, List<ContactUsModel> contactUsModels) {
+    public ContactUsAdapter(Context context, List<ContactUsModel> contactUsModels, OnContactClickListener onContactClickListener) {
         this.mContext = context;
         this.mContactUsModelList = contactUsModels;
+        this.mOnContactClickListener = onContactClickListener;
     }
 
     @Override
@@ -49,7 +52,6 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
     }
 
     public static class ContactUsViewHolder extends RecyclerView.ViewHolder {
-        private OnContactClickListener mOnContactClickListener;
 
         private TextView mName;
         private TextView mAddress;
@@ -74,6 +76,8 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             mEmailImage = (ImageView) itemView.findViewById(R.id.ic_email);
             mPhoneImage = (ImageView) itemView.findViewById(R.id.ic_phone);
             mLinkImage = (ImageView) itemView.findViewById(R.id.ic_link);
+
+
         }
 
         public void bindContacts(final ContactUsModel contactUsModel) {
@@ -84,6 +88,7 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             }
             if(!contactUsModel.getAddress().equals("")){
                 mAddress.setText(contactUsModel.getAddress());
+                mAddress.setPaintFlags(mAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 mAddressImage.setImageResource(R.drawable.ic_address);
                 mAddress.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -99,6 +104,7 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             }
             if(!contactUsModel.getEmailText().equals("")){
                 mEmail.setText(contactUsModel.getEmailText());
+                mEmail.setPaintFlags(mEmail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 mEmailImage.setImageResource(R.drawable.ic_email);
                 mEmail.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -114,6 +120,7 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             }
             if(!contactUsModel.getCellphone().equals("")){
                 mPhone.setText(contactUsModel.getCellphone());
+                mPhone.setPaintFlags(mPhone.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 mPhoneImage.setImageResource(R.drawable.ic_phone);
                 mPhone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,6 +136,7 @@ public class ContactUsAdapter extends RecyclerView.Adapter<ContactUsAdapter.Cont
             }
             if(!contactUsModel.getLink().equals("")){
                 mLink.setText(contactUsModel.getLink());
+                mLink.setPaintFlags(mLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 mLinkImage.setImageResource(R.drawable.ic_link);
                 mLink.setOnClickListener(new View.OnClickListener() {
                     @Override

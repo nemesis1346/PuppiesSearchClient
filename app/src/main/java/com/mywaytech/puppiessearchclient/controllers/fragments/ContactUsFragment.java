@@ -100,7 +100,7 @@ public class ContactUsFragment extends Fragment implements ContactUsAdapter.OnCo
             mContactUsModelList.add(contactUsModel);
         }
 
-        mContactUsAdapter = new ContactUsAdapter(getContext(), mContactUsModelList);
+        mContactUsAdapter = new ContactUsAdapter(getContext(), mContactUsModelList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mContactusList.setLayoutManager(linearLayoutManager);

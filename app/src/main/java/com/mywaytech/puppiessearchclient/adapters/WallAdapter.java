@@ -22,8 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
-import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
+import com.mywaytech.puppiessearchclient.models.ReportModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
@@ -37,10 +37,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder> {
     private Context mContext;
-    private List<ReportObject> mListItems;
+    private List<ReportModel> mListItems;
     private CallBacks callbacks;
 
-    public WallAdapter(Context mContext, List<ReportObject> mListItems) {
+    public WallAdapter(Context mContext, List<ReportModel> mListItems) {
         this.mContext = mContext;
         this.mListItems = mListItems;
     }
@@ -50,7 +50,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         return new ItemViewHolder(itemView);
     }
 
-    public void setListItems(List<ReportObject> newListItems) {
+    public void setListItems(List<ReportModel> newListItems) {
         mListItems.clear();
         mListItems.addAll(newListItems);
         notifyDataSetChanged();
@@ -65,7 +65,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                  .addListenerForSingleValueEvent(new ValueEventListener() {
                      @Override
                      public void onDataChange(DataSnapshot dataSnapshot) {
-                         NewUserObject mNewUserObject = dataSnapshot.getValue(NewUserObject.class);
+                         NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
 
                          final long ONE_MEGABYTE = 1024 * 1024;
 
@@ -125,7 +125,17 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             }
         });
 
-        switch(mListItems.get(position).getuType()){
+        //TODO CHANGE THIS
+        String typeParam;
+//        if(mListItems.get(position).getuType()==null){
+//            typeParam= mListItems.get(position).getuType();
+//        }else{
+//            typeParam= ReportFragment.TYPE_PET_ADOPTION;
+//        }
+        mListItems.get(position).setuType(ReportFragment.TYPE_PET_ADOPTION);
+        typeParam=mListItems.get(position).getuType();
+
+        switch(typeParam){
             case ReportFragment.TYPE_PET_ADOPTION:
                 holder.typeBackground.setBackgroundResource(R.color.red);
                 break;
@@ -210,11 +220,11 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
     }
 
     public interface CallBacks {
-        void onClickListener(ReportObject listItem);
+        void onClickListener(ReportModel listItem);
     }
 
-    public void updateData(ReportObject reportObject) {
-        mListItems.add(0, reportObject);
+    public void updateData(ReportModel reportModel) {
+        mListItems.add(0, reportModel);
         notifyDataSetChanged();
     }
 

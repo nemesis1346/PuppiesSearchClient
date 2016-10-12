@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
@@ -25,7 +24,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.ProgressDialogFra
 import com.mywaytech.puppiessearchclient.controllers.fragments.RegistrationBaseFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.UserPictureRegistrationFragment;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
-import com.mywaytech.puppiessearchclient.models.NewUserObject;
+import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
@@ -43,7 +42,7 @@ public class RegistrationActivity extends BaseActivity implements
 
     private ProgressDialogFragment mProgressfragment;
 
-    private NewUserObject mNewUserObject;
+    private NewUserModel mNewUserObject;
 
     public static final int PAGE_PERSONAL_INFO = 0;
     public static final int PAGE_USER_PICTURE = 1;
@@ -69,7 +68,7 @@ public class RegistrationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        mNewUserObject = new NewUserObject();
+        mNewUserObject = new NewUserModel();
 
         mBtnBack = (Button) findViewById(R.id.btn_back);
         mBtnNext = (Button) findViewById(R.id.btn_foward);
@@ -147,7 +146,7 @@ public class RegistrationActivity extends BaseActivity implements
     }
 
     @Override
-    public void updateRegistrationModel(NewUserObject newUserObject) {
+    public void updateRegistrationModel(NewUserModel newUserObject) {
         mNewUserObject.setmName(newUserObject.getmName());
         mNewUserObject.setmEmail(newUserObject.getmEmail());
         mNewUserObject.setmPassword(newUserObject.getmPassword());

@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
-import com.mywaytech.puppiessearchclient.models.ReportObject;
+import com.mywaytech.puppiessearchclient.models.ReportModel;
 import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class WallLostFragment extends Fragment {
 
     private RecyclerView mListView;
     private WallAdapter wallAdapter;
-    private List<ReportObject> pet_list;
+    private List<ReportModel> pet_list;
 
     private ProgressBar mProgressBar;
     private Button mRetryBtn;
@@ -75,7 +75,7 @@ public class WallLostFragment extends Fragment {
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
-        wallAdapter = new WallAdapter(getContext(), new ArrayList<ReportObject>());
+        wallAdapter = new WallAdapter(getContext(), new ArrayList<ReportModel>());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
@@ -105,7 +105,7 @@ public class WallLostFragment extends Fragment {
             showProgress();
             if (dataSnapshot != null) {
                 for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
-                    ReportObject object = objectSnapshot.getValue(ReportObject.class);
+                    ReportModel object = objectSnapshot.getValue(ReportModel.class);
                     pet_list.add(object);
                 }
                 wallAdapter.setListItems(pet_list);
