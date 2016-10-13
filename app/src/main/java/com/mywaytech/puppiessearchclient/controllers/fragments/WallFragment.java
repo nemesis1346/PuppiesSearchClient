@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by Marco on 4/13/2016.
  */
-public class WallLostFragment extends Fragment {
+public class WallFragment extends Fragment {
 
     private static final String ARG_POSITION = "ARG POSITION";
     private static final String ARG_VALUE = "ARG VALUE";
@@ -44,11 +44,9 @@ public class WallLostFragment extends Fragment {
     private ImageView mProgressErrorImg;
 
 
-    public static WallLostFragment newInstance(int position, int value) {
-        WallLostFragment fragment = new WallLostFragment();
+    public static WallFragment newInstance() {
+        WallFragment fragment = new WallFragment();
         Bundle arg = new Bundle();
-        arg.putInt(ARG_VALUE, value);
-        arg.putInt(ARG_POSITION, position);
         fragment.setArguments(arg);
         return fragment;
     }
@@ -57,9 +55,8 @@ public class WallLostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mValue = getArguments().getInt(ARG_VALUE);
         pet_list = new ArrayList<>();
-        FireBaseHandler.getInstance(getContext()).getLostPetFirebaseDatabaseReference()
+        FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
                 .addValueEventListener(showFireBaseListener);
     }
 
@@ -103,7 +100,7 @@ public class WallLostFragment extends Fragment {
             pet_list = new ArrayList<>();
             wallAdapter.setListItems(pet_list);
             showProgress();
-            if (dataSnapshot != null) {
+            if (dataSnapshot.hasChildren()) {
                 for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
                     ReportModel object = objectSnapshot.getValue(ReportModel.class);
                     pet_list.add(object);

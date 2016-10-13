@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +18,8 @@ import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
+
+import java.util.UUID;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -32,8 +35,7 @@ public class FireBaseHandler {
     private StorageReference mStorageRef;
 
     public static final String OBJECT_USERS_NAME = "USERS";
-    public static final String OBJECT_PET_LOST = "PET_FOR_ADOPTION";
-    public static final String OBJECT_PET_ADOPTION = "PET_FOR_RESCUE";
+    public static final String REPORTS = "REPORTS";
 
     private FireBaseHandler(Context context) {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -126,24 +128,15 @@ public class FireBaseHandler {
 
     }
 
-    public boolean savePetObject(ReportModel reportModel, String mType) {
-        String uid = "";
+    public boolean savePetObject(ReportModel reportModel) {
+        String uid = UUID.randomUUID().toString();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         Log.d("report uname: ", "" + reportModel.getuName());
         Log.d("report upath: ", "" + reportModel.getImagePath());
 
         if (user != null) {
-            uid = reportModel.getuId();
-            switch (mType) {
-                case ReportFragment.TYPE_PET_LOST:
-                    mFirebaseDatabaseReference.child(OBJECT_PET_LOST).child(uid).setValue(reportModel);
-                    break;
-                case ReportFragment.TYPE_PET_ADOPTION:
-                    mFirebaseDatabaseReference.child(OBJECT_PET_ADOPTION).child(uid).setValue(reportModel);
-                    break;
-            }
+            mFirebaseDatabaseReference.child(REPORTS).child(uid).setValue(reportModel);
             return true;
-
         } else {
             Log.d("error in creation", "" + "error");
             return false;
@@ -154,7 +147,7 @@ public class FireBaseHandler {
         return mStorageRef.child("images/petImage" + imageId + ".jpg");
     }
 
-    public StorageReference getImageFirebaseStorageReference(String imagePath){
+    public StorageReference getImageFirebaseStorageReference(String imagePath) {
         return mStorageRef.child(imagePath);
     }
 
@@ -167,11 +160,9 @@ public class FireBaseHandler {
         return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(user.getUid());
     }
 
-    public DatabaseReference getLostPetFirebaseDatabaseReference(){
-        return mFirebaseDatabaseReference.child(OBJECT_PET_LOST);
+    public DatabaseReference getReportsFirebaseDatabaseReference() {
+        return mFirebaseDatabaseReference.child(REPORTS);
     }
 
-    public DatabaseReference getAdoptionPetFirebaseDatabaseReference(){
-        return mFirebaseDatabaseReference.child(OBJECT_PET_ADOPTION);
-    }
+
 }

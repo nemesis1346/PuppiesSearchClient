@@ -44,6 +44,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         this.mContext = mContext;
         this.mListItems = mListItems;
     }
+
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.wall_item_layout, parent, false);
@@ -61,35 +62,35 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         showProgress(holder);
 
-         FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReference()
-                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                     @Override
-                     public void onDataChange(DataSnapshot dataSnapshot) {
-                         NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
+        FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReference()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
 
-                         final long ONE_MEGABYTE = 1024 * 1024;
+                        final long ONE_MEGABYTE = 1024 * 1024;
 
-                         FireBaseHandler.getInstance(mContext)
-                                 .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
-                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                             @Override
-                             public void onSuccess(byte[] bytes) {
-                                 ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                 holder.mUserPictureContainer.setImageBitmap(bitmap);
-                             }
-                         }).addOnFailureListener(new OnFailureListener() {
-                             @Override
-                             public void onFailure(@NonNull Exception exception) {
-                             }
-                         });
-                     }
+                        FireBaseHandler.getInstance(mContext)
+                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                holder.mUserPictureContainer.setImageBitmap(bitmap);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                            }
+                        });
+                    }
 
-                     @Override
-                     public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                     }
-                 });
+                    }
+                });
 
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
@@ -121,32 +122,27 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         holder.userEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.openEmail(v.getContext(),new String[]{mListItems.get(position).getuEmail()},null,null);
+                Utils.openEmail(v.getContext(), new String[]{mListItems.get(position).getuEmail()}, null, null);
             }
         });
 
-        //TODO CHANGE THIS
         String typeParam;
-//        if(mListItems.get(position).getuType()==null){
-//            typeParam= mListItems.get(position).getuType();
-//        }else{
-//            typeParam= ReportFragment.TYPE_PET_ADOPTION;
-//        }
-        mListItems.get(position).setuType(ReportFragment.TYPE_PET_ADOPTION);
-        typeParam=mListItems.get(position).getuType();
+        if (mListItems.get(position).getuType() != null) {
+            typeParam = mListItems.get(position).getuType();
 
-        switch(typeParam){
-            case ReportFragment.TYPE_PET_ADOPTION:
-                holder.typeBackground.setBackgroundResource(R.color.red);
-                break;
-            case ReportFragment.TYPE_PET_LOST:
-                holder.typeBackground.setBackgroundResource(R.color.yellow);
-                break;
-            default:
-                break;
+            switch (typeParam) {
+                case ReportFragment.TYPE_PET_ADOPTION:
+                    holder.typeBackground.setBackgroundResource(R.color.red);
+                    break;
+                case ReportFragment.TYPE_PET_LOST:
+                    holder.typeBackground.setBackgroundResource(R.color.yellow);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            holder.typeBackground.setBackgroundResource(R.color.yellow);
         }
-
-
     }
 
     private void showProgress(ItemViewHolder itemViewHolder) {

@@ -77,7 +77,6 @@
 
         </RelativeLayout>
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -85,7 +84,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_dog_image_layout"
-        android:layout_marginBottom="@dimen/material_design_margin"
         android:layout_marginTop="@dimen/material_design_margin"
         android:background="@color/colorAccent"
         android:orientation="horizontal">
@@ -93,7 +91,9 @@
         <TextView
             android:id="@+id/item_type"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/item_font_title_size"
+            android:textStyle="bold|italic"/>
 
         <TextView
             android:id="@+id/item_date"

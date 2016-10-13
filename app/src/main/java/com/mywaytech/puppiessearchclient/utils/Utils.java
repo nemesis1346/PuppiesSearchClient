@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Marco on 28/9/2016.
@@ -50,6 +54,18 @@ public class Utils {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(Intent.createChooser(browserIntent, context.getString(R.string.select_browser_title)));
     }
+    public static Date getDate(String dateString){
+        Date date;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Constants.LOCALE_ES);
+            date =  simpleDateFormat.parse(dateString);
+        }catch (Exception ex){
+            Log.e("getDate: "," Invalid date string");
+            date = null;
+        }
+        return date;
+    }
+
 
 
 }

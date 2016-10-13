@@ -39,9 +39,13 @@ import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -219,14 +223,16 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 mStorageRef = FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
+//                Date currentDate = Utils.getDate();
+
                 mReportModel = new ReportModel(
                         uniqueId,
                         mNewUserObject.getmName(),
                         newAddress.getText().toString(),
                         mImageFirebasepPath,
                         newComment.getText().toString(),
-                        mNewUserObject.getmEmail()
-
+                        mNewUserObject.getmEmail(),
+                        mSpinnerValue
                 );
 
 
@@ -234,7 +240,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 saveImageInFireBase(imageByte);
 
                 showProgress();
-                mReportFlag = FireBaseHandler.getInstance(getActivity()).savePetObject(mReportModel, mSpinnerValue);
+                mReportFlag = FireBaseHandler.getInstance(getActivity()).savePetObject(mReportModel);
             }
         }
     };
