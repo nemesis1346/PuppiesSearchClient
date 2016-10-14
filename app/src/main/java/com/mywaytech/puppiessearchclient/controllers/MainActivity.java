@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,6 +36,8 @@ public class MainActivity extends BaseActivity {
 
     private String emailForAuth;
 
+    private WallFragment mWallFragment;
+    private String mTypeDialog;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -54,8 +57,8 @@ public class MainActivity extends BaseActivity {
         emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        WallFragment fragment = WallFragment.newInstance();
-        ft.replace(R.id.container, fragment).commit();
+        mWallFragment = WallFragment.newInstance();
+        ft.replace(R.id.container, mWallFragment).commit();
 
     }
 
@@ -136,6 +139,12 @@ public class MainActivity extends BaseActivity {
         mChoiceListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mChoiceListView.setAdapter(arrayAdapter);
 
+        mChoiceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mTypeDialog = (String) parent.getItemAtPosition(position);
+            }
+        });
 
         new AlertDialogUtils.Builder(this)
                 .setTitle(R.string.txt_title_choice)
@@ -144,7 +153,7 @@ public class MainActivity extends BaseActivity {
                 .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        mWallFragment.sortList(mTypeDialog);
                     }
                 })
                 .setIsCancelable(false)
@@ -156,7 +165,7 @@ public class MainActivity extends BaseActivity {
                     }
                 })
                 .show();
-
     }
+
 
 }

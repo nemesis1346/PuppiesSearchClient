@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -85,7 +87,6 @@ public class WallFragment extends Fragment {
     }
 
 
-
     public RecyclerView.AdapterDataObserver adapterOnChangeData = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onChanged() {
@@ -152,5 +153,71 @@ public class WallFragment extends Fragment {
         mProgressErrorImg.setVisibility(View.GONE);
         mRetryBtn.setVisibility(View.VISIBLE);
     }
+
+
+    public void sortList(String type) {
+        FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                .orderByChild("uType")
+                .equalTo(type)
+                .addChildEventListener(mSortFirebaseListener);
+    }
+
+    private ChildEventListener mSortFirebaseListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            pet_list = new ArrayList<>();
+            wallAdapter.setListItems(pet_list);
+            showProgress();
+            if (dataSnapshot.hasChildren()) {
+                for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
+                    ReportModel object = objectSnapshot.getValue(ReportModel.class);
+                    pet_list.add(object);
+                }
+                wallAdapter.setListItems(pet_list);
+            } else {
+                showError(R.string.error_no_results_found);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            pet_list = new ArrayList<>();
+//            wallAdapter.setListItems(pet_list);
+//            showProgress();
+//            if (dataSnapshot.hasChildren()) {
+//                for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
+//                    ReportModel object = objectSnapshot.getValue(ReportModel.class);
+//                    pet_list.add(object);
+//                }
+//                wallAdapter.setListItems(pet_list);
+//            } else {
+//                showError(R.string.error_no_results_found);
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelled(DatabaseError databaseError) {
+//            showErrorRetry();
+//        }
+    };
 
 }
