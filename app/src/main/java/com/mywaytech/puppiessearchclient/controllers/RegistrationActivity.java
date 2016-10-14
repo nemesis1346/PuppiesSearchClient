@@ -25,7 +25,7 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.RegistrationBaseF
 import com.mywaytech.puppiessearchclient.controllers.fragments.UserPictureRegistrationFragment;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
-import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;

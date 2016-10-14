@@ -16,11 +16,11 @@ public class ReportModel implements Serializable {
     private String uComment;
     private String uEmail;
     private String uType;
-//    private String uDate;
+    private String uDate;
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public ReportModel(String uid, String uName, String uAddress, String imagePath, String uComment, String uEmail,String uType) {
+    public ReportModel(String uid, String uName, String uAddress, String imagePath, String uComment, String uEmail,String uType, String uDate) {
         this.uId = uid;
         this.uName = uName;
         this.uAddress = uAddress;
@@ -28,18 +28,18 @@ public class ReportModel implements Serializable {
         this.uComment = uComment;
         this.uEmail = uEmail;
         this.uType = uType;
-//        this.uDate = uDate;
+        this.uDate = uDate;
     }
     public ReportModel() {
     }
-//
-//    public String getuDate() {
-//        return uDate;
-//    }
-//
-//    public void setuDate(String uDate) {
-//        this.uDate = uDate;
-//    }
+
+    public String getuDate() {
+        return uDate;
+    }
+
+    public void setuDate(String uDate) {
+        this.uDate = uDate;
+    }
 
     public String getuType() {
         return uType;

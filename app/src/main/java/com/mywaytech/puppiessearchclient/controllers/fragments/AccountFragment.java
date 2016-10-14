@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
-import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 
 import java.io.ByteArrayInputStream;
 

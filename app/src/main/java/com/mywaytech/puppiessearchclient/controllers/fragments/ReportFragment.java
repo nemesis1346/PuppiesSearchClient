@@ -1,9 +1,12 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ParseException;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -35,17 +38,16 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
-import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -206,6 +208,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     public View.OnClickListener backToActivity = new View.OnClickListener() {
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         public void onClick(View v) {
             if (newAddress.getText().toString().isEmpty() ||
@@ -223,8 +226,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 mStorageRef = FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
 
-//                Date currentDate = Utils.getDate();
-
                 mReportModel = new ReportModel(
                         uniqueId,
                         mNewUserObject.getmName(),
@@ -232,7 +233,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                         mImageFirebasepPath,
                         newComment.getText().toString(),
                         mNewUserObject.getmEmail(),
-                        mSpinnerValue
+                        mSpinnerValue,
+                        Utils.getCurrentDateTime()
                 );
 
 

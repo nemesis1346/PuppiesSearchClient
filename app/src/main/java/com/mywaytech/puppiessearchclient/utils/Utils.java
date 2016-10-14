@@ -9,8 +9,11 @@ import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Marco on 28/9/2016.
@@ -54,18 +57,33 @@ public class Utils {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(Intent.createChooser(browserIntent, context.getString(R.string.select_browser_title)));
     }
-    public static Date getDate(String dateString){
-        Date date;
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Constants.LOCALE_ES);
-            date =  simpleDateFormat.parse(dateString);
-        }catch (Exception ex){
-            Log.e("getDate: "," Invalid date string");
-            date = null;
+
+    public static String getCurrentDateTime() {
+        try{
+            //TODO GET CURRENT UTC TIME
+//            Calendar calendar = Calendar.getInstance();
+//            TimeZone tz = TimeZone.getDefault();
+//            calendar.setTimeInMillis((System.currentTimeMillis()/1000) * 1000);
+//            calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            Date currentTimeZone = calendar.getTime();
+//            Long  currentTimeZoneLong =currentTimeZone.getTime();
+//            return String.valueOf(currentTimeZoneLong);
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
+            return ts;
+        }catch (Exception e) {
         }
-        return date;
+        return "";
     }
 
+    public static Date convertLongToDate(String longStringDate) {
+        return new Date(Long.valueOf(longStringDate) * 1000);
+    }
+
+    public static String convertLongToString(String longStringDate) {
+        return  new Date(Long.valueOf(longStringDate)*1000).toString();
+    }
 
 
 }

@@ -45,7 +45,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.LocationModel;
-import com.mywaytech.puppiessearchclient.services.LocationsAsyncTask;
+import com.mywaytech.puppiessearchclient.tasks.LocationsAsyncTask;
 
 /**
  * Created by Marco on 9/19/2016.

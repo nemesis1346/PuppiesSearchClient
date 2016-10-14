@@ -1,19 +1,13 @@
-package com.mywaytech.puppiessearchclient.services;
+package com.mywaytech.puppiessearchclient.tasks;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.AsyncTask;
 
+import com.mywaytech.puppiessearchclient.dataaccess.GeoLocationWebService;
 import com.mywaytech.puppiessearchclient.enums.Constants;
 import com.mywaytech.puppiessearchclient.models.LocationModel;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by m.maigua on 8/1/2016.

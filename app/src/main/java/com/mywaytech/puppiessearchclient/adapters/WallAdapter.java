@@ -24,10 +24,13 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
-import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -53,6 +56,14 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
     public void setListItems(List<ReportModel> newListItems) {
         mListItems.clear();
+        Collections.sort(newListItems, new Comparator<ReportModel>() {
+            @Override
+            public int compare(ReportModel lhs, ReportModel rhs) {
+                Date o1 = Utils.convertLongToDate(lhs.getuDate());
+                Date o2 = Utils.convertLongToDate(rhs.getuDate());
+                return o1.compareTo(o2);
+            }
+        });
         mListItems.addAll(newListItems);
         notifyDataSetChanged();
     }
@@ -143,6 +154,10 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         } else {
             holder.typeBackground.setBackgroundResource(R.color.yellow);
         }
+
+        if(mListItems.get(position).getuDate()!=null){
+            holder.mDate.setText(Utils.convertLongToString(mListItems.get(position).getuDate()));
+        }
     }
 
     private void showProgress(ItemViewHolder itemViewHolder) {
@@ -179,6 +194,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         private TextView userAddress;
         private TextView userComment;
         private TextView userEmail;
+        private TextView mDate;
         private CircleImageView mUserPictureContainer;
 
         private TextView type;
@@ -197,6 +213,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             petImage = (ImageView) itemView.findViewById(R.id.item_dog_image);
             userAddress = (TextView) itemView.findViewById(R.id.item_address);
             userComment = (TextView) itemView.findViewById(R.id.item_comment);
+            mDate = (TextView) itemView.findViewById(R.id.item_date);
             type = (TextView) itemView.findViewById(R.id.item_type);
             typeBackground = (LinearLayout) itemView.findViewById(R.id.layout_type_date);
 

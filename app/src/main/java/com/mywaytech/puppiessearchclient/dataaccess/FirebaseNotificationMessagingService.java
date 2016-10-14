@@ -1,7 +1,6 @@
-package com.mywaytech.puppiessearchclient.services;
+package com.mywaytech.puppiessearchclient.dataaccess;
 
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,10 +12,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.LoginActivity;
-import com.mywaytech.puppiessearchclient.controllers.MainActivity;
-
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by Marco on 28/9/2016.

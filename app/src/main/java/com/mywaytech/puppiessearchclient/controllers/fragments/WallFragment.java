@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
-import com.mywaytech.puppiessearchclient.services.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 
 import java.util.ArrayList;
 import java.util.List;

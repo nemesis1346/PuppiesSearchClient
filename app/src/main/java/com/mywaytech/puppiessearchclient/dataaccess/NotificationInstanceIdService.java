@@ -1,12 +1,9 @@
-package com.mywaytech.puppiessearchclient.services;
+package com.mywaytech.puppiessearchclient.dataaccess;
 
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.mywaytech.puppiessearchclient.domain.NotificationTokenManager;
-
-import java.io.IOException;
 
 /**
  * Created by Marco on 28/9/2016.

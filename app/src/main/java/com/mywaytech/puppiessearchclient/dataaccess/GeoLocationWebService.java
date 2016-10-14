@@ -1,27 +1,20 @@
-package com.mywaytech.puppiessearchclient.services;
+package com.mywaytech.puppiessearchclient.dataaccess;
 
 import android.location.Address;
 import android.util.Log;
 
-import com.google.firebase.auth.api.model.StringList;
 import com.mywaytech.puppiessearchclient.enums.Constants;
 import com.mywaytech.puppiessearchclient.models.LocationModel;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.List;
 
 /**

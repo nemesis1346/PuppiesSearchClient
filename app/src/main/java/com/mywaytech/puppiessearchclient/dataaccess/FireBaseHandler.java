@@ -1,4 +1,4 @@
-package com.mywaytech.puppiessearchclient.services;
+package com.mywaytech.puppiessearchclient.dataaccess;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
 
