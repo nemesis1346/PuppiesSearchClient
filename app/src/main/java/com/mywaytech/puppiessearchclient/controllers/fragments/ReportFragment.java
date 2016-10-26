@@ -69,6 +69,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public static final String TYPE_PET_LOST = "LOST";
     public static final String TYPE_PET_ADOPTION = "ADOPTION";
     public static final String TYPE_PET_NEW = "NEWS";
+    public static final String TYPE_PET_ALL = "ALL";
 
     private Bitmap mPhoto;
     private Bitmap mTemporalPhoto;

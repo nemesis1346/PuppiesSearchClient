@@ -53,6 +53,15 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.wall_item_layout, parent, false);
         return new ItemViewHolder(itemView);
     }
+//    public void addItem(ReportModel model){
+//        mListItems
+//
+//    }
+
+    public void clear() {
+        mListItems.clear();
+        notifyDataSetChanged();
+    }
 
     public void setListItems(List<ReportModel> newListItems) {
         mListItems.clear();

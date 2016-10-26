@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class MainActivity extends BaseActivity {
 
-    public static final String EXTRA_EMAIL_FORAUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_forauth";
+    public static final String EXTRA_EMAIL_FOR_AUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_for_auth";
 
     private static final int PET_REQUEST = 0;
 
@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity {
         btn_add_dog = (FloatingActionButton) findViewById(R.id.fab_add_dog_wall);
         btn_add_dog.setOnClickListener(addListener);
 
-        emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FORAUTH);
+        emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FOR_AUTH);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         mWallFragment = WallFragment.newInstance();
@@ -131,9 +131,9 @@ public class MainActivity extends BaseActivity {
 
         final ListView mChoiceListView = new ListView(this);
         List<String> optionsFilter = new ArrayList<String>();
+        optionsFilter.add(ReportFragment.TYPE_PET_ALL);
         optionsFilter.add(ReportFragment.TYPE_PET_ADOPTION);
         optionsFilter.add(ReportFragment.TYPE_PET_LOST);
-        optionsFilter.add(ReportFragment.TYPE_PET_NEW);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, optionsFilter);
         mChoiceListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

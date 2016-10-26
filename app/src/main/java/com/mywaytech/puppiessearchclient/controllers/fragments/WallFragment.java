@@ -156,24 +156,29 @@ public class WallFragment extends Fragment {
 
 
     public void sortList(String type) {
-        FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
-                .orderByChild("uType")
-                .equalTo(type)
-                .addChildEventListener(mSortFirebaseListener);
+        wallAdapter.clear();
+        switch (type){
+            case ReportFragment.TYPE_PET_ALL:
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                        .addValueEventListener(showFireBaseListener);
+                break;
+            default:
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                        .orderByChild("uType")
+                        .equalTo(type)
+                        .addChildEventListener(mSortFireBaseListener);
+                break;
+        }
+
     }
 
-    private ChildEventListener mSortFirebaseListener = new ChildEventListener() {
+    private ChildEventListener mSortFireBaseListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            pet_list = new ArrayList<>();
-            wallAdapter.setListItems(pet_list);
             showProgress();
-            if (dataSnapshot.hasChildren()) {
-                for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
-                    ReportModel object = objectSnapshot.getValue(ReportModel.class);
-                    pet_list.add(object);
-                }
-                wallAdapter.setListItems(pet_list);
+            if (dataSnapshot.exists()) {
+                ReportModel object = dataSnapshot.getValue(ReportModel.class);
+                wallAdapter.updateData(object);
             } else {
                 showError(R.string.error_no_results_found);
             }
