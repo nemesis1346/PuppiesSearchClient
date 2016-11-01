@@ -13,6 +13,14 @@ public class LocationModel {
 
     public LocationModel(){}
 
+    public LocationModel(int id, String name, double lng, double lat, String address){
+        this.mId = id;
+        this.mName = name;
+        this.mLatitude = lng;
+        this.mLatitude = lat;
+        this.mAddress = address;
+    }
+
     public int getId() {
         return mId;
     }

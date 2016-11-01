@@ -52,6 +52,7 @@ import com.mywaytech.puppiessearchclient.models.LocationModel;
 import com.mywaytech.puppiessearchclient.tasks.LocationsAsyncTask;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,7 +88,7 @@ public class MapPuppiesFragment extends Fragment implements
     private GoogleApiClient mClient;
     private Location mCurrentLocation;
 
-
+    private List<LocationModel> mLocationModels;
     private Thread mDrawMarkersThread;
 
 
@@ -190,6 +191,8 @@ public class MapPuppiesFragment extends Fragment implements
         LatLng latlng = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latlng).title("prueba"));
     }
+
+
 
     @Override
     public void onStart() {
@@ -312,7 +315,12 @@ public class MapPuppiesFragment extends Fragment implements
 
             }
         });
-//        drawMapMarkers();
+        mLocationModels = new ArrayList<>();
+        mLocationModels.add(new LocationModel(0, "Fundación Gora", -0.153976, -78.473185, "Las toronjas E12-161 y Av. el Inca, Quito-Ecuador"));
+        mLocationModels.add(new LocationModel(1, "PAE, Protección Animal Ecuador", -0.183899, -78.494362, "Antonio de Ulloa N34-85 y Rumipamba, Quito-Ecuador"));
+        mLocationModels.add(new LocationModel(2, "Urbanimal-Centro de Rescate del Municipio de Quito", -0.104485, -78.418293, "Parroquia Calderón, calle de las semillas"));
+
+        drawMapMarkers(mLocationModels);
     }
 
     private void drawMapMarkers(final List<LocationModel> locations) {
@@ -326,7 +334,7 @@ public class MapPuppiesFragment extends Fragment implements
             @Override
             public void run() {
                 for (final LocationModel location : locations) {
-                    if(mDrawMarkersThread.isInterrupted()) break;
+                    if (mDrawMarkersThread.isInterrupted()) break;
                     LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
                     final MarkerOptions markerOptions = new MarkerOptions()
                             .position(latlng)
@@ -345,13 +353,14 @@ public class MapPuppiesFragment extends Fragment implements
         mDrawMarkersThread.start();
 
     }
+
     private void moveCamera(LatLngBounds bounds) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, MAP_CAMERA_PADDING);
         mMap.moveCamera(cameraUpdate);
     }
 
-    private void interruptMarkerThread(){
-        if(mDrawMarkersThread == null) return;
+    private void interruptMarkerThread() {
+        if (mDrawMarkersThread == null) return;
         mDrawMarkersThread.interrupt();
         mDrawMarkersThread = null;
     }
