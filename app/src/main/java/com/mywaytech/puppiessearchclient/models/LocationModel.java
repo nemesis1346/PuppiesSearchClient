@@ -5,8 +5,37 @@ package com.mywaytech.puppiessearchclient.models;
  */
 public class LocationModel {
 
+    private int mId;
+    private String mName;
     private double mLongitude;
     private double mLatitude;
+    private String mAddress;
+
+    public LocationModel(){}
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(String address) {
+        mAddress = address;
+    }
 
     public double getLongitude() {
         return mLongitude;

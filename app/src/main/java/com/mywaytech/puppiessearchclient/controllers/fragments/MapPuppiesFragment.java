@@ -8,6 +8,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -41,11 +42,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.LocationModel;
 import com.mywaytech.puppiessearchclient.tasks.LocationsAsyncTask;
+import com.mywaytech.puppiessearchclient.utils.Utils;
+
+import java.util.List;
 
 /**
  * Created by Marco on 9/19/2016.
@@ -56,6 +63,12 @@ public class MapPuppiesFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+
+    private static final int MAP_CAMERA_PADDING = 150;
+
+    private Handler mHandler = new Handler();
+
 
     private static final int REQUEST_CHECK_SETTINGS = 1;
     public static final int PERMISSIONS_MAP_ACTIVITY = 0;
@@ -73,6 +86,10 @@ public class MapPuppiesFragment extends Fragment implements
 
     private GoogleApiClient mClient;
     private Location mCurrentLocation;
+
+
+    private Thread mDrawMarkersThread;
+
 
     public static MapPuppiesFragment newInstance() {
         Bundle args = new Bundle();
@@ -114,6 +131,7 @@ public class MapPuppiesFragment extends Fragment implements
                 .build();
 
         createLocationRequest();
+
         return rootView;
     }
 
@@ -294,5 +312,47 @@ public class MapPuppiesFragment extends Fragment implements
 
             }
         });
+//        drawMapMarkers();
+    }
+
+    private void drawMapMarkers(final List<LocationModel> locations) {
+        if (mMap == null) return;
+        mMap.clear();
+        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+        bounds.include(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+        moveCamera(bounds.build());
+        interruptMarkerThread();
+        mDrawMarkersThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (final LocationModel location : locations) {
+                    if(mDrawMarkersThread.isInterrupted()) break;
+                    LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    final MarkerOptions markerOptions = new MarkerOptions()
+                            .position(latlng)
+                            .title(location.getName())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_locations));
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Marker marker = mMap.addMarker(markerOptions);
+                            marker.setTag(location);
+                        }
+                    });
+                }
+            }
+        });
+        mDrawMarkersThread.start();
+
+    }
+    private void moveCamera(LatLngBounds bounds) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, MAP_CAMERA_PADDING);
+        mMap.moveCamera(cameraUpdate);
+    }
+
+    private void interruptMarkerThread(){
+        if(mDrawMarkersThread == null) return;
+        mDrawMarkersThread.interrupt();
+        mDrawMarkersThread = null;
     }
 }

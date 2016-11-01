@@ -3,8 +3,11 @@ package com.mywaytech.puppiessearchclient.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
@@ -82,8 +85,23 @@ public class Utils {
     }
 
     public static String convertLongToString(String longStringDate) {
-        return  new Date(Long.valueOf(longStringDate)*1000).toString();
+        // Create a DateFormatter object for displaying date in specified format.
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.valueOf(longStringDate));
+        return formatter.format(calendar.getTime());
     }
 
-
+    public static Bitmap getBitmap(VectorDrawableCompat vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
 }
