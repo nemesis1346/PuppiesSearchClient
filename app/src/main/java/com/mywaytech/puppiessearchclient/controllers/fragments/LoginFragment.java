@@ -15,9 +15,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +44,8 @@ import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
+
+import static android.R.id.list;
 
 /**
  * Created by Marco on 9/19/2016.
@@ -50,6 +64,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private ImageView mProgressErrorImg;
 
     private NewUserModel mNewUserObject;
+    private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInOptions gso;
 
     private ProgressDialogFragment mProgressfragment;
 
@@ -58,6 +74,9 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private SignInButton mSignInButtonGoogle;
 
     private static final String ARG_NOTIFICATION_FLAG = "arg_notification_flag";
+
+    public static final int RC_SIGN_IN = 1346;
+
     public static LoginFragment newInstance(boolean notificationFlag) {
         Bundle args = new Bundle();
         args.putBoolean(ARG_NOTIFICATION_FLAG,notificationFlag);
@@ -82,8 +101,6 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-
-
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mRetryBtn = (Button) rootView.findViewById(R.id.btn_retry);
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
@@ -97,13 +114,19 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         bNewUser.setOnClickListener(newUserListener);
 
         //GOOGLE SIGN IN
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+         gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
-//        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-//                .enableAutoManage(this/* FragmentActivity */, getContext() /* OnConnectionFailedListener */)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
+        mGoogleApiClient= new GoogleApiClient.Builder(getContext())
+                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Toast.makeText(getContext(),"test",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         mSignInButtonGoogle = (SignInButton) rootView.findViewById(R.id.sign_in_google_button);
         mSignInButtonGoogle.setSize(SignInButton.SIZE_STANDARD);
@@ -121,10 +144,13 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public View.OnClickListener mSignInGoogle = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-//            startActivityForResult(signInIntent, RC_SIGN_IN);
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+            mGoogleApiClient.connect();
+
         }
     };
+
 
     public View.OnClickListener LoginListener = new View.OnClickListener() {
         @Override
@@ -259,5 +285,26 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from
+        //   GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                GoogleSignInAccount acct = result.getSignInAccount();
+                // Get account information
+                String mFullName = acct.getDisplayName();
+                String mEmail = acct.getEmail();
+                Log.d("", "fullName "+mFullName);
+                Log.d("", "email "+mEmail);
+
+
+            }
+        }
     }
 }
