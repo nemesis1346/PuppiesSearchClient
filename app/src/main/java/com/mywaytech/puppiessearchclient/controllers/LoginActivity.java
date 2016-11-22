@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.LoginFragment;
 
@@ -25,7 +27,10 @@ public class LoginActivity extends BaseActivity  {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
+
 
         mNotificationFlag = getIntent().getBooleanExtra(EXTRA_NOTIFICATION_FLAG,false);
 
