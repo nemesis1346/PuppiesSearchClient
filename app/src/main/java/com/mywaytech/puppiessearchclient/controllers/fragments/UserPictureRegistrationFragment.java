@@ -83,6 +83,7 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.image_userPicture_container);
+        mProgressBar.setVisibility(View.GONE);
         if (mNewUserObject.getUserImagePath() != null) {
             final long ONE_MEGABYTE = 1024 * 1024 * 2;
             showProgress();
