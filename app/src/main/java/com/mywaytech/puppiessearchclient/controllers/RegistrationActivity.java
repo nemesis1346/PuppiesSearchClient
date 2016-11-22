@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -68,7 +71,16 @@ public class RegistrationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        mNewUserObject = new NewUserModel();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.registration_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (UserSessionManager.getInstance(this).getLocalUser() != null) {
+            mNewUserObject = UserSessionManager.getInstance(this).getLocalUser();
+        } else {
+            mNewUserObject = new NewUserModel();
+        }
 
         mBtnBack = (Button) findViewById(R.id.btn_back);
         mBtnNext = (Button) findViewById(R.id.btn_foward);
@@ -234,4 +246,16 @@ public class RegistrationActivity extends BaseActivity implements
     public void userPictureImageResult(Bitmap userPicture) {
         mUserPicture = userPicture;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -13,8 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
@@ -40,6 +49,8 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
     private CircleImageView mUserPicture;
     private FloatingActionButton mFloatingActionButton;
     private NewUserModel mNewUserObject;
+    private ProgressBar mProgressBar;
+    private TextView mProgressTextInfo;
 
     public static final String ARG_NEW_USER_OBJECT = "arg_new_user_object";
 
@@ -56,20 +67,63 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNewUserObject = (NewUserModel) getArguments().getSerializable(ARG_NEW_USER_OBJECT);
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_picture_registration, container, false);
-        mUserPicture = (CircleImageView) rootView.findViewById(R.id.image_userPicture_container);
-        mUserPicture.setImageResource(R.drawable.ic_user_picture);
-        mUserPicture.setOnClickListener(mBtnActionButton);
+        View rootView = inflater.inflate(R.layout.fragment_user_data_edit, container, false);
+
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.icon_add_user_picture);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
+        mUserPicture = (CircleImageView) rootView.findViewById(R.id.image_userPicture_container);
+        if (mNewUserObject.getUserImagePath() != null) {
+            final long ONE_MEGABYTE = 1024 * 1024 * 2;
+            showProgress();
+            FireBaseHandler.getInstance(getContext())
+                    .getImageFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                    .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    hideProgress();
+                    Glide.with(getContext())
+                            .load(bytes)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(mUserPicture);
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getContext(), R.string.error_no_results_found, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mUserPicture.setImageResource(R.drawable.ic_user_picture);
+
+        }
+        mUserPicture.setOnClickListener(mBtnActionButton);
         mFloatingActionButton.setOnClickListener(mBtnActionButton);
         return rootView;
+    }
+
+    private void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setText(R.string.pet_loading_user_picture);
+    }
+
+    private void hideProgress() {
+        mUserPicture.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.GONE);
     }
 
 

@@ -180,7 +180,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
-                            UserSessionManager.getInstance(getContext()).saveLocalUser(mNewUserObject);
+                            UserSessionManager.getInstance(getContext()).logged(mNewUserObject,true);
                             hideProgress();
                             new AlertDialogUtils.Builder(getContext())
                                     .setResourceMessage(R.string.login_identified)
