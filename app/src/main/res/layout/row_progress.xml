@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/material_design_small_margin"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_error"/>
+        app:srcCompat="@drawable/ic_error"
+        android:layout_gravity="center_vertical"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -114,6 +116,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
+//        holder.petImage.
 
         FireBaseHandler.getInstance(mContext)
                 .getImageFirebaseStorageReference(mListItems.get(position).getImagePath())
@@ -123,7 +126,13 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                 hideProgress(holder);
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                holder.petImage.setImageBitmap(bitmap);
+//                holder.petImage.setImageBitmap(bitmap);
+
+                Glide.with(mContext)
+                        .load(bytes)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(holder.petImage);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -164,18 +173,21 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             holder.typeBackground.setBackgroundResource(R.color.yellow);
         }
 
-        if(mListItems.get(position).getuDate()!=null){
+        if (mListItems.get(position).getuDate() != null) {
             holder.mDate.setText(Utils.convertLongToString(mListItems.get(position).getuDate()));
         }
     }
 
     private void showProgress(ItemViewHolder itemViewHolder) {
+        itemViewHolder.petImage.setVisibility(View.GONE);
+        itemViewHolder.petImage.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         itemViewHolder.mProgressBar.setVisibility(View.VISIBLE);
         itemViewHolder.mProgressTextInfo.setVisibility(View.VISIBLE);
         itemViewHolder.mProgressTextInfo.setText(R.string.pet_loading_message);
     }
 
     private void hideProgress(ItemViewHolder itemViewHolder) {
+        itemViewHolder.petImage.setVisibility(View.VISIBLE);
         itemViewHolder.mProgressBar.setVisibility(View.GONE);
         itemViewHolder.mProgressTextInfo.setVisibility(View.GONE);
     }
