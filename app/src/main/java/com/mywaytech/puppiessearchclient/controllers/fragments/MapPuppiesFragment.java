@@ -326,20 +326,20 @@ public class MapPuppiesFragment extends Fragment implements
     private void drawMapMarkers(final List<LocationModel> locations) {
         if (mMap == null) return;
         mMap.clear();
-        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-        bounds.include(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
-        moveCamera(bounds.build());
+//        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+//        bounds.include(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+//        moveCamera(bounds.build());
         interruptMarkerThread();
         mDrawMarkersThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 for (final LocationModel location : locations) {
                     if (mDrawMarkersThread.isInterrupted()) break;
-                    LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    LatLng latlng = new LatLng(location.getLatitude(),location.getLongitude());
                     final MarkerOptions markerOptions = new MarkerOptions()
                             .position(latlng)
                             .title(location.getName())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_locations));
+                            .icon(BitmapDescriptorFactory.defaultMarker());
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -351,7 +351,6 @@ public class MapPuppiesFragment extends Fragment implements
             }
         });
         mDrawMarkersThread.start();
-
     }
 
     private void moveCamera(LatLngBounds bounds) {

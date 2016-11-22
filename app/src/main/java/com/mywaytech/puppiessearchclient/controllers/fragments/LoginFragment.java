@@ -302,8 +302,6 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 String mEmail = acct.getEmail();
                 Log.d("", "fullName "+mFullName);
                 Log.d("", "email "+mEmail);
-
-
             }
         }
     }

@@ -81,6 +81,15 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/btn_bar_layout"
                 android:layout_marginBottom="@dimen/material_design_margin"/>
+
+
+            <!--<com.facebook.login.widget.LoginButton-->
+                <!--android:id="@+id/login_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_below="@+id/sign_in_google_button"-->
+                <!--/>-->
         </RelativeLayout>
 
 

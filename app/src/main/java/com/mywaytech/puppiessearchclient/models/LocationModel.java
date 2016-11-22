@@ -13,11 +13,11 @@ public class LocationModel {
 
     public LocationModel(){}
 
-    public LocationModel(int id, String name, double lng, double lat, String address){
+    public LocationModel(int id, String name, double lat, double lng, String address){
         this.mId = id;
         this.mName = name;
-        this.mLatitude = lng;
         this.mLatitude = lat;
+        this.mLongitude = lng;
         this.mAddress = address;
     }
 
