@@ -86,6 +86,7 @@
     <string name="action_settings">Configuración</string>
     <string name="server_client_id">539840606577-4tbl29m25vdlbtjgspf4sqgelhtam0fp.apps.googleusercontent.com</string>
     <string name="registration_title">Registro</string>
+    <string name="btn_txt_edit">Editar</string>
 
     <!--STRINGS FOR CONTACT_US-->
     <string-array name="contact_us_name_array">

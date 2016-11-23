@@ -62,6 +62,9 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
                 uPassword.setText(mNewUserObject.getmPassword());
                 uPassword_repeat.setText(mNewUserObject.getmPassword());
             }
+            if(mNewUserObject.getAddress()!=null){
+                uAddress.setText(mNewUserObject.getAddress());
+            }
         }
         return rootView;
     }

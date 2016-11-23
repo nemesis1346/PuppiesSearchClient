@@ -91,4 +91,12 @@
             />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/btn_txt_edit"
+        style="@style/base_button"/>
+
 </LinearLayout>

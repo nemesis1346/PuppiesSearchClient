@@ -17,8 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
@@ -33,6 +35,9 @@ import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by m.maigua on 4/13/2016.
  */
@@ -41,6 +46,8 @@ public class RegistrationActivity extends BaseActivity implements
         FireBaseHandler.CallbackSign,
         UserPictureRegistrationFragment.UserPictureImageCallback {
 
+
+    public static final String EXTRA_IS_EDITING = "extra_is_editing";
     protected int mCurrentPageNumber;
 
     private ProgressDialogFragment mProgressfragment;
@@ -62,6 +69,8 @@ public class RegistrationActivity extends BaseActivity implements
     private boolean mObjectflag;
     private boolean mUserPictureFlag;
 
+    private boolean mIsEditingFlag;
+
     public static Intent newIntent(Context context) {
         return new Intent(context, RegistrationActivity.class);
     }
@@ -71,12 +80,14 @@ public class RegistrationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        mIsEditingFlag = getIntent().getBooleanExtra(EXTRA_IS_EDITING, false);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.registration_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (UserSessionManager.getInstance(this).getLocalUser() != null) {
+        if (mIsEditingFlag) {
             mNewUserObject = UserSessionManager.getInstance(this).getLocalUser();
         } else {
             mNewUserObject = new NewUserModel();
@@ -89,6 +100,8 @@ public class RegistrationActivity extends BaseActivity implements
         mBtnNext.setOnClickListener(onClickNext);
 
         mCurrentPageNumber = 0;
+
+
         showPage(mCurrentPageNumber);
 
     }
@@ -147,11 +160,62 @@ public class RegistrationActivity extends BaseActivity implements
 
     public void mRegistrationIntent() {
         //TODO FIRST, VALIDATE THE EXISTENCE OF CURRENT USER
-        //FIREBASE INTEND
         showProgress();
-        FireBaseHandler.getInstance(this)
-                .fireBaseSignIn(mNewUserObject.getmEmail(), mNewUserObject.getmPassword(), this, this);
+        if (mIsEditingFlag) {
+            updateInfo(mNewUserObject);
+        } else {
+            FireBaseHandler.getInstance(this)
+                    .fireBaseSignIn(mNewUserObject.getmEmail(), mNewUserObject.getmPassword(), this, this);
+        }
     }
+
+    public void updateInfo(NewUserModel model) {
+        //TODO PASS THIS TO FIREBASE HANLER
+        String test = "/" + FireBaseHandler.OBJECT_USERS_NAME + "/" + FireBaseHandler.getInstance(this).getUserKey();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("mUid", model.getUid());
+        updates.put("mName", model.getmName());
+        updates.put("mEmail", model.getmEmail());
+        updates.put("mPassword", model.getmPassword());
+        updates.put("mUserImagePath", model.getUserImagePath());
+        updates.put("mAddress", model.getAddress());
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(test, updates);
+
+        FireBaseHandler.getInstance(this)
+                .getFirebaseDatabaseReference()
+                .updateChildren(childUpdates).addOnCompleteListener(mOnCompleteListenerEditing)
+                .addOnFailureListener(mOnFailureListener);
+
+
+    }
+
+    private OnCompleteListener<Void> mOnCompleteListenerEditing = new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
+            UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
+            finish();
+        }
+    };
+
+    private OnFailureListener mOnFailureListener = new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            Log.e("errorEditing: "," "+e.getMessage());
+            new AlertDialogUtils.Builder(RegistrationActivity.this)
+                    .setResourceMessage(R.string.registration_failure)
+                    .setPositiveText(R.string.btn_ok)
+                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+    };
 
     public int getNumPages() {
         return NUM_PAGES;
@@ -162,6 +226,8 @@ public class RegistrationActivity extends BaseActivity implements
         mNewUserObject.setmName(newUserObject.getmName());
         mNewUserObject.setmEmail(newUserObject.getmEmail());
         mNewUserObject.setmPassword(newUserObject.getmPassword());
+        mNewUserObject.setUserImagePath(newUserObject.getUserImagePath());
+        mNewUserObject.setAddress(newUserObject.getAddress());
     }
 
     @Override
@@ -172,9 +238,8 @@ public class RegistrationActivity extends BaseActivity implements
             mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath());
             byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
             saveImageInFireBase(imageByte);
-
-            mObjectflag = FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);
-//            validateRegistration();
+            FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);
+            mObjectflag =true;
         } else {
             new AlertDialogUtils.Builder(this)
                     .setResourceMessage(R.string.registration_failure)

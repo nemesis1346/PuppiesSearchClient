@@ -1,5 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 
@@ -42,6 +46,7 @@ public class AccountFragment extends Fragment {
     private TextView mEmail;
     private TextView mAddress;
     private CircleImageView mUserPicture;
+    private Button mEditBtn;
 
     private ProgressBar mProgressBar;
     private TextView mProgressTextInfo;
@@ -73,11 +78,13 @@ public class AccountFragment extends Fragment {
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
-
         mName = (TextView) rootView.findViewById(R.id.show_user_name);
         mEmail = (TextView) rootView.findViewById(R.id.show_email);
         mAddress= (TextView) rootView.findViewById(R.id.show_address);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.account_image);
+        mEditBtn = (Button) rootView.findViewById(R.id.btn_edit);
+
+        mEditBtn.setOnClickListener(mEditBtnListener);
 
         showProgress();
         FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
@@ -149,5 +156,14 @@ public class AccountFragment extends Fragment {
         mProgressErrorImg.setVisibility(View.VISIBLE);
         mProgressTextInfo.setText(stringId);
     }
+
+    private View.OnClickListener mEditBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = RegistrationActivity.newIntent(getContext());
+            intent.putExtra(RegistrationActivity.EXTRA_IS_EDITING,true);
+            startActivity(intent);
+        }
+    };
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -93,6 +95,10 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     hideProgress();
+
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                    mPhoto = BitmapFactory.decodeStream(inputStream); //to be used for the flag
+
                     Glide.with(getContext())
                             .load(bytes)
                             .asBitmap()
@@ -153,6 +159,7 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
         if (mPhoto != null) {
             String mUserImagePath = "userPicture/user" + mNewUserObject.getmEmail() + ".jpg";
             mNewUserObject.setUserImagePath(mUserImagePath);
+            mPersonalInfoRegistrationCallback.updateRegistrationModel(mNewUserObject);
             mUserPictureImageCallback.userPictureImageResult(mPhoto);
             return true;
         } else {

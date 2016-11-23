@@ -2,22 +2,30 @@ package com.mywaytech.puppiessearchclient.dataaccess;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
 
+import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 /**
@@ -112,17 +120,52 @@ public class FireBaseHandler {
     }
 
 
-    public boolean saveUserObject(NewUserModel newUserObject) {
+    public void editUserObject(NewUserModel newUserModel){
+
+    }
+
+    public void saveUserObject(NewUserModel newUserObject) {
         String uid = "";
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
             newUserObject.setUid(user.getUid());
             mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(uid).setValue(newUserObject);
-            return true;
+
+            mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(user.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
+
+                            final long ONE_MEGABYTE = 1024 * 1024;
+
+                            FireBaseHandler.getInstance(mContext)
+                                    .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                    .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                    UserSessionManager.getInstance(mContext).setUserImage(bitmap);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Log.e("errorSaveImage: ",exception.getMessage());
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
         } else {
             Log.d("error in creation", "" + "error");
-            return false;
+
         }
 
     }
@@ -159,10 +202,18 @@ public class FireBaseHandler {
         return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(user.getUid());
     }
 
+    public DatabaseReference getUserObjectFirebaseDatabaseReferenceRaw() {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME);
+    }
+
     public DatabaseReference getReportsFirebaseDatabaseReference() {
         return mFirebaseDatabaseReference.child(REPORTS);
     }
 
-
+    public String getUserKey(){
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        return user.getUid();
+    }
 
 }

@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
@@ -84,7 +85,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         showProgress(holder);
 
-        FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReference()
+
+        //TODO CHANGE THIS PART FOR BETTER
+        FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReferenceRaw().child(mListItems.get(position).getuUserId())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -93,7 +96,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                         final long ONE_MEGABYTE = 1024 * 1024;
 
                         FireBaseHandler.getInstance(mContext)
-                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath()!=null?mNewUserObject.getUserImagePath():"")
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
@@ -114,6 +117,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                     }
                 });
 
+        holder.mUserPictureContainer.setImageBitmap(UserSessionManager.getInstance(mContext).getUserImage());
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
 //        holder.petImage.

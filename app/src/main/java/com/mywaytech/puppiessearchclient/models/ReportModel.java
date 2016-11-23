@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 public class ReportModel implements Serializable {
     private String uId;
+    private String uUserId;
     private String uName;
     private String uAddress;
     private String imagePath;
@@ -20,8 +21,9 @@ public class ReportModel implements Serializable {
     //TODO FIX THE ORDER AND ERASE THE PREVIOUS OBJECTS AND FIX THE VIEW AND PUT CURRENT USER UID
 
 
-    public ReportModel(String uid, String uName, String uAddress, String imagePath, String uComment, String uEmail,String uType, String uDate) {
+    public ReportModel(String uid, String uUserId, String uName, String uAddress, String imagePath, String uComment, String uEmail,String uType, String uDate) {
         this.uId = uid;
+        this.uUserId = uUserId;
         this.uName = uName;
         this.uAddress = uAddress;
         this.imagePath = imagePath;
@@ -31,6 +33,14 @@ public class ReportModel implements Serializable {
         this.uDate = uDate;
     }
     public ReportModel() {
+    }
+
+    public String getuUserId() {
+        return uUserId;
+    }
+
+    public void setuUserId(String uUserId) {
+        this.uUserId = uUserId;
     }
 
     public String getuDate() {
