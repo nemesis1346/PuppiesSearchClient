@@ -229,7 +229,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
                 mReportModel = new ReportModel(
                         uniqueId,
-                        UserSessionManager.getInstance(getContext()).getLocalUser().getUid(),
+                        UserSessionManager.getInstance(getContext()).getLocalUser().getmUid(),
                         mNewUserObject.getmName(),
                         newAddress.getText().toString(),
                         mImageFirebasepPath,

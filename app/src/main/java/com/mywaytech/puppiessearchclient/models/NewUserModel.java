@@ -31,7 +31,7 @@ public class NewUserModel implements Serializable {
         this.mUid = uid;
     }
 
-    public String getUid() {
+    public String getmUid() {
         return mUid;
     }
 
@@ -39,7 +39,7 @@ public class NewUserModel implements Serializable {
         mUid = uid;
     }
 
-    public String getUserImagePath() {
+    public String getmUserImagePath() {
         return mUserImagePath;
     }
 
@@ -71,7 +71,7 @@ public class NewUserModel implements Serializable {
         this.mPassword = mPassword;
     }
 
-    public String getAddress() {
+    public String getmAddress() {
         return mAddress;
     }
 

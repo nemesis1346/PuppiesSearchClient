@@ -96,7 +96,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                         final long ONE_MEGABYTE = 1024 * 1024;
 
                         FireBaseHandler.getInstance(mContext)
-                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath()!=null?mNewUserObject.getUserImagePath():"")
+                                .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath()!=null?mNewUserObject.getmUserImagePath():"")
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {

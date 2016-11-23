@@ -1,5 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.AccountFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.PersonalInfoRegistrationFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ProgressDialogFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.RegistrationBaseFragment;
@@ -173,12 +175,12 @@ public class RegistrationActivity extends BaseActivity implements
         //TODO PASS THIS TO FIREBASE HANLER
         String test = "/" + FireBaseHandler.OBJECT_USERS_NAME + "/" + FireBaseHandler.getInstance(this).getUserKey();
         Map<String, Object> updates = new HashMap<>();
-        updates.put("mUid", model.getUid());
+        updates.put("mUid", model.getmUid());
         updates.put("mName", model.getmName());
         updates.put("mEmail", model.getmEmail());
         updates.put("mPassword", model.getmPassword());
-        updates.put("mUserImagePath", model.getUserImagePath());
-        updates.put("mAddress", model.getAddress());
+        updates.put("mUserImagePath", model.getmUserImagePath());
+        updates.put("mAddress", model.getmAddress());
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(test, updates);
@@ -196,6 +198,9 @@ public class RegistrationActivity extends BaseActivity implements
         public void onComplete(@NonNull Task<Void> task) {
             UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
             UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
+            Intent intentForResult = getIntent();
+            intentForResult.putExtra(AccountFragment.EXTRA_EDIT_USER_OBJECT, mNewUserObject);
+            setResult(RESULT_OK, intentForResult);
             finish();
         }
     };
@@ -226,8 +231,8 @@ public class RegistrationActivity extends BaseActivity implements
         mNewUserObject.setmName(newUserObject.getmName());
         mNewUserObject.setmEmail(newUserObject.getmEmail());
         mNewUserObject.setmPassword(newUserObject.getmPassword());
-        mNewUserObject.setUserImagePath(newUserObject.getUserImagePath());
-        mNewUserObject.setAddress(newUserObject.getAddress());
+        mNewUserObject.setUserImagePath(newUserObject.getmUserImagePath());
+        mNewUserObject.setAddress(newUserObject.getmAddress());
     }
 
     @Override
@@ -235,7 +240,7 @@ public class RegistrationActivity extends BaseActivity implements
         if (isCreated) {
             //GET CURRENT USER INFO
             //TODO SAVE IMAGE
-            mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath());
+            mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath());
             byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
             saveImageInFireBase(imageByte);
             FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);

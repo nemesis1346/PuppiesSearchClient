@@ -86,11 +86,11 @@ public class UserPictureRegistrationFragment extends RegistrationBaseFragment {
         mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.image_userPicture_container);
         mProgressBar.setVisibility(View.GONE);
-        if (mNewUserObject.getUserImagePath() != null) {
+        if (mNewUserObject.getmUserImagePath() != null) {
             final long ONE_MEGABYTE = 1024 * 1024 * 2;
             showProgress();
             FireBaseHandler.getInstance(getContext())
-                    .getImageFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                    .getImageFirebaseStorageReference(mNewUserObject.getmUserImagePath())
                     .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {

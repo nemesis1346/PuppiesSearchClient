@@ -1,5 +1,6 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 
@@ -40,6 +42,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class AccountFragment extends Fragment {
 
+
+    public static final int CODE_EDITING = 1234;
+    public static final String EXTRA_EDIT_USER_OBJECT = "extra_edit_user_object";
     private NewUserModel mNewUserObject;
 
     private TextView mName;
@@ -52,11 +57,11 @@ public class AccountFragment extends Fragment {
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
-    public static AccountFragment newInstance(){
+    public static AccountFragment newInstance() {
         Bundle args = new Bundle();
         AccountFragment fragment = new AccountFragment();
         fragment.setArguments(args);
-        return  fragment;
+        return fragment;
     }
 
     @Override
@@ -73,22 +78,24 @@ public class AccountFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.myAccountTitle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
-        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
+//
+//        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+//        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
+//        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
         mName = (TextView) rootView.findViewById(R.id.show_user_name);
         mEmail = (TextView) rootView.findViewById(R.id.show_email);
-        mAddress= (TextView) rootView.findViewById(R.id.show_address);
+        mAddress = (TextView) rootView.findViewById(R.id.show_address);
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.account_image);
         mEditBtn = (Button) rootView.findViewById(R.id.btn_edit);
 
         mEditBtn.setOnClickListener(mEditBtnListener);
 
-        showProgress();
-        FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
-                .addListenerForSingleValueEvent(mAccountFirebaseListener);
+//        showProgress();
+//        FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
+//                .addListenerForSingleValueEvent(mAccountFirebaseListener);
+
+        setupUI(UserSessionManager.getInstance(getContext()).getLocalUser());
 
         return rootView;
     }
@@ -97,29 +104,7 @@ public class AccountFragment extends Fragment {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
-            mName.setText(mNewUserObject.getmName());
-            mEmail.setText(mNewUserObject.getmEmail());
-            mAddress.setText(mNewUserObject.getAddress());
-
-            StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(getContext())
-                    .getmStorageRef().child(mNewUserObject.getUserImagePath());
-            final long ONE_MEGABYTE = 1024 * 1024 * 2;
-
-            mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    mUserPicture.setImageBitmap(bitmap);
-                    hideProgress();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
-                    showError(R.string.error_no_results_found);
-                }
-            });
+            setupUI(mNewUserObject);
         }
 
         @Override
@@ -161,9 +146,45 @@ public class AccountFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent intent = RegistrationActivity.newIntent(getContext());
-            intent.putExtra(RegistrationActivity.EXTRA_IS_EDITING,true);
-            startActivity(intent);
+            intent.putExtra(RegistrationActivity.EXTRA_IS_EDITING, true);
+            startActivityForResult(intent, CODE_EDITING);
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE_EDITING && resultCode == Activity.RESULT_OK) {
+            NewUserModel resultado = (NewUserModel) data.getExtras().getSerializable(EXTRA_EDIT_USER_OBJECT);
+            setupUI(resultado);
+        }
+    }
+
+    private void setupUI(NewUserModel newUserModel) {
+        mName.setText(newUserModel.getmName());
+        mEmail.setText(newUserModel.getmEmail());
+        mAddress.setText(newUserModel.getmAddress());
+
+//        StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(getContext())
+//                .getmStorageRef().child(newUserModel.getmUserImagePath());
+//        final long ONE_MEGABYTE = 1024 * 1024 * 2;
+
+//        mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+//                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                mUserPicture.setImageBitmap(bitmap);
+//                hideProgress();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                showError(R.string.error_no_results_found);
+//            }
+//        });
+        mUserPicture.setImageBitmap(UserSessionManager.getInstance(getContext()).getUserImage());
+    }
 
 }

@@ -59,12 +59,12 @@ public class UserSessionManager {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
+                        NewUserModel mResultUser = (NewUserModel) dataSnapshot.getValue(NewUserModel.class);
 
                         final long ONE_MEGABYTE = 1024 * 1024;
 
                         FireBaseHandler.getInstance(mContext)
-                                .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                .getUserObjectFirebaseStorageReference(mResultUser.getmUserImagePath())
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {

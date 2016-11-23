@@ -141,7 +141,7 @@ public class FireBaseHandler {
                             final long ONE_MEGABYTE = 1024 * 1024;
 
                             FireBaseHandler.getInstance(mContext)
-                                    .getUserObjectFirebaseStorageReference(mNewUserObject.getUserImagePath())
+                                    .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
                                     .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
@@ -195,7 +195,8 @@ public class FireBaseHandler {
 
     public DatabaseReference getUserObjectFirebaseDatabaseReference() {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(user.getUid());
+        String uid = user.getUid();
+        return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(uid);
     }
 
     public DatabaseReference getUserObjectFirebaseDatabaseReferenceRaw() {
