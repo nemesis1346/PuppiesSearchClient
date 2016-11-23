@@ -171,13 +171,9 @@ public class FireBaseHandler {
     }
 
     public boolean savePetObject(ReportModel reportModel) {
-        String uid = UUID.randomUUID().toString();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        Log.d("report uname: ", "" + reportModel.getuName());
-        Log.d("report upath: ", "" + reportModel.getImagePath());
-
         if (user != null) {
-            mFirebaseDatabaseReference.child(REPORTS).child(uid).setValue(reportModel);
+            mFirebaseDatabaseReference.child(REPORTS).child(reportModel.getuId()).setValue(reportModel);
             return true;
         } else {
             Log.d("error in creation", "" + "error");
