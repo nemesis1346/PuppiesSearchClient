@@ -206,12 +206,10 @@ public class RegistrationActivity extends BaseActivity implements
                 @Override
                 public void onSuccess(byte[] bytes) {
                     hideProgress();
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
                     UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
                     UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
-                    UserSessionManager.getInstance(RegistrationActivity.this).setUserImage(bitmap);
+                    UserSessionManager.getInstance(RegistrationActivity.this).setUserImage(bytes);
 
                     new AlertDialogUtils.Builder(RegistrationActivity.this)
                             .setResourceMessage(R.string.registration_success)

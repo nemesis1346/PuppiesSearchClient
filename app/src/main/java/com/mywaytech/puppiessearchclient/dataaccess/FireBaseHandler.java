@@ -145,9 +145,8 @@ public class FireBaseHandler {
                                     .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
-                                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                    UserSessionManager.getInstance(mContext).setUserImage(bitmap);
+
+                                    UserSessionManager.getInstance(mContext).setUserImage(bytes);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

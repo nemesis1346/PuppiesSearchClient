@@ -34,7 +34,7 @@ public class UserSessionManager {
     public static final long ONE_MEGABYTE = 1024 * 1024;
 
 
-    private Bitmap mUserImage;
+    private byte[] mUserImage;
 
     public static UserSessionManager getInstance(Context context) {
         if (sInstance == null) {
@@ -68,9 +68,7 @@ public class UserSessionManager {
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
-                                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                UserSessionManager.getInstance(mContext).setUserImage(bitmap);
+                                UserSessionManager.getInstance(mContext).setUserImage(bytes);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -99,30 +97,12 @@ public class UserSessionManager {
         Log.d("UserSessionManager: ", " se guardo el usuario en SessionManager");
     }
 
-    public Bitmap getUserImage() {
+    public byte[] getUserImage() {
         return mUserImage;
     }
 
-    public void setUserImage(Bitmap bitmap) {
-        mUserImage = bitmap;
-    }
-
-    public void updateUserImage() {
-        FireBaseHandler.getInstance(mContext)
-                .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
-                .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                setUserImage(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("errorSaveImage: ", exception.getMessage());
-            }
-        });
+    public void setUserImage(byte[] userImage) {
+        mUserImage = userImage;
     }
 
     /**
@@ -155,7 +135,5 @@ public class UserSessionManager {
         return userModel;
     }
 
-    public interface updateCallbacks{
-        void updateUserObject(NewUserModel myNewUserObject);
-    }
+
 }

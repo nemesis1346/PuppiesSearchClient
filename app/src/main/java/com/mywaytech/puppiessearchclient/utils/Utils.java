@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
 
+import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -96,12 +98,9 @@ public class Utils {
         return formatter.format(calendar.getTime());
     }
 
-    public static Bitmap getBitmap(VectorDrawableCompat vectorDrawable) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
+    public static Bitmap getBitmap(byte[] bytes) {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         return bitmap;
     }
 }

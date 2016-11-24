@@ -32,6 +32,7 @@ import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 
@@ -128,7 +129,7 @@ mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
         mEmail.setText(newUserModel.getmEmail());
         mAddress.setText(newUserModel.getmAddress());
 
-        mUserPicture.setImageBitmap(UserSessionManager.getInstance(getContext()).getUserImage());
+        mUserPicture.setImageBitmap(Utils.getBitmap(UserSessionManager.getInstance(getContext()).getUserImage()));
     }
 
 }
