@@ -78,10 +78,6 @@ public class AccountFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.myAccountTitle);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-//        mProgressTextInfo = (TextView) rootView.findViewById(R.id.text_progress_info);
-//        mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
         mName = (TextView) rootView.findViewById(R.id.show_user_name);
         mEmail = (TextView) rootView.findViewById(R.id.show_email);
@@ -90,28 +86,13 @@ public class AccountFragment extends Fragment {
         mEditBtn = (Button) rootView.findViewById(R.id.btn_edit);
 
         mEditBtn.setOnClickListener(mEditBtnListener);
+mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
 
-//        showProgress();
-//        FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
-//                .addListenerForSingleValueEvent(mAccountFirebaseListener);
-
-        setupUI(UserSessionManager.getInstance(getContext()).getLocalUser());
+        setupUI(mNewUserObject);
 
         return rootView;
     }
 
-    private ValueEventListener mAccountFirebaseListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
-            setupUI(mNewUserObject);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -122,24 +103,6 @@ public class AccountFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressTextInfo.setVisibility(View.VISIBLE);
-        mProgressTextInfo.setText(R.string.pet_loading_user_picture);
-    }
-
-    private void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
-        mProgressTextInfo.setVisibility(View.GONE);
-    }
-
-    private void showError(@StringRes int stringId) {
-        mProgressBar.setVisibility(View.GONE);
-        mProgressTextInfo.setVisibility(View.VISIBLE);
-        mProgressErrorImg.setVisibility(View.VISIBLE);
-        mProgressTextInfo.setText(stringId);
     }
 
     private View.OnClickListener mEditBtnListener = new View.OnClickListener() {
@@ -165,25 +128,6 @@ public class AccountFragment extends Fragment {
         mEmail.setText(newUserModel.getmEmail());
         mAddress.setText(newUserModel.getmAddress());
 
-//        StorageReference mFirebaseStorageReference = FireBaseHandler.getInstance(getContext())
-//                .getmStorageRef().child(newUserModel.getmUserImagePath());
-//        final long ONE_MEGABYTE = 1024 * 1024 * 2;
-
-//        mFirebaseStorageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-//                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//                mUserPicture.setImageBitmap(bitmap);
-//                hideProgress();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                showError(R.string.error_no_results_found);
-//            }
-//        });
         mUserPicture.setImageBitmap(UserSessionManager.getInstance(getContext()).getUserImage());
     }
 

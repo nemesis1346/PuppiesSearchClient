@@ -31,27 +31,29 @@ public class UserSessionManager {
     private Context mContext;
     private NewUserModel mNewUserObject;
     private static UserSessionManager sInstance;
+    public static final long ONE_MEGABYTE = 1024 * 1024;
+
 
     private Bitmap mUserImage;
 
-    public static UserSessionManager getInstance(Context context){
-        if(sInstance==null){
-            sInstance =new UserSessionManager(context);
+    public static UserSessionManager getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new UserSessionManager(context);
         }
         return sInstance;
     }
 
-    private UserSessionManager(Context context){
+    private UserSessionManager(Context context) {
         mContext = context;
     }
 
-    public void logged(NewUserModel newUserObject, boolean saveUserLocally){
-        if(newUserObject == null){
+    public void logged(NewUserModel newUserObject, boolean saveUserLocally) {
+        if (newUserObject == null) {
             return;
         }
-        if(saveUserLocally){
+        if (saveUserLocally) {
             saveLocalUser(newUserObject);
-        }else{
+        } else {
             clearLocalUser();
         }
         mNewUserObject = newUserObject;
@@ -60,8 +62,6 @@ public class UserSessionManager {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         NewUserModel mResultUser = (NewUserModel) dataSnapshot.getValue(NewUserModel.class);
-
-                        final long ONE_MEGABYTE = 1024 * 1024;
 
                         FireBaseHandler.getInstance(mContext)
                                 .getUserObjectFirebaseStorageReference(mResultUser.getmUserImagePath())
@@ -75,7 +75,7 @@ public class UserSessionManager {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                Log.e("errorSaveImage: ",exception.getMessage());
+                                Log.e("errorSaveImage: ", exception.getMessage());
                             }
                         });
                     }
@@ -86,7 +86,9 @@ public class UserSessionManager {
                     }
                 });
     }
+
     public void saveLocalUser(NewUserModel newUserObject) {
+        mNewUserObject = newUserObject;
         Gson gson = new Gson();
         String userString = gson.toJson(newUserObject);
         SharedPreferences sharedPref = mContext.getSharedPreferences(PREFERENCES_USER, Context.MODE_PRIVATE);
@@ -94,15 +96,33 @@ public class UserSessionManager {
         editor.putString(KEY_USER, userString);
         editor.commit();
 
-        Log.d("UserSessionManager: "," se guardo el usuario en SessionManager");
+        Log.d("UserSessionManager: ", " se guardo el usuario en SessionManager");
     }
 
     public Bitmap getUserImage() {
         return mUserImage;
     }
 
-    public void setUserImage(Bitmap userImage) {
-        mUserImage = userImage;
+    public void setUserImage(Bitmap bitmap) {
+        mUserImage = bitmap;
+    }
+
+    public void updateUserImage() {
+        FireBaseHandler.getInstance(mContext)
+                .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                setUserImage(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("errorSaveImage: ", exception.getMessage());
+            }
+        });
     }
 
     /**
@@ -113,12 +133,13 @@ public class UserSessionManager {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.commit();
-        Log.d("UserSessionManager: "," se borro el usuario en SessionManager");
+        Log.d("UserSessionManager: ", " se borro el usuario en SessionManager");
 
     }
 
     /**
      * This method retrieves the user saved in preferences
+     *
      * @return the user model found in preferences, if it cant find it it returns null
      */
     @Nullable
@@ -132,5 +153,9 @@ public class UserSessionManager {
             userModel = gson.fromJson(userString, NewUserModel.class);
         }
         return userModel;
+    }
+
+    public interface updateCallbacks{
+        void updateUserObject(NewUserModel myNewUserObject);
     }
 }

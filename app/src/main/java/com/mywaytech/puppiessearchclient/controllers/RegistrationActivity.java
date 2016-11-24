@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -172,6 +174,7 @@ public class RegistrationActivity extends BaseActivity implements
     }
 
     public void updateInfo(NewUserModel model) {
+        mObjectflag =true;
         //TODO PASS THIS TO FIREBASE HANLER
         String test = "/" + FireBaseHandler.OBJECT_USERS_NAME + "/" + FireBaseHandler.getInstance(this).getUserKey();
         Map<String, Object> updates = new HashMap<>();
@@ -190,18 +193,48 @@ public class RegistrationActivity extends BaseActivity implements
                 .updateChildren(childUpdates).addOnCompleteListener(mOnCompleteListenerEditing)
                 .addOnFailureListener(mOnFailureListener);
 
-
     }
 
     private OnCompleteListener<Void> mOnCompleteListenerEditing = new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
-            UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
-            UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
-            Intent intentForResult = getIntent();
-            intentForResult.putExtra(AccountFragment.EXTRA_EDIT_USER_OBJECT, mNewUserObject);
-            setResult(RESULT_OK, intentForResult);
-            finish();
+            saveImageInFireBase();
+
+            FireBaseHandler.getInstance(RegistrationActivity.this)
+                    .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                    .getBytes(UserSessionManager.ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    hideProgress();
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                    UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
+                    UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
+                    UserSessionManager.getInstance(RegistrationActivity.this).setUserImage(bitmap);
+
+                    new AlertDialogUtils.Builder(RegistrationActivity.this)
+                            .setResourceMessage(R.string.registration_success)
+                            .setPositiveText(R.string.btn_ok)
+                            .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentForResult = getIntent();
+                                    intentForResult.putExtra(AccountFragment.EXTRA_EDIT_USER_OBJECT, mNewUserObject);
+                                    setResult(RESULT_OK, intentForResult);
+                                    finish();
+                                }
+                            })
+                            .show();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("errorSaveImage: ", exception.getMessage());
+                }
+            });
+
         }
     };
 
@@ -240,9 +273,7 @@ public class RegistrationActivity extends BaseActivity implements
         if (isCreated) {
             //GET CURRENT USER INFO
             //TODO SAVE IMAGE
-            mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath());
-            byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
-            saveImageInFireBase(imageByte);
+            saveImageInFireBase();
             FireBaseHandler.getInstance(this).saveUserObject(mNewUserObject);
             mObjectflag =true;
         } else {
@@ -253,9 +284,13 @@ public class RegistrationActivity extends BaseActivity implements
         }
     }
 
-    public void saveImageInFireBase(byte[] bitMap) {
+    public void saveImageInFireBase() {
 
-        UploadTask uploadTask = mStorageRef.putBytes(bitMap);
+        mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath());
+
+        byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
+
+        UploadTask uploadTask = mStorageRef.putBytes(imageByte);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
