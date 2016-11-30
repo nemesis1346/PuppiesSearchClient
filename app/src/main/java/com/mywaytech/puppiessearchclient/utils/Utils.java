@@ -14,6 +14,7 @@ import android.util.Log;
 import com.mywaytech.puppiessearchclient.R;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,7 +65,7 @@ public class Utils {
     }
 
     public static String getCurrentDateTime() {
-        try{
+        try {
             //TODO GET CURRENT UTC TIME
 //            Calendar calendar = Calendar.getInstance();
 //            TimeZone tz = TimeZone.getDefault();
@@ -74,10 +75,10 @@ public class Utils {
 //            Date currentTimeZone = calendar.getTime();
 //            Long  currentTimeZoneLong =currentTimeZone.getTime();
 //            return String.valueOf(currentTimeZoneLong);
-            Long tsLong = System.currentTimeMillis()/1000;
+            Long tsLong = System.currentTimeMillis() / 1000;
             String ts = tsLong.toString();
             return ts;
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
         return "";
     }
@@ -99,8 +100,14 @@ public class Utils {
     }
 
     public static Bitmap getBitmap(byte[] bytes) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         return bitmap;
+    }
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }

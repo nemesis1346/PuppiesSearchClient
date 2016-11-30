@@ -86,6 +86,7 @@ public class UserSessionManager {
     }
 
     public void saveLocalUser(NewUserModel newUserObject) {
+        clearLocalUser();
         mNewUserObject = newUserObject;
         Gson gson = new Gson();
         String userString = gson.toJson(newUserObject);

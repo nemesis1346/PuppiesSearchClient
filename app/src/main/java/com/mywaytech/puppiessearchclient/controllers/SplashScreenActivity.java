@@ -53,12 +53,12 @@ public class SplashScreenActivity extends Activity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        this.finish();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        this.finish();
+//    }
 
 
 }

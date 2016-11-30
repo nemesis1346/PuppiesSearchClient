@@ -37,6 +37,7 @@ import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
@@ -198,40 +199,55 @@ public class RegistrationActivity extends BaseActivity implements
     private OnCompleteListener<Void> mOnCompleteListenerEditing = new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task) {
-            saveImageInFireBase();
 
             FireBaseHandler.getInstance(RegistrationActivity.this)
                     .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
-                    .getBytes(UserSessionManager.ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onSuccess(byte[] bytes) {
-                    hideProgress();
+                public void onSuccess(Void aVoid) {
+                    saveImageInFireBase();
 
-                    UserSessionManager.getInstance(RegistrationActivity.this).clearLocalUser();
-                    UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
-                    UserSessionManager.getInstance(RegistrationActivity.this).setUserImage(bytes);
+                    FireBaseHandler.getInstance(RegistrationActivity.this)
+                            .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                            .getBytes(UserSessionManager.ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            hideProgress();
 
-                    new AlertDialogUtils.Builder(RegistrationActivity.this)
-                            .setResourceMessage(R.string.registration_success)
-                            .setPositiveText(R.string.btn_ok)
-                            .setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intentForResult = getIntent();
-                                    intentForResult.putExtra(AccountFragment.EXTRA_EDIT_USER_OBJECT, mNewUserObject);
-                                    setResult(RESULT_OK, intentForResult);
-                                    finish();
-                                }
-                            })
-                            .show();
+                            UserSessionManager.getInstance(RegistrationActivity.this).saveLocalUser(mNewUserObject);
+                            UserSessionManager.getInstance(RegistrationActivity.this).setUserImage(bytes);
 
+                            new AlertDialogUtils.Builder(RegistrationActivity.this)
+                                    .setResourceMessage(R.string.registration_success)
+                                    .setPositiveText(R.string.btn_ok)
+                                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intentForResult = getIntent();
+                                            intentForResult.putExtra(AccountFragment.EXTRA_EDIT_USER_OBJECT, mNewUserObject);
+                                            setResult(RESULT_OK, intentForResult);
+                                            finish();
+                                        }
+                                    })
+                                    .show();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.e("errorSaveImage: ", exception.getMessage());
+                        }
+                    });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.e("errorSaveImage: ", exception.getMessage());
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("errorUpdatingImage: ", e.getMessage());
+
                 }
             });
+
+
 
         }
     };
@@ -308,6 +324,8 @@ public class RegistrationActivity extends BaseActivity implements
         if (mObjectflag && mUserPictureFlag) {
             hideProgress();
             UserSessionManager.getInstance(this).saveLocalUser(mNewUserObject);
+            UserSessionManager.getInstance(this).setUserImage(Utils.getBytes(mUserPicture));
+
 
             new AlertDialogUtils.Builder(this)
                     .setResourceMessage(R.string.registration_success)

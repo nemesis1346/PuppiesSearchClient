@@ -87,7 +87,7 @@ public class AccountFragment extends Fragment {
         mEditBtn = (Button) rootView.findViewById(R.id.btn_edit);
 
         mEditBtn.setOnClickListener(mEditBtnListener);
-mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
+        mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
 
         setupUI(mNewUserObject);
 
@@ -132,4 +132,9 @@ mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
         mUserPicture.setImageBitmap(Utils.getBitmap(UserSessionManager.getInstance(getContext()).getUserImage()));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupUI(UserSessionManager.getInstance(getContext()).getLocalUser());
+    }
 }
