@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +29,7 @@ public class UserSessionManager {
     private NewUserModel mNewUserObject;
     private static UserSessionManager sInstance;
     public static final long ONE_MEGABYTE = 1024 * 1024;
-
+    private GoogleApiClient mGoogleApiClient;
 
     private byte[] mUserImage;
 
@@ -132,5 +133,11 @@ public class UserSessionManager {
         return userModel;
     }
 
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
 
+    public void setGoogleApiClient(GoogleApiClient googleApiClient) {
+        mGoogleApiClient = googleApiClient;
+    }
 }

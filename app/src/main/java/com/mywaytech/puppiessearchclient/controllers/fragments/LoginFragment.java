@@ -114,20 +114,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         bNewUser = (Button) rootView.findViewById(R.id.btn_new_user);
         bNewUser.setOnClickListener(newUserListener);
 
-        //TODO REVIEW GOOGLE SIGN IN
-//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.server_client_id))
-//                .requestEmail()
-//                .build();
-//        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-//                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
-//                    @Override
-//                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//                        Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
+        //GOOGLE API CLIENT
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -275,7 +262,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     }
 
     private void hideProgress() {
-        if (mProgressfragment != null && mProgressfragment.isVisible()) {
+        if (mProgressfragment != null) {
             mProgressfragment.dismiss();
         }
     }
@@ -333,7 +320,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                                         hideProgress();
                                         UserSessionManager.getInstance(getContext()).saveLocalUser(googleUserObject);
                                         UserSessionManager.getInstance(getContext()).setUserImage(Utils.getBytes(bitmap));
-                                        
+                                        UserSessionManager.getInstance(getContext()).setGoogleApiClient(mGoogleApiClient);
+
                                         new AlertDialogUtils.Builder(getContext())
                                                 .setResourceMessage(R.string.login_identified)
                                                 .setPositiveText(R.string.btn_ok)
@@ -377,6 +365,12 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     };
 
     @Override
+    public void onResume() {
+        super.onResume();
+        hideProgress();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -406,6 +400,12 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         .setResourceMessage(R.string.login_not_identified)
                         .setIsCancelable(false)
                         .setPositiveText(R.string.btn_ok)
+                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                hideProgress();
+                            }
+                        })
                         .show();
             }
         }

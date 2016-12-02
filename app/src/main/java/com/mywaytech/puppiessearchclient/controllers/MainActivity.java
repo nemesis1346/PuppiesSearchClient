@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +17,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 import com.mywaytech.puppiessearchclient.controllers.fragments.WallFragment;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 
 import java.util.ArrayList;
@@ -29,6 +37,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
 
     public static final String EXTRA_EMAIL_FOR_AUTH = "com.mywaytech.puppiessearchclient.extras.extra_email_for_auth";
+    public static final String EXTRA_GOOGLE_CLIENT ="com.mywaytech.puppiessearchclient.extras.extra_google_client";
 
     private static final int PET_REQUEST = 0;
 
@@ -36,6 +45,7 @@ public class MainActivity extends BaseActivity {
 
     private WallFragment mWallFragment;
     private String mTypeDialog;
+private GoogleApiClient mGoogleApiClient;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -45,6 +55,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.main_activity_title);
@@ -56,6 +67,11 @@ public class MainActivity extends BaseActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         mWallFragment = WallFragment.newInstance();
         ft.replace(R.id.container, mWallFragment).commit();
+
+        mGoogleApiClient=UserSessionManager.getInstance(this).getGoogleApiClient();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
 
     }
 
@@ -100,6 +116,13 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -114,9 +137,38 @@ public class MainActivity extends BaseActivity {
                 .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent mainIntent = new Intent().setClass(
-                                MainActivity.this, LoginActivity.class);
-                        startActivity(mainIntent);
+                        if(mGoogleApiClient!=null){
+                            mGoogleApiClient.connect();
+                            mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                                @Override
+                                public void onConnected(@Nullable Bundle bundle) {
+
+                                    FirebaseAuth.getInstance().signOut();
+                                    if(mGoogleApiClient.isConnected()) {
+                                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                                            @Override
+                                            public void onResult(@NonNull Status status) {
+                                                if (status.isSuccess()) {
+                                                    Log.d("", "User Logged out");
+                                                    Intent mainIntent = new Intent().setClass(
+                                                            MainActivity.this, LoginActivity.class);
+                                                    startActivity(mainIntent);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onConnectionSuspended(int i) {
+                                    Log.d("", "Google API Client Connection Suspended");
+                                }
+                            });
+                        }else {
+                            Intent mainIntent = new Intent().setClass(
+                                    MainActivity.this, LoginActivity.class);
+                            startActivity(mainIntent);
+                        }
                     }
                 })
                 .setNegativeText(R.string.btn_no)
