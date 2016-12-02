@@ -145,8 +145,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         mTypeSpinner.setOnItemSelectedListener(this);
 
 
-        mFirebaseAuth = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+//        mFirebaseAuth = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth();
+//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
 
         //TODO IT MIGHT BE UNNECESARY
         mCurrentUser = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth().getCurrentUser();
@@ -184,7 +184,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                 Log.d("username: ", "" + mCurrentUserName);
             } else {
 
-                Toast.makeText(getActivity(), "Usuario Sin No ha iniciado sesión", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Usuario no ha iniciado sesión", Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }
         }

@@ -1,16 +1,13 @@
 package com.mywaytech.puppiessearchclient.controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +36,6 @@ import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
-import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -201,14 +197,14 @@ public class RegistrationActivity extends BaseActivity implements
         public void onComplete(@NonNull Task<Void> task) {
 
             FireBaseHandler.getInstance(RegistrationActivity.this)
-                    .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                    .getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath())
                     .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     saveImageInFireBase();
 
                     FireBaseHandler.getInstance(RegistrationActivity.this)
-                            .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                            .getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath())
                             .getBytes(UserSessionManager.ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
                         public void onSuccess(byte[] bytes) {
@@ -300,7 +296,7 @@ public class RegistrationActivity extends BaseActivity implements
 
     public void saveImageInFireBase() {
 
-        mStorageRef = FireBaseHandler.getInstance(this).getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath());
+        mStorageRef = FireBaseHandler.getInstance(this).getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath());
 
         byte[] imageByte = PhotoUtils.processImagePet(mUserPicture);
 

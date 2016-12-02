@@ -2,8 +2,6 @@ package com.mywaytech.puppiessearchclient.dataaccess;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -24,9 +22,6 @@ import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
-
-import java.io.ByteArrayInputStream;
-import java.util.UUID;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -124,6 +119,12 @@ public class FireBaseHandler {
 
     }
 
+    public void saveUserObjectByGmail(NewUserModel newUserModel, ValueEventListener mCallback){
+            mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(newUserModel.getmUid()).setValue(newUserModel);
+            mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(newUserModel.getmUid())
+                    .addListenerForSingleValueEvent(mCallback);
+    }
+
     public void saveUserObject(NewUserModel newUserObject) {
         String uid = "";
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -141,7 +142,7 @@ public class FireBaseHandler {
                             final long ONE_MEGABYTE = 1024 * 1024;
 
                             FireBaseHandler.getInstance(mContext)
-                                    .getUserObjectFirebaseStorageReference(mNewUserObject.getmUserImagePath())
+                                    .getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath())
                                     .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
@@ -170,14 +171,8 @@ public class FireBaseHandler {
     }
 
     public boolean savePetObject(ReportModel reportModel) {
-        FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        if (user != null) {
             mFirebaseDatabaseReference.child(REPORTS).child(reportModel.getuId()).setValue(reportModel);
             return true;
-        } else {
-            Log.d("error in creation", "" + "error");
-            return false;
-        }
     }
 
     public StorageReference setImageFirebaseStorageReference(String imageId) {
@@ -188,7 +183,7 @@ public class FireBaseHandler {
         return mStorageRef.child(imagePath);
     }
 
-    public StorageReference getUserObjectFirebaseStorageReference(String imagePath) {
+    public StorageReference getUserImageFirebaseStorageReference(String imagePath) {
         return mStorageRef.child(imagePath);
     }
 

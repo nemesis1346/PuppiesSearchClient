@@ -2,8 +2,6 @@ package com.mywaytech.puppiessearchclient.domain;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,8 +14,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
-
-import java.io.ByteArrayInputStream;
 
 /**
  * Created by Marco on 26/9/2016.
@@ -64,7 +60,7 @@ public class UserSessionManager {
                         NewUserModel mResultUser = (NewUserModel) dataSnapshot.getValue(NewUserModel.class);
 
                         FireBaseHandler.getInstance(mContext)
-                                .getUserObjectFirebaseStorageReference(mResultUser.getmUserImagePath())
+                                .getUserImageFirebaseStorageReference(mResultUser.getmUserImagePath())
                                 .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {

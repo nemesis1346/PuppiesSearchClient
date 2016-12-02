@@ -34,8 +34,6 @@ public class MainActivity extends BaseActivity {
 
     private FloatingActionButton btn_add_dog;
 
-    private String emailForAuth;
-
     private WallFragment mWallFragment;
     private String mTypeDialog;
 
@@ -54,7 +52,6 @@ public class MainActivity extends BaseActivity {
         btn_add_dog = (FloatingActionButton) findViewById(R.id.fab_add_dog_wall);
         btn_add_dog.setOnClickListener(addListener);
 
-        emailForAuth = getIntent().getStringExtra(EXTRA_EMAIL_FOR_AUTH);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         mWallFragment = WallFragment.newInstance();

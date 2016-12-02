@@ -2,6 +2,8 @@ package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,20 +24,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
@@ -44,8 +44,9 @@ import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
-
-import static android.R.id.list;
+import com.mywaytech.puppiessearchclient.utils.Utils;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 /**
  * Created by Marco on 9/19/2016.
@@ -79,7 +80,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
 
     public static LoginFragment newInstance(boolean notificationFlag) {
         Bundle args = new Bundle();
-        args.putBoolean(ARG_NOTIFICATION_FLAG,notificationFlag);
+        args.putBoolean(ARG_NOTIFICATION_FLAG, notificationFlag);
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
@@ -89,8 +90,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNotificacionFlag = getArguments().getBoolean(ARG_NOTIFICATION_FLAG);
-        Log.d("flag not: ",""+mNotificacionFlag);
-        if(mNotificacionFlag){
+        Log.d("flag not: ", "" + mNotificacionFlag);
+        if (mNotificacionFlag) {
             showProgress();
             authenticateUser();
         }
@@ -113,16 +114,29 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         bNewUser = (Button) rootView.findViewById(R.id.btn_new_user);
         bNewUser.setOnClickListener(newUserListener);
 
-        //GOOGLE SIGN IN
-         gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                 .requestIdToken(getString(R.string.server_client_id))
+        //TODO REVIEW GOOGLE SIGN IN
+//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.server_client_id))
+//                .requestEmail()
+//                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+//                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
+//                    @Override
+//                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//                        Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleApiClient= new GoogleApiClient.Builder(getContext())
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                 .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Toast.makeText(getContext(),"test",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -180,7 +194,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
-                            UserSessionManager.getInstance(getContext()).logged(mNewUserObject,true);
+                            UserSessionManager.getInstance(getContext()).logged(mNewUserObject, true);
 
                             hideProgress();
                             new AlertDialogUtils.Builder(getContext())
@@ -266,7 +280,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         }
     }
 
-    private void authenticateUser(){
+    private void authenticateUser() {
         FireBaseHandler.getInstance(getContext()).getFirebaseAuth().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
@@ -288,6 +302,80 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         });
     }
 
+    private ValueEventListener mSaveUserByGmailCallback = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            final NewUserModel googleUserObject = dataSnapshot.getValue(NewUserModel.class);
+            FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(googleUserObject.getmUid());
+            String mImageFirebasepPath = "userPicture/user" + googleUserObject.getmEmail() + ".jpg";
+            final StorageReference mStorageRef = FireBaseHandler.getInstance(getContext()).getUserImageFirebaseStorageReference(mImageFirebasepPath);
+            try {
+
+                Picasso.with(getContext())
+                        .load(googleUserObject.getmUserImagePath())
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded (final Bitmap bitmap, Picasso.LoadedFrom from){
+                                UploadTask uploadTask = mStorageRef.putBytes(Utils.getBytes(bitmap));
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        hideProgress();
+                                        new AlertDialogUtils.Builder(getContext())
+                                                .setStringMessage(e.getMessage())
+                                                .setIsCancelable(false)
+                                                .setPositiveText(R.string.btn_ok)
+                                                .show();
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        hideProgress();
+                                        UserSessionManager.getInstance(getContext()).saveLocalUser(googleUserObject);
+                                        UserSessionManager.getInstance(getContext()).setUserImage(Utils.getBytes(bitmap));
+                                        
+                                        new AlertDialogUtils.Builder(getContext())
+                                                .setResourceMessage(R.string.login_identified)
+                                                .setPositiveText(R.string.btn_ok)
+                                                .setIsCancelable(false)
+                                                .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent intent = MainActivity.newIntent(getActivity());
+                                                        startActivity(intent);
+                                                    }
+                                                })
+                                                .show();
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {}
+                        });
+//
+            } catch (Exception e) {
+                hideProgress();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.error_title)
+                        .setIsCancelable(false)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -295,14 +383,30 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         // Result returned from launching the Intent from
         //   GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            showProgress();
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            String resultMessage = result.getStatus().getStatusMessage();
+            Log.e("resultError:", " " + resultMessage);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
-                // Get account information
-                String mFullName = acct.getDisplayName();
-                String mEmail = acct.getEmail();
-                Log.d("", "fullName "+mFullName);
-                Log.d("", "email "+mEmail);
+                // Get account information and save it
+                NewUserModel googleUserObject = new NewUserModel(
+                        acct.getDisplayName(),
+                        acct.getEmail(),
+                        "",
+                        "",
+                        acct.getPhotoUrl().toString(),
+                        acct.getId());
+
+                FireBaseHandler.getInstance(getContext()).saveUserObjectByGmail(googleUserObject, mSaveUserByGmailCallback);
+
+            } else {
+                hideProgress();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.login_not_identified)
+                        .setIsCancelable(false)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
             }
         }
     }

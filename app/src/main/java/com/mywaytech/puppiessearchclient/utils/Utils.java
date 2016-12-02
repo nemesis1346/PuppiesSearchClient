@@ -13,8 +13,18 @@ import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -110,4 +120,31 @@ public class Utils {
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }
+
+    public static byte[] getBytesFromUrl(String url) throws IOException {
+        URL myUrl = new URL(url);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
+        try {
+            is = myUrl.openStream ();
+            byte[] byteChunk = new byte[4096]; // Or whatever size you want to read in at a time.
+            int n;
+
+            while ( (n = is.read(byteChunk)) > 0 ) {
+                baos.write(byteChunk, 0, n);
+            }
+        }
+        catch (IOException e) {
+            System.err.printf ("Failed while reading bytes from %s: %s", myUrl.toExternalForm(), e.getMessage());
+            e.printStackTrace ();
+            // Perform any other exception handling that's appropriate.
+        }
+        finally {
+            if (is != null) {
+                is.close();
+            }
+        }
+        return baos.toByteArray();
+    }
+
 }
