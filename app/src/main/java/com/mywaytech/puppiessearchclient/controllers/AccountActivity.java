@@ -15,6 +15,8 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.AccountFragment;
  */
 public class AccountActivity extends AppCompatActivity {
 
+    public static final String EXTRA_OUTSIDE_USER_FLAG ="extra_outside_user_flag";
+    private boolean mOutsideUserFlag;
 
     public static Intent newIntent(Context context){
         return new Intent(context, AccountActivity.class);
@@ -24,8 +26,11 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_account);
+
+        mOutsideUserFlag=getIntent().getBooleanExtra(EXTRA_OUTSIDE_USER_FLAG,mOutsideUserFlag);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, AccountFragment.newInstance());
+        ft.replace(R.id.fragment_container, AccountFragment.newInstance(mOutsideUserFlag));
         ft.commit();
     }
 

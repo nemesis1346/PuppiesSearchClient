@@ -1,14 +1,9 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,24 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.RegistrationActivity;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
-import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.Utils;
-
-import java.io.ByteArrayInputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,6 +30,7 @@ public class AccountFragment extends Fragment {
 
     public static final int CODE_EDITING = 1234;
     public static final String EXTRA_EDIT_USER_OBJECT = "extra_edit_user_object";
+    public static final String ARG_OUTSIDE_USER_FLAG = "arg_outside_user_flag";
     private NewUserModel mNewUserObject;
 
     private TextView mName;
@@ -54,12 +39,11 @@ public class AccountFragment extends Fragment {
     private CircleImageView mUserPicture;
     private Button mEditBtn;
 
-    private ProgressBar mProgressBar;
-    private TextView mProgressTextInfo;
-    private ImageView mProgressErrorImg;
+    private boolean mFlagOutsideUser;
 
-    public static AccountFragment newInstance() {
+    public static AccountFragment newInstance(boolean flagGoogleUser) {
         Bundle args = new Bundle();
+        args.putBoolean(ARG_OUTSIDE_USER_FLAG,flagGoogleUser);
         AccountFragment fragment = new AccountFragment();
         fragment.setArguments(args);
         return fragment;
@@ -69,6 +53,7 @@ public class AccountFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mFlagOutsideUser = getArguments().getBoolean(ARG_OUTSIDE_USER_FLAG, false);
     }
 
     @Nullable
@@ -86,8 +71,13 @@ public class AccountFragment extends Fragment {
         mUserPicture = (CircleImageView) rootView.findViewById(R.id.account_image);
         mEditBtn = (Button) rootView.findViewById(R.id.btn_edit);
 
+
         mEditBtn.setOnClickListener(mEditBtnListener);
         mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
+
+        if(mFlagOutsideUser){
+            mEditBtn.setEnabled(false);
+        }
 
         setupUI(mNewUserObject);
 

@@ -107,6 +107,7 @@ public class UserSessionManager {
      * This method erases the user information saved in preferences
      */
     public void clearLocalUser() {
+        mGoogleApiClient=null;
         SharedPreferences sharedPref = mContext.getSharedPreferences(PREFERENCES_USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();

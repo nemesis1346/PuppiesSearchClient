@@ -10,6 +10,7 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.controllers.AboutActivity;
 import com.mywaytech.puppiessearchclient.controllers.AccountActivity;
 import com.mywaytech.puppiessearchclient.controllers.MainActivity;
+import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 
 /**
  * Created by m.maigua on 7/20/2016.
@@ -36,6 +37,9 @@ public class PreferencesFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceClick(Preference preference) {
             Intent intent = AccountActivity.newIntent(getActivity());
+            if(UserSessionManager.getInstance(getActivity()).getGoogleApiClient()!=null){
+                intent.putExtra(AccountActivity.EXTRA_OUTSIDE_USER_FLAG,true);
+            }
             startActivity(intent);
             return true;
         }
