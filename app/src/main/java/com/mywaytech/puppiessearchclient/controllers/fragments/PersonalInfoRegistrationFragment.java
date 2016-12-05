@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
+import com.mywaytech.puppiessearchclient.utils.ValidationUtils;
 
 /**
  * Created by Marco on 21/9/2016.
@@ -62,7 +64,7 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
                 uPassword.setText(mNewUserObject.getmPassword());
                 uPassword_repeat.setText(mNewUserObject.getmPassword());
             }
-            if(mNewUserObject.getmAddress()!=null){
+            if (mNewUserObject.getmAddress() != null) {
                 uAddress.setText(mNewUserObject.getmAddress());
             }
         }
@@ -85,29 +87,33 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
 
             return false;
 
+        } else if (ValidationUtils.isValidEmail(uEmail.getText().toString()) == R.string.error_invalid_user_email) {
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.error_invalid_user_email)
+                    .setPositiveText(R.string.btn_ok)
+                    .setTitle(R.string.error_title)
+                    .show();
+
+            return false;
+        } else if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
+
+            mNewUserObject.setmName(uName.getText().toString());
+            mNewUserObject.setmEmail(uEmail.getText().toString());
+            mNewUserObject.setmPassword(uPassword.getText().toString());
+            mNewUserObject.setAddress(uAddress.getText().toString());
+            mPersonalInfoRegistrationCallback.updateRegistrationModel(mNewUserObject);
+            return true;
         } else {
-            if (uPassword.getText().toString().equals(uPassword_repeat.getText().toString())) {
 
-                mNewUserObject.setmName(uName.getText().toString());
-                mNewUserObject.setmEmail(uEmail.getText().toString());
-                mNewUserObject.setmPassword(uPassword.getText().toString());
-                mNewUserObject.setAddress(uAddress.getText().toString());
-                mPersonalInfoRegistrationCallback.updateRegistrationModel(mNewUserObject);
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.message_validation_password)
+                    .setPositiveText(R.string.btn_ok)
+                    .setTitle(R.string.error_title)
+                    .show();
 
-                return true;
-    } else {
-
-                new AlertDialogUtils.Builder(getContext())
-                        .setResourceMessage(R.string.message_validation_password)
-                        .setPositiveText(R.string.btn_ok)
-                        .setTitle(R.string.error_title)
-                        .show();
-
-                return false;
-            }
+            return false;
         }
     }
-
 
 
 }
