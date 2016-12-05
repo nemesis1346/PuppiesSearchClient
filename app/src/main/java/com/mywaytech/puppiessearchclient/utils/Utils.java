@@ -99,15 +99,10 @@ public class Utils {
     }
 
     public static String convertLongToString(String longStringDate) {
-        // Create a DateFormatter object for displaying date in specified format.
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
-
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.valueOf(longStringDate));
-        return formatter.format(calendar.getTime());
+        long timestamp = Long.parseLong(longStringDate) * 1000L;
+        DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Date netDate = (new Date(timestamp));
+        return sdf.format(netDate);
     }
 
     public static Bitmap getBitmap(byte[] bytes) {
