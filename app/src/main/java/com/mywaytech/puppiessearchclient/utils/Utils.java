@@ -12,6 +12,7 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.Log;
 
 import com.mywaytech.puppiessearchclient.R;
+import com.mywaytech.puppiessearchclient.controllers.fragments.ReportFragment;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -114,6 +115,7 @@ public class Utils {
         return bitmap;
     }
 
+
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -147,4 +149,37 @@ public class Utils {
         return baos.toByteArray();
     }
 
+
+    public static String getSpinnerSelection(String spinnerValue){
+        String typeValue = "";
+        switch (spinnerValue) {
+            case ReportFragment.TYPE_PET_ADOPTION_STRING:
+                typeValue = ReportFragment.TYPE_PET_ADOPTION;
+                break;
+            case ReportFragment.TYPE_PET_LOST_STRING:
+                typeValue = ReportFragment.TYPE_PET_LOST;
+                break;
+            case ReportFragment.TYPE_PET_ALL_STRING:
+                typeValue = ReportFragment.TYPE_PET_ALL;
+            default:
+                typeValue = ReportFragment.TYPE_PET_ALL;
+                break;
+        }
+        return typeValue;
+    }
+    public static String getNamefromSpinnerSelection(String spinnerValue){
+        String typeValue = "";
+        switch (spinnerValue) {
+            case ReportFragment.TYPE_PET_ADOPTION:
+                typeValue = ReportFragment.TYPE_PET_ADOPTION_STRING;
+                break;
+            case ReportFragment.TYPE_PET_LOST:
+                typeValue = ReportFragment.TYPE_PET_LOST_STRING;
+                break;
+            default:
+                typeValue = ReportFragment.TYPE_PET_ALL;
+                break;
+        }
+        return typeValue;
+    }
 }

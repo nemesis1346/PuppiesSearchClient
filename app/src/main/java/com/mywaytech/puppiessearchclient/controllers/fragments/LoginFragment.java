@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -191,8 +192,17 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                                     .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = MainActivity.newIntent(getActivity());
-                                            startActivity(intent);
+
+                                            final Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    //Do something after 100ms
+
+                                                    Intent intent = MainActivity.newIntent(getActivity());
+                                                    startActivity(intent);
+                                                }
+                                            }, 1500);
                                         }
                                     })
                                     .show();
@@ -274,7 +284,14 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     hideProgress();
-                    startActivity(MainActivity.newIntent(getContext()));
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                            startActivity(MainActivity.newIntent(getContext()));
+                        }
+                    }, 1500);
                     Log.d("signed", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     hideProgress();
@@ -302,7 +319,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         .load(googleUserObject.getmUserImagePath())
                         .into(new Target() {
                             @Override
-                            public void onBitmapLoaded (final Bitmap bitmap, Picasso.LoadedFrom from){
+                            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                                 UploadTask uploadTask = mStorageRef.putBytes(Utils.getBytes(bitmap));
                                 uploadTask.addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -329,8 +346,17 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                                                 .setPositiveButtonListener(new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = MainActivity.newIntent(getActivity());
-                                                        startActivity(intent);
+
+                                                        final Handler handler = new Handler();
+                                                        handler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                //Do something after 100ms
+                                                                Intent intent = MainActivity.newIntent(getActivity());
+                                                                startActivity(intent);
+                                                            }
+                                                        }, 1500);
+
                                                     }
                                                 })
                                                 .show();
@@ -340,10 +366,12 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                             }
 
                             @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            }
 
                             @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {}
+                            public void onBitmapFailed(Drawable errorDrawable) {
+                            }
                         });
 //
             } catch (Exception e) {

@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">MyBestFriend\</string>
+    <string name="app_name">LlaquiApp\</string>
     <string name="hint_username">Nombre del Usuario</string>
     <string name="hint_mail">Email</string>
     <string name="hint_password">Contraseña</string>
     <string name="btn_register">Registrarse</string>
     <string name="btn_signin">Registrarse</string>
     <string name="btn_login">Ingresar</string>
-    <string name="main_activity_title">My Best Friend</string>
+    <string name="main_activity_title">@string/app_name</string>
     <string name="input_pet_image">Ingrese image de la mascota</string>
     <string name="btn_reportar">Reportar</string>
     <string name="hint_location">Ubicación</string>
@@ -84,7 +84,6 @@
     <string name="txt_title_choice">Seleccionar</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="action_settings">Configuración</string>
-    <string name="server_client_id">539840606577-4tbl29m25vdlbtjgspf4sqgelhtam0fp.apps.googleusercontent.com</string>
     <string name="registration_title">Registro</string>
     <string name="btn_txt_edit">Editar</string>
 
@@ -133,5 +132,11 @@
         <item name="contact_defensa_animal_link">http://defensavidaanimal.blogspot.com/</item>
         <item name="contact_urbanimal_link">http://urbanimalquito.blogspot.com/</item>
     </string-array>
+
+
+    <!--KEYS-->
+    <string name="server_client_id">539840606577-4tbl29m25vdlbtjgspf4sqgelhtam0fp.apps.googleusercontent.com</string>
+    <string name="keystore">RJJPzFqVBHcIGQRNfmWY9EE5XaQ</string>
+    <string name="btn_map_search">Buscar</string>
 
 </resources>

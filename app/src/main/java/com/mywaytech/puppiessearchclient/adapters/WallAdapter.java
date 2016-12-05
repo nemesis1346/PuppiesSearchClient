@@ -150,7 +150,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
         holder.userAddress.setText(mListItems.get(position).getuAddress());
         holder.userComment.setText(mListItems.get(position).getuComment());
 
-        holder.type.setText(mListItems.get(position).getuType());
+        holder.type.setText(Utils.getNamefromSpinnerSelection(mListItems.get(position).getuType()));
         holder.userEmail.setText(mListItems.get(position).getuEmail());
         holder.userEmail.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         holder.userEmail.setOnClickListener(new View.OnClickListener() {

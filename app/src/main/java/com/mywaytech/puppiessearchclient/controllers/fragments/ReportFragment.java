@@ -71,6 +71,10 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public static final String TYPE_PET_NEW = "NEWS";
     public static final String TYPE_PET_ALL = "ALL";
 
+    public static final String TYPE_PET_LOST_STRING = "Perdido";
+    public static final String TYPE_PET_ADOPTION_STRING= "Adopción";
+    public static final String TYPE_PET_ALL_STRING ="Todos";
+
     private Bitmap mPhoto;
     private Bitmap mTemporalPhoto;
     private ReportModel mReportModel;
@@ -135,8 +139,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         ArrayList<String> mTypeList = new ArrayList<String>() {
         };
         mTypeList.add(TYPE_PET_SELECT_DEFAULT);
-        mTypeList.add(TYPE_PET_LOST);
-        mTypeList.add(TYPE_PET_ADOPTION);
+        mTypeList.add(TYPE_PET_LOST_STRING);
+        mTypeList.add(TYPE_PET_ADOPTION_STRING);
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mTypeList);
@@ -214,7 +218,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         public void onClick(View v) {
             if (newAddress.getText().toString().isEmpty() ||
                     newComment.getText().toString().isEmpty() ||
-                    mTemporalPhoto == null || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)) {
+                    mTemporalPhoto == null || mSpinnerValue.equals(TYPE_PET_SELECT_DEFAULT)
+                    || mSpinnerValue.equals(TYPE_PET_ALL)) {
 
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.validation_error_message)
@@ -270,7 +275,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mSpinnerValue = mTypeSpinner.getSelectedItem().toString();
+        mSpinnerValue = Utils.getSpinnerSelection(mTypeSpinner.getSelectedItem().toString());
         Log.d("type of report: ", "" + mSpinnerValue);
     }
 

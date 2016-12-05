@@ -180,9 +180,9 @@ private GoogleApiClient mGoogleApiClient;
 
         final ListView mChoiceListView = new ListView(this);
         List<String> optionsFilter = new ArrayList<String>();
-        optionsFilter.add(ReportFragment.TYPE_PET_ALL);
-        optionsFilter.add(ReportFragment.TYPE_PET_ADOPTION);
-        optionsFilter.add(ReportFragment.TYPE_PET_LOST);
+        optionsFilter.add(ReportFragment.TYPE_PET_ALL_STRING);
+        optionsFilter.add(ReportFragment.TYPE_PET_ADOPTION_STRING);
+        optionsFilter.add(ReportFragment.TYPE_PET_LOST_STRING);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, optionsFilter);
         mChoiceListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

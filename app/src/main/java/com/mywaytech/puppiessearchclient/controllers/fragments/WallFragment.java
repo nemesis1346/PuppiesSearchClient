@@ -22,6 +22,7 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
 import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,9 +156,13 @@ public class WallFragment extends Fragment {
     }
 
 
+
+
     public void sortList(String type) {
         wallAdapter.clear();
-        switch (type){
+        String typeValue = Utils.getSpinnerSelection(type);
+
+        switch (typeValue) {
             case ReportFragment.TYPE_PET_ALL:
                 FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
                         .addValueEventListener(showFireBaseListener);
@@ -165,7 +170,7 @@ public class WallFragment extends Fragment {
             default:
                 FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
                         .orderByChild("uType")
-                        .equalTo(type)
+                        .equalTo(typeValue)
                         .addChildEventListener(mSortFireBaseListener);
                 break;
         }

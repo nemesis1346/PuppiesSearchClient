@@ -162,13 +162,13 @@ public class MapPuppiesFragment extends Fragment implements
 
     @Override
     public void onFinishedSearch(LocationModel locationModel) {
-        Log.d("onFinishedSearch", "Search finished:" + String.valueOf(locationModel.getLatitude()) + ", " + String.valueOf(locationModel.getLongitude()));
+//        Log.d("onFinishedSearch", "Search finished:" + String.valueOf(locationModel.getLatitude()) + ", " + String.valueOf(locationModel.getLongitude()));
         //TODO: ASK IF THIS VALIDATION IS OK
-        if (locationModel.getLongitude() != -1 && locationModel.getLatitude() != -1) {
-            drawMapMarkers(locationModel);
-        } else {
-            Toast.makeText(getActivity(), "Dirección no Encontrada", Toast.LENGTH_LONG).show();
-        }
+//        if (locationModel.getLongitude() != -1 && locationModel.getLatitude() != -1) {
+//            drawMapMarkers(locationModel);
+//        } else {
+//            Toast.makeText(getActivity(), "Dirección no Encontrada", Toast.LENGTH_LONG).show();
+//        }
     }
 
     private View.OnClickListener searchAddress = new View.OnClickListener() {
