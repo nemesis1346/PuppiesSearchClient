@@ -46,6 +46,7 @@ import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
+import com.mywaytech.puppiessearchclient.utils.ValidationUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -161,6 +162,13 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
             if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.login_error_validation_message)
+                        .show();
+            }
+            else if (ValidationUtils.isValidEmail(uMail.getText().toString()) == R.string.error_invalid_user_email) {
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.error_invalid_user_email)
+                        .setPositiveText(R.string.btn_ok)
+                        .setTitle(R.string.error_title)
                         .show();
             } else {
                 //FIREBASE SIGN METHOD
