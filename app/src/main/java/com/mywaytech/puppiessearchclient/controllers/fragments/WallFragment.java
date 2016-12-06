@@ -208,26 +208,6 @@ public class WallFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
 
         }
-//        @Override
-//        public void onDataChange(DataSnapshot dataSnapshot) {
-//            pet_list = new ArrayList<>();
-//            wallAdapter.setListItems(pet_list);
-//            showProgress();
-//            if (dataSnapshot.hasChildren()) {
-//                for (DataSnapshot objectSnapshot : dataSnapshot.getChildren()) {
-//                    ReportModel object = objectSnapshot.getValue(ReportModel.class);
-//                    pet_list.add(object);
-//                }
-//                wallAdapter.setListItems(pet_list);
-//            } else {
-//                showError(R.string.error_no_results_found);
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(DatabaseError databaseError) {
-//            showErrorRetry();
-//        }
     };
 
 }
