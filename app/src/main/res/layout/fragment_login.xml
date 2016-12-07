@@ -16,27 +16,30 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin_large"
             android:layout_marginRight="@dimen/activity_horizontal_margin_large"
-            android:layout_marginTop="@dimen/activity_vertical_margin_large">
+            android:layout_marginTop="@dimen/material_design_large_margin">
 
             <ImageView
                 android:id="@+id/start_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_large"
                 android:src="@drawable/initial_dog_image"/>
 
             <EditText
+                style="@style/EditTextTheme"
                 android:id="@+id/edit_text_mail_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/start_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:hint="@string/hint_mail"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:layout_below="@+id/start_image"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="@dimen/material_design_margin"/>
 
-            <EditText
+            <com.mywaytech.puppiessearchclient.widgets.CustomEditText
                 android:id="@+id/edit_text_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +93,8 @@
                 android:layout_centerInParent="true"
                 android:layout_below="@+id/sign_in_google_button"
                 />
+
+
         </RelativeLayout>
 
 

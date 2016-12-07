@@ -12,6 +12,7 @@ import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ValidationUtils;
+import com.mywaytech.puppiessearchclient.widgets.CustomEditText;
 
 /**
  * Created by Marco on 21/9/2016.
@@ -20,9 +21,9 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
 
     private EditText uName;
     private EditText uEmail;
-    private EditText uPassword;
+    private CustomEditText uPassword;
     private Button uSignin;
-    private EditText uPassword_repeat;
+    private CustomEditText uPassword_repeat;
     private EditText uAddress;
 
     private NewUserModel mNewUserObject;
@@ -49,8 +50,8 @@ public class PersonalInfoRegistrationFragment extends RegistrationBaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_personal_info_registration, container, false);
         uName = (EditText) rootView.findViewById(R.id.edit_text_name);
         uEmail = (EditText) rootView.findViewById(R.id.edit_text_mail);
-        uPassword = (EditText) rootView.findViewById(R.id.edit_text_password);
-        uPassword_repeat = (EditText) rootView.findViewById(R.id.edit_text_password_repeat);
+        uPassword = (CustomEditText) rootView.findViewById(R.id.edit_text_password);
+        uPassword_repeat = (CustomEditText) rootView.findViewById(R.id.edit_text_password_repeat);
         uAddress = (EditText) rootView.findViewById(R.id.edit_text_address);
 
         //TODO LOCAL UPDATE OF THE OBJECT

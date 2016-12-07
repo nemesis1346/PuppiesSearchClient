@@ -25,10 +25,11 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_design_large_margin"
+                android:layout_marginTop="@dimen/material_design_margin"
                 android:src="@drawable/initial_dog_image"/>
 
             <EditText
+                style="@style/EditTextTheme"
                 android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,37 +40,43 @@
                 android:inputType="text"/>
 
 
-            <EditText
+            <com.mywaytech.puppiessearchclient.widgets.CustomEditText
                 android:id="@+id/edit_text_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_text_name"
                 android:layout_centerHorizontal="true"
                 android:hint="@string/hint_password"
+                android:layout_marginTop="@dimen/material_design_small_margin"
                 android:inputType="textPassword"/>
 
-            <EditText
+            <com.mywaytech.puppiessearchclient.widgets.CustomEditText
                 android:id="@+id/edit_text_password_repeat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_text_password"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/material_design_small_margin"
                 android:hint="@string/hint_password_repeat"
                 android:inputType="textPassword"/>
 
             <EditText
+                style="@style/EditTextTheme"
                 android:id="@+id/edit_text_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_design_small_margin"
                 android:layout_below="@+id/edit_text_password_repeat"
                 android:layout_centerHorizontal="true"
                 android:hint="@string/hint_mail"
                 android:inputType="textEmailAddress"/>
 
             <EditText
+                style="@style/EditTextTheme"
                 android:id="@+id/edit_text_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_design_small_margin"
                 android:layout_below="@+id/edit_text_mail"
                 android:layout_centerHorizontal="true"
                 android:hint="@string/hint_address"

@@ -7,4 +7,10 @@
         <attr name="pet_nonMonospaceFont" format="boolean" />
         <attr name="pet_disableIconAlpha" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CustomEditText">
+        <attr name="android:maxLength"/>
+        <attr name="android:inputType"/>
+        <attr name="android:hint"/>
+    </declare-styleable>
 </resources>

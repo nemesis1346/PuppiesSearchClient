@@ -47,6 +47,7 @@ import com.mywaytech.puppiessearchclient.utils.AlertDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.ProgressDialogUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 import com.mywaytech.puppiessearchclient.utils.ValidationUtils;
+import com.mywaytech.puppiessearchclient.widgets.CustomEditText;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -56,7 +57,7 @@ import com.squareup.picasso.Target;
 public class LoginFragment extends Fragment implements FireBaseHandler.CallbackLogin {
 
     private EditText uMail;
-    private EditText uPassword;
+    private CustomEditText uPassword;
     private Button bLogin;
     private Button bNewUser;
     private FirebaseAuth mAuth;
@@ -110,7 +111,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         mProgressErrorImg = (ImageView) rootView.findViewById(R.id.img_error_icon);
 
         uMail = (EditText) rootView.findViewById(R.id.edit_text_mail_input);
-        uPassword = (EditText) rootView.findViewById(R.id.edit_text_password);
+        uPassword = (CustomEditText) rootView.findViewById(R.id.edit_text_password);
         bLogin = (Button) rootView.findViewById(R.id.btn_login);
         bLogin.setOnClickListener(LoginListener);
         bNewUser = (Button) rootView.findViewById(R.id.btn_new_user);

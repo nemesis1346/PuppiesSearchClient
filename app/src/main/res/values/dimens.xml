@@ -16,4 +16,5 @@
     <dimen name="activity_horizontal_margin_huge">96dp</dimen>
     <dimen name="user_image_size_myaccount">120dp</dimen>
     <dimen name="about_company_title_size">20dp</dimen>
+    <dimen name="edit_text_bg_radius">5dp</dimen>
 </resources>

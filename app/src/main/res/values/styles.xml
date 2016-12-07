@@ -60,4 +60,10 @@
     <dimen name="btn_min_heigth">48dp</dimen>
     <dimen name="margin_button">10dp</dimen>
 
+    <style name="EditTextTheme" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name = "android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+    </style>
+
 </resources>
