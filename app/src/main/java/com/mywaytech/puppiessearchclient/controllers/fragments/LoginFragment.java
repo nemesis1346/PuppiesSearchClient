@@ -3,6 +3,7 @@ package com.mywaytech.puppiessearchclient.controllers.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -157,6 +158,41 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         @Override
         public void onSuccess(LoginResult loginResult) {
             Log.d("FacebookSuccess: ", " " + loginResult.getAccessToken().getUserId() + " " + loginResult.getAccessToken().getToken());
+            NewUserModel facebookUserObject = new NewUserModel(
+                    "FacebookUser",
+                    "FacebookEmail",
+                    "",
+                    "",
+                    "facebookURL",
+                    loginResult.getAccessToken().getUserId());
+
+
+            UserSessionManager.getInstance(getContext()).saveLocalUser(facebookUserObject);
+            UserSessionManager.getInstance(getContext()).setUserImage(Utils.getBytes(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)));
+            UserSessionManager.getInstance(getContext()).setFacebookUserFlag(true);
+
+            new AlertDialogUtils.Builder(getContext())
+                    .setResourceMessage(R.string.login_identified)
+                    .setPositiveText(R.string.btn_ok)
+                    .setIsCancelable(false)
+                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Do something after 100ms
+                                    Intent intent = MainActivity.newIntent(getActivity());
+                                    startActivity(intent);
+                                }
+                            }, 1500);
+
+                        }
+                    })
+                    .show();
+
         }
 
         @Override

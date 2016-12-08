@@ -85,37 +85,42 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         showProgress(holder);
 
+        if (UserSessionManager.getInstance(mContext).isFacebookUserFlag()) {
+            holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(UserSessionManager.getInstance(mContext).getUserImage()));
 
-        //TODO CHANGE THIS PART FOR BETTER
-        FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReferenceRaw().child(mListItems.get(position).getuUserId())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
+        } else {
+            //TODO CHANGE THIS PART FOR BETTER
+            FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReferenceRaw().child(mListItems.get(position).getuUserId())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
 
-                        final long ONE_MEGABYTE = 1024 * 1024;
+                            final long ONE_MEGABYTE = 1024 * 1024;
 
-                        FireBaseHandler.getInstance(mContext)
-                                .getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath()!=null?mNewUserObject.getmUserImagePath():"")
-                                .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
-                                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                holder.mUserPictureContainer.setImageBitmap(bitmap);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        });
-                    }
+                            FireBaseHandler.getInstance(mContext)
+                                    .getUserImageFirebaseStorageReference(mNewUserObject.getmUserImagePath() != null ? mNewUserObject.getmUserImagePath() : "")
+                                    .getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                    holder.mUserPictureContainer.setImageBitmap(bitmap);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+        }
+
 
         byte[] userImage = UserSessionManager.getInstance(mContext).getUserImage();
         holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(userImage));

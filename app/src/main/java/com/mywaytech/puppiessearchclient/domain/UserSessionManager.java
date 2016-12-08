@@ -30,6 +30,7 @@ public class UserSessionManager {
     private static UserSessionManager sInstance;
     public static final long ONE_MEGABYTE = 1024 * 1024;
     private GoogleApiClient mGoogleApiClient;
+    private boolean mFacebookUserFlag = false;
 
     private byte[] mUserImage;
 
@@ -140,5 +141,13 @@ public class UserSessionManager {
 
     public void setGoogleApiClient(GoogleApiClient googleApiClient) {
         mGoogleApiClient = googleApiClient;
+    }
+
+    public boolean isFacebookUserFlag() {
+        return mFacebookUserFlag;
+    }
+
+    public void setFacebookUserFlag(boolean facebookUserFlag) {
+        mFacebookUserFlag = facebookUserFlag;
     }
 }
