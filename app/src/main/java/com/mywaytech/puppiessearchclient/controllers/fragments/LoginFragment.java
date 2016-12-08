@@ -20,6 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,6 +81,9 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private DatabaseReference mDatabaseReference;
     private boolean mNotificacionFlag;
     private SignInButton mSignInButtonGoogle;
+    private LoginButton mLoginButton;
+    private CallbackManager mCallbackManagerFacebook;
+
 
     private static final String ARG_NOTIFICATION_FLAG = "arg_notification_flag";
 
@@ -136,8 +144,35 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         mSignInButtonGoogle.setSize(SignInButton.SIZE_STANDARD);
         mSignInButtonGoogle.setScopes(gso.getScopeArray());
         mSignInButtonGoogle.setOnClickListener(mSignInGoogle);
+
+        //FACEBOOK
+        mLoginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+        mLoginButton.setFragment(this);
+        mCallbackManagerFacebook = CallbackManager.Factory.create();
+        mLoginButton.registerCallback(mCallbackManagerFacebook, mResultFacebookCallback);
         return rootView;
     }
+
+    private FacebookCallback<LoginResult> mResultFacebookCallback = new FacebookCallback<LoginResult>() {
+        @Override
+        public void onSuccess(LoginResult loginResult) {
+            Log.d("FacebookSuccess: ", " " + loginResult.getAccessToken().getUserId() + " " + loginResult.getAccessToken().getToken());
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            new AlertDialogUtils.Builder(getContext())
+                    .setStringMessage(error.getMessage())
+                    .setIsCancelable(false)
+                    .setPositiveText(R.string.btn_ok)
+                    .show();
+        }
+    };
 
     @Override
     public void onPause() {
@@ -164,8 +199,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.login_error_validation_message)
                         .show();
-            }
-            else if (ValidationUtils.isValidEmail(uMail.getText().toString()) == R.string.error_invalid_user_email) {
+            } else if (ValidationUtils.isValidEmail(uMail.getText().toString()) == R.string.error_invalid_user_email) {
                 new AlertDialogUtils.Builder(getContext())
                         .setResourceMessage(R.string.error_invalid_user_email)
                         .setPositiveText(R.string.btn_ok)
