@@ -413,6 +413,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                        //TODO UPLOEAD GOOGLE USER IMAGE
                                         hideProgress();
                                         UserSessionManager.getInstance(getContext()).saveLocalUser(googleUserObject);
                                         UserSessionManager.getInstance(getContext()).setUserImage(Utils.getBytes(bitmap));

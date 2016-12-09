@@ -30,6 +30,8 @@ public class UserSessionManager {
     private static UserSessionManager sInstance;
     public static final long ONE_MEGABYTE = 1024 * 1024;
     private GoogleApiClient mGoogleApiClient;
+
+    private boolean mGoogleUserFlag = false;
     private boolean mFacebookUserFlag = false;
 
     private byte[] mUserImage;

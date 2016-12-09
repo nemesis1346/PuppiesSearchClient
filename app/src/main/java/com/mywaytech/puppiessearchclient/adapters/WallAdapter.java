@@ -121,9 +121,9 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                     });
         }
 
-
-        byte[] userImage = UserSessionManager.getInstance(mContext).getUserImage();
-        holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(userImage));
+//  TODO CHECK IF THIS HAS TO BE ERASED
+//        byte[] userImage = UserSessionManager.getInstance(mContext).getUserImage();
+//        holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(userImage));
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
 //        holder.petImage.
