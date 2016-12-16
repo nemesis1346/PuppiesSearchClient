@@ -85,6 +85,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private LoginButton mLoginButton;
     private CallbackManager mCallbackManagerFacebook;
 
+    private String mGooglePhotoUrl="";
+
 
     private static final String ARG_NOTIFICATION_FLAG = "arg_notification_flag";
 
@@ -389,13 +391,13 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             final NewUserModel googleUserObject = dataSnapshot.getValue(NewUserModel.class);
-            FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(googleUserObject.getmUid());
             String mImageFirebasepPath = "userPicture/user" + googleUserObject.getmEmail() + ".jpg";
             final StorageReference mStorageRef = FireBaseHandler.getInstance(getContext()).getUserImageFirebaseStorageReference(mImageFirebasepPath);
+           showProgress();
             try {
 
                 Picasso.with(getContext())
-                        .load(googleUserObject.getmUserImagePath())
+                        .load(mGooglePhotoUrl)
                         .into(new Target() {
                             @Override
                             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -454,7 +456,8 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                             public void onBitmapFailed(Drawable errorDrawable) {
                             }
                         });
-//
+
+
             } catch (Exception e) {
                 hideProgress();
                 new AlertDialogUtils.Builder(getContext())
@@ -462,7 +465,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         .setIsCancelable(false)
                         .setPositiveText(R.string.btn_ok)
                         .show();
-                e.printStackTrace();
+                Log.e("error: ",e.getMessage());
             }
 
         }
@@ -498,9 +501,10 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         acct.getEmail(),
                         "",
                         "",
-                        acct.getPhotoUrl().toString(),
+                        "userPicture/user"+acct.getEmail()+".jpg",
                         acct.getId());
 
+                mGooglePhotoUrl = acct.getPhotoUrl().toString();
                 FireBaseHandler.getInstance(getContext()).saveUserObjectByGmail(googleUserObject, mSaveUserByGmailCallback);
 
             } else {

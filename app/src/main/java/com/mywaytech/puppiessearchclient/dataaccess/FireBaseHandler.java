@@ -39,6 +39,7 @@ public class FireBaseHandler {
     public static final String OBJECT_USERS_NAME = "USERS";
     public static final String REPORTS = "REPORTS";
 
+
     private FireBaseHandler(Context context) {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();

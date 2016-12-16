@@ -89,7 +89,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(UserSessionManager.getInstance(mContext).getUserImage()));
 
         } else {
-            //TODO CHANGE THIS PART FOR BETTER
+            //USER PICTURE
             FireBaseHandler.getInstance(mContext).getUserObjectFirebaseDatabaseReferenceRaw().child(mListItems.get(position).getuUserId())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -121,12 +121,8 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                     });
         }
 
-//  TODO CHECK IF THIS HAS TO BE ERASED
-//        byte[] userImage = UserSessionManager.getInstance(mContext).getUserImage();
-//        holder.mUserPictureContainer.setImageBitmap(Utils.getBitmap(userImage));
 
         final long ONE_MEGABYTE = 1024 * 1024 * 2;
-//        holder.petImage.
 
         FireBaseHandler.getInstance(mContext)
                 .getImageFirebaseStorageReference(mListItems.get(position).getImagePath())
@@ -134,9 +130,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             @Override
             public void onSuccess(byte[] bytes) {
                 hideProgress(holder);
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//                holder.petImage.setImageBitmap(bitmap);
 
                 Glide.with(mContext)
                         .load(bytes)
