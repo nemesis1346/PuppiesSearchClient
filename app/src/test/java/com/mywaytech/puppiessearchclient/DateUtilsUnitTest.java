@@ -29,8 +29,26 @@ public class DateUtilsUnitTest {
         long timestamp = Long.parseLong("1021161600") * 1000L;
         DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         Date netDate = (new Date(timestamp));
+        Log.i("date1: ", "" + sdf.format(netDate));
+
+    }
+
+
+    @Test
+    public void test_isCorrect()throws  Exception{
+
+        ShadowLog.setupLogging();
+        ShadowLog.stream = System.out;
+
+        Long tsLong = System.currentTimeMillis() / 1000;
+        String ts = tsLong.toString();
+        long timestamp = Long.parseLong(ts) * 1000L;
+        DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Date netDate = (new Date(timestamp));
+
         Log.i("date2: ", "" + sdf.format(netDate));
 
     }
+
 
 }

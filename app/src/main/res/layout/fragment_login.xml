@@ -25,7 +25,7 @@
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin_large"
-                android:src="@drawable/initial_dog_image"/>
+                android:src="@mipmap/ic_launcher_final"/>
 
             <EditText
                 style="@style/EditTextTheme"
