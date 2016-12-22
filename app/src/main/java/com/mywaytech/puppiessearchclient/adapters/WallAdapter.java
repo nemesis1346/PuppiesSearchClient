@@ -157,6 +157,12 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
                 Utils.openEmail(v.getContext(), new String[]{mListItems.get(position).getuEmail()}, null, null);
             }
         });
+        holder.emailImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.openEmail(v.getContext(), new String[]{mListItems.get(position).getuEmail()}, null, null);
+            }
+        });
 
         String typeParam;
         if (mListItems.get(position).getuType() != null) {
@@ -215,6 +221,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
 
         private TextView userName;
         private ImageView petImage;
+        private ImageView emailImage;
         private TextView userAddress;
         private TextView userComment;
         private TextView userEmail;
@@ -240,6 +247,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.ItemViewHolder
             mDate = (TextView) itemView.findViewById(R.id.item_date);
             type = (TextView) itemView.findViewById(R.id.item_type);
             typeBackground = (LinearLayout) itemView.findViewById(R.id.layout_type_date);
+            emailImage = (ImageView) itemView.findViewById(R.id.ic_send_message);
 
             if (callbacks != null) {
                 itemView.setOnClickListener(new View.OnClickListener() {

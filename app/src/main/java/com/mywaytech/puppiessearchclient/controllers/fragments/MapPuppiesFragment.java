@@ -115,10 +115,10 @@ public class MapPuppiesFragment extends Fragment implements
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.mapactivity_title);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        searchText = (EditText) rootView.findViewById(R.id.edit_text_search_puppy);
-        searchBtn = (Button) rootView.findViewById(R.id.btn_search);
-
-        searchBtn.setOnClickListener(searchAddress);
+//        searchText = (EditText) rootView.findViewById(R.id.edit_text_search_puppy);
+//        searchBtn = (Button) rootView.findViewById(R.id.btn_search);
+//
+//        searchBtn.setOnClickListener(searchAddress);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_puppies);
         mapFragment.getMapAsync(this);
@@ -273,7 +273,7 @@ public class MapPuppiesFragment extends Fragment implements
             mMap.animateCamera(cameraUpdate);
             mMap.moveCamera(cameraUpdate);
 
-            float zoomLevel = 16; //This goes up to 21
+            float zoomLevel = 9; //This goes up to 21
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
         }
     }
@@ -345,6 +345,7 @@ public class MapPuppiesFragment extends Fragment implements
                         public void run() {
                             Marker marker = mMap.addMarker(markerOptions);
                             marker.setTag(location);
+
                         }
                     });
                 }

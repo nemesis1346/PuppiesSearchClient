@@ -24,27 +24,27 @@
             tools:context=".controllers.MapActivity">
         </fragment>
 
-        <EditText
-            android:id="@+id/edit_text_search_puppy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_search"
-            android:elevation="4dp"
-            android:focusableInTouchMode="true"
-            android:hint="@string/hint_search_map"
-            android:inputType="text"
-            android:padding="8dp"/>
+        <!--<EditText-->
+            <!--android:id="@+id/edit_text_search_puppy"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="@dimen/activity_horizontal_margin"-->
+            <!--android:background="@color/white"-->
+            <!--android:drawableLeft="@drawable/ic_search"-->
+            <!--android:elevation="4dp"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:hint="@string/hint_search_map"-->
+            <!--android:inputType="text"-->
+            <!--android:padding="8dp"/>-->
 
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_text_search_puppy"
-            android:text="@string/btn_map_search"
-            android:layout_marginLeft="@dimen/material_design_margin"
-            />
+        <!--<Button-->
+            <!--android:id="@+id/btn_search"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/edit_text_search_puppy"-->
+            <!--android:text="@string/btn_map_search"-->
+            <!--android:layout_marginLeft="@dimen/material_design_margin"-->
+            <!--/>-->
 
     </RelativeLayout>
 </LinearLayout>
