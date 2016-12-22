@@ -149,10 +149,10 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         mSignInButtonGoogle.setOnClickListener(mSignInGoogle);
 
         //FACEBOOK
-        mLoginButton = (LoginButton) rootView.findViewById(R.id.login_button);
-        mLoginButton.setFragment(this);
-        mCallbackManagerFacebook = CallbackManager.Factory.create();
-        mLoginButton.registerCallback(mCallbackManagerFacebook, mResultFacebookCallback);
+//        mLoginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+//        mLoginButton.setFragment(this);
+//        mCallbackManagerFacebook = CallbackManager.Factory.create();
+//        mLoginButton.registerCallback(mCallbackManagerFacebook, mResultFacebookCallback);
         return rootView;
     }
 
