@@ -18,7 +18,7 @@ import com.mywaytech.puppiessearchclient.R;
  * Created by nemesis1346 on 7/12/2016.
  */
 
-public class CustomEditText extends LinearLayout{
+public class CustomEditText extends LinearLayout {
     public static final int DEFAULT_MAX_LENGTH = 0;
 
     private EditText mEditText;
@@ -49,10 +49,19 @@ public class CustomEditText extends LinearLayout{
                 styledAttributes.recycle();
             }
         }
-        if(isPasswordInputType()){
-            inflate(getContext(), R.layout.custom_password_edit_text, this);
-        }else {
-            inflate(getContext(), R.layout.custom_edit_text, this);
+
+        if (android.os.Build.VERSION.SDK_INT > 21) {
+            if (isPasswordInputType()) {
+                inflate(getContext(), R.layout.custom_password_edit_text, this);
+            } else {
+                inflate(getContext(), R.layout.custom_edit_text, this);
+            }
+        } else {
+            if (isPasswordInputType()) {
+                inflate(getContext(), R.layout.normal_password_edit_text, this);
+            } else {
+                inflate(getContext(), R.layout.normal_edit_text, this);
+            }
         }
     }
 
@@ -60,8 +69,24 @@ public class CustomEditText extends LinearLayout{
     protected void onFinishInflate() {
         super.onFinishInflate();
         if (isInEditMode()) return;
-        mEditText = (EditText) findViewById(R.id.edit_text);
-        mErrorText = (TextView) findViewById(R.id.text_error);
+
+        if (android.os.Build.VERSION.SDK_INT > 21) {
+            if (isPasswordInputType()) {
+                mEditText = (EditText) findViewById(R.id.password_edit_text);
+                mErrorText = (TextView) findViewById(R.id.password_text_error);
+            } else {
+                mEditText = (EditText) findViewById(R.id.edit_text);
+                mErrorText = (TextView) findViewById(R.id.text_error);
+            }
+        }else{
+            if (isPasswordInputType()) {
+                mEditText = (EditText) findViewById(R.id.password_edit_text);
+                mErrorText = (TextView) findViewById(R.id.password_text_error);
+            } else {
+                mEditText = (EditText) findViewById(R.id.edit_text);
+                mErrorText = (TextView) findViewById(R.id.text_error);
+            }
+        }
 
 //        mEditText.setTypeface(Typeface.SERIF);
 
@@ -119,21 +144,21 @@ public class CustomEditText extends LinearLayout{
         mEditText.setEnabled(false);
     }
 
-    private boolean isPasswordInputType(){
+    private boolean isPasswordInputType() {
         return mInputType == InputType.TYPE_TEXT_VARIATION_PASSWORD || mInputType == InputType.TYPE_NUMBER_VARIATION_PASSWORD || mInputType == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
     }
 
-    public void setInputType(int inputType){
+    public void setInputType(int inputType) {
         mEditText.setInputType(inputType);
     }
 
-    public void setPasswordVisible(boolean passwordVisible){
-        if(mEditText instanceof PasswordEditText){
+    public void setPasswordVisible(boolean passwordVisible) {
+        if (mEditText instanceof PasswordEditText) {
             ((PasswordEditText) mEditText).setPasswordVisible(passwordVisible);
         }
     }
 
-    public void disableEditorAction(){
+    public void disableEditorAction() {
         super.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
