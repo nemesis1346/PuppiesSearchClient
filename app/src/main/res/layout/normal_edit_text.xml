@@ -6,13 +6,13 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/edit_text"
+        android:id="@+id/edit_text_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/EditTextTheme"/>
 
     <TextView
-        android:id="@+id/text_error"
+        android:id="@+id/text_error_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

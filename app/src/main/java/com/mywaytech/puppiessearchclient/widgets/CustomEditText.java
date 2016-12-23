@@ -80,11 +80,11 @@ public class CustomEditText extends LinearLayout {
             }
         }else{
             if (isPasswordInputType()) {
-                mEditText = (EditText) findViewById(R.id.password_edit_text);
-                mErrorText = (TextView) findViewById(R.id.password_text_error);
+                mEditText = (EditText) findViewById(R.id.password_edit_text_normal);
+                mErrorText = (TextView) findViewById(R.id.password_text_error_normal);
             } else {
-                mEditText = (EditText) findViewById(R.id.edit_text);
-                mErrorText = (TextView) findViewById(R.id.text_error);
+                mEditText = (EditText) findViewById(R.id.edit_text_normal);
+                mErrorText = (TextView) findViewById(R.id.text_error_normal);
             }
         }
 
@@ -93,7 +93,7 @@ public class CustomEditText extends LinearLayout {
         if (mMaxLength > DEFAULT_MAX_LENGTH) {
             mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mMaxLength)});
         }
-        if (mInputType != InputType.TYPE_NULL) {
+        if (mInputType != InputType.TYPE_NULL && android.os.Build.VERSION.SDK_INT > 21) {
             mEditText.setInputType(mInputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         }
 
