@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,21 +24,22 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/btn_min_heigth"
                 android:layout_marginTop="@dimen/activity_vertical_margin_large"
                 android:src="@mipmap/ic_launcher_final"/>
 
             <EditText
-                style="@style/EditTextTheme"
                 android:id="@+id/edit_text_mail_input"
+                style="@style/EditTextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:hint="@string/hint_mail"
-                android:inputType="textEmailAddress"
-                android:layout_below="@+id/start_image"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="@dimen/material_design_margin"/>
+                android:layout_below="@+id/start_image"
+                android:layout_marginBottom="@dimen/material_design_margin"
+                android:layout_marginTop="14dp"
+                android:hint="@string/hint_mail"
+                android:inputType="textEmailAddress"/>
 
             <com.mywaytech.puppiessearchclient.widgets.CustomEditText
                 android:id="@+id/edit_text_password"
@@ -54,48 +55,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_text_password"
-                android:layout_marginTop="@dimen/material_design_margin"
                 android:layout_marginBottom="@dimen/material_design_margin"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/material_design_margin"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
 
                 <Button
                     android:id="@+id/btn_login"
                     style="@style/main_button"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:text="@string/btn_login"/>
 
                 <Button
                     android:id="@+id/btn_new_user"
                     style="@style/main_button"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/btn_new_user"/>
 
 
             </LinearLayout>
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_google_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/btn_bar_layout"
-                android:layout_marginBottom="@dimen/material_design_margin"/>
+            <!--<com.google.android.gms.common.SignInButton-->
+            <!--android:id="@+id/sign_in_google_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_below="@+id/btn_bar_layout"-->
+            <!--android:layout_marginBottom="@dimen/material_design_margin"/>-->
 
 
             <!--<com.facebook.login.widget.LoginButton-->
-                <!--android:id="@+id/login_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:layout_below="@+id/sign_in_google_button"-->
-                <!--facebook:com_facebook_confirm_logout="true"-->
-                <!--facebook:com_facebook_tooltip_mode="never_display"-->
-                <!--/>-->
+            <!--android:id="@+id/login_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_below="@+id/sign_in_google_button"-->
+            <!--facebook:com_facebook_confirm_logout="true"-->
+            <!--facebook:com_facebook_tooltip_mode="never_display"-->
+            <!--/>-->
 
 
         </RelativeLayout>

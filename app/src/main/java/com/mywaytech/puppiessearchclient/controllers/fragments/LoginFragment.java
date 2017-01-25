@@ -143,10 +143,12 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        mSignInButtonGoogle = (SignInButton) rootView.findViewById(R.id.sign_in_google_button);
-        mSignInButtonGoogle.setSize(SignInButton.SIZE_STANDARD);
-        mSignInButtonGoogle.setScopes(gso.getScopeArray());
-        mSignInButtonGoogle.setOnClickListener(mSignInGoogle);
+        //TODO IN THE NEXT VERSION: MAKE USE OF THESE FEATURES
+
+//        mSignInButtonGoogle = (SignInButton) rootView.findViewById(R.id.sign_in_google_button);
+//        mSignInButtonGoogle.setSize(SignInButton.SIZE_STANDARD);
+//        mSignInButtonGoogle.setScopes(gso.getScopeArray());
+//        mSignInButtonGoogle.setOnClickListener(mSignInGoogle);
 
         //FACEBOOK
 //        mLoginButton = (LoginButton) rootView.findViewById(R.id.login_button);
