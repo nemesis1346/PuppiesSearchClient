@@ -85,7 +85,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
     private LoginButton mLoginButton;
     private CallbackManager mCallbackManagerFacebook;
 
-    private String mGooglePhotoUrl="";
+    private String mGooglePhotoUrl = "";
 
 
     private static final String ARG_NOTIFICATION_FLAG = "arg_notification_flag";
@@ -155,6 +155,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
 //        mLoginButton.setFragment(this);
 //        mCallbackManagerFacebook = CallbackManager.Factory.create();
 //        mLoginButton.registerCallback(mCallbackManagerFacebook, mResultFacebookCallback);
+
         return rootView;
     }
 
@@ -395,7 +396,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
             final NewUserModel googleUserObject = dataSnapshot.getValue(NewUserModel.class);
             String mImageFirebasepPath = "userPicture/user" + googleUserObject.getmEmail() + ".jpg";
             final StorageReference mStorageRef = FireBaseHandler.getInstance(getContext()).getUserImageFirebaseStorageReference(mImageFirebasepPath);
-           showProgress();
+            showProgress();
             try {
 
                 Picasso.with(getContext())
@@ -467,7 +468,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         .setIsCancelable(false)
                         .setPositiveText(R.string.btn_ok)
                         .show();
-                Log.e("error: ",e.getMessage());
+                Log.e("error: ", e.getMessage());
             }
 
         }
@@ -503,7 +504,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                         acct.getEmail(),
                         "",
                         "",
-                        "userPicture/user"+acct.getEmail()+".jpg",
+                        "userPicture/user" + acct.getEmail() + ".jpg",
                         acct.getId());
 
                 mGooglePhotoUrl = acct.getPhotoUrl().toString();

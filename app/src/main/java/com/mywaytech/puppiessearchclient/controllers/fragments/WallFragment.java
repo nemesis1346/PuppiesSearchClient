@@ -1,5 +1,8 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -46,6 +49,7 @@ public class WallFragment extends Fragment {
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
+    private ConnectivityManager mConMgr;
 
     public static WallFragment newInstance() {
         WallFragment fragment = new WallFragment();
@@ -80,13 +84,24 @@ public class WallFragment extends Fragment {
 
         mListView = (RecyclerView) rootView.findViewById(R.id.item_list_wall);
         mListView.setLayoutManager(linearLayoutManager);
+        mRetryBtn.setOnClickListener(mBtnRetryListener);
 
         mListView.setAdapter(wallAdapter);
         wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
         showProgress();
+        mConMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+            showError(R.string.noInternetToast);
+            showErrorRetry();
+        }
+    }
 
     public RecyclerView.AdapterDataObserver adapterOnChangeData = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -110,7 +125,9 @@ public class WallFragment extends Fragment {
                 wallAdapter.setListItems(pet_list);
             } else {
                 showError(R.string.error_no_results_found);
+                showErrorRetry();
             }
+
         }
 
         @Override
@@ -131,6 +148,8 @@ public class WallFragment extends Fragment {
         mProgressErrorImg.setVisibility(View.GONE);
         mRetryBtn.setVisibility(View.GONE);
         mProgressTextInfo.setText(R.string.pet_loading_message);
+        mListView.setVisibility(View.GONE);
+
     }
 
     private void hideProgress() {
@@ -138,24 +157,27 @@ public class WallFragment extends Fragment {
         mProgressTextInfo.setVisibility(View.GONE);
         mProgressErrorImg.setVisibility(View.GONE);
         mRetryBtn.setVisibility(View.GONE);
+        mListView.setVisibility(View.VISIBLE);
+
     }
 
     public void showError(@StringRes int stringId) {
         mProgressBar.setVisibility(View.GONE);
-        mProgressTextInfo.setVisibility(View.VISIBLE);
         mProgressErrorImg.setVisibility(View.VISIBLE);
-        mRetryBtn.setVisibility(View.GONE);
+        mListView.setVisibility(View.GONE);
+        mRetryBtn.setVisibility(View.VISIBLE);
         mProgressTextInfo.setText(stringId);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+
     }
 
     private void showErrorRetry() {
         mProgressBar.setVisibility(View.GONE);
-        mProgressTextInfo.setVisibility(View.GONE);
-        mProgressErrorImg.setVisibility(View.GONE);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+        mProgressErrorImg.setVisibility(View.VISIBLE);
+        mListView.setVisibility(View.GONE);
         mRetryBtn.setVisibility(View.VISIBLE);
     }
-
-
 
 
     public void sortList(String type) {
@@ -176,6 +198,18 @@ public class WallFragment extends Fragment {
         }
 
     }
+
+    public View.OnClickListener mBtnRetryListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                        .addValueEventListener(showFireBaseListener);
+                hideProgress();
+            }
+
+        }
+    };
 
     private ChildEventListener mSortFireBaseListener = new ChildEventListener() {
         @Override

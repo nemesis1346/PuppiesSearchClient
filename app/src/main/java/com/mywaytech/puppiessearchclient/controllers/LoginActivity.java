@@ -15,10 +15,11 @@ import com.mywaytech.puppiessearchclient.controllers.fragments.LoginFragment;
 /**
  * Created by m.maigua on 4/13/2016.
  */
-public class LoginActivity extends BaseActivity  {
+public class LoginActivity extends BaseActivity {
 
     public static final String EXTRA_NOTIFICATION_FLAG = "extra_notification_flag";
-    private boolean mNotificationFlag=false;
+    public static final String EXTRA_NO_CONNECTION = "extra_no_conexion";
+    private boolean mNotificationFlag = false;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -31,19 +32,12 @@ public class LoginActivity extends BaseActivity  {
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
 
-
-        mNotificationFlag = getIntent().getBooleanExtra(EXTRA_NOTIFICATION_FLAG,false);
+        mNotificationFlag = getIntent().getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-            ft.replace(R.id.fragment_container, LoginFragment.newInstance(mNotificationFlag));
-            ft.commit();
-
-
-
+        ft.replace(R.id.fragment_container, LoginFragment.newInstance(mNotificationFlag));
+        ft.commit();
     }
-
-
-
 
 }
