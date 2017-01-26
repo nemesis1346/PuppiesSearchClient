@@ -49,7 +49,6 @@ public class WallFragment extends Fragment {
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
-    private ConnectivityManager mConMgr;
 
     public static WallFragment newInstance() {
         WallFragment fragment = new WallFragment();
@@ -89,7 +88,6 @@ public class WallFragment extends Fragment {
         mListView.setAdapter(wallAdapter);
         wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
         showProgress();
-        mConMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return rootView;
     }
@@ -97,7 +95,7 @@ public class WallFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+        if (!Utils.checkConexion(getContext())) {
             showError(R.string.noInternetToast);
             showErrorRetry();
         }
@@ -202,7 +200,7 @@ public class WallFragment extends Fragment {
     public View.OnClickListener mBtnRetryListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            if (Utils.checkConexion(getContext())) {
                 FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
                         .addValueEventListener(showFireBaseListener);
                 hideProgress();

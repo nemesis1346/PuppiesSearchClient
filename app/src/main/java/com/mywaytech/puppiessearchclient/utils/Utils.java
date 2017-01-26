@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -123,20 +125,18 @@ public class Utils {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         InputStream is = null;
         try {
-            is = myUrl.openStream ();
+            is = myUrl.openStream();
             byte[] byteChunk = new byte[4096]; // Or whatever size you want to read in at a time.
             int n;
 
-            while ( (n = is.read(byteChunk)) > 0 ) {
+            while ((n = is.read(byteChunk)) > 0) {
                 baos.write(byteChunk, 0, n);
             }
-        }
-        catch (IOException e) {
-            System.err.printf ("Failed while reading bytes from %s: %s", myUrl.toExternalForm(), e.getMessage());
-            e.printStackTrace ();
+        } catch (IOException e) {
+            System.err.printf("Failed while reading bytes from %s: %s", myUrl.toExternalForm(), e.getMessage());
+            e.printStackTrace();
             // Perform any other exception handling that's appropriate.
-        }
-        finally {
+        } finally {
             if (is != null) {
                 is.close();
             }
@@ -145,7 +145,7 @@ public class Utils {
     }
 
 
-    public static String getSpinnerSelection(String spinnerValue){
+    public static String getSpinnerSelection(String spinnerValue) {
         String typeValue = "";
         switch (spinnerValue) {
             case ReportFragment.TYPE_PET_ADOPTION_STRING:
@@ -162,7 +162,8 @@ public class Utils {
         }
         return typeValue;
     }
-    public static String getNamefromSpinnerSelection(String spinnerValue){
+
+    public static String getNamefromSpinnerSelection(String spinnerValue) {
         String typeValue = "";
         switch (spinnerValue) {
             case ReportFragment.TYPE_PET_ADOPTION:
@@ -176,5 +177,16 @@ public class Utils {
                 break;
         }
         return typeValue;
+    }
+
+    public static boolean checkConexion(Context context) {
+        ConnectivityManager mConMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
+                || mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        } else if (mConMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+            return false;
+        }
+        return true;
     }
 }

@@ -76,6 +76,7 @@ public class FireBaseHandler {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d("LoginOnCompleteError: ", " " + e);
+                                callback.onFailLogging(e);
                             }
                         });
                         if (callback != null) {
@@ -112,6 +113,7 @@ public class FireBaseHandler {
     }
 
     public interface CallbackLogin {
+        void onFailLogging(Exception e);
         void onCompleteLogging(boolean isLogged);
     }
 

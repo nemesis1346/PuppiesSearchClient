@@ -1,10 +1,13 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -143,6 +146,7 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+
         //TODO IN THE NEXT VERSION: MAKE USE OF THESE FEATURES
 
 //        mSignInButtonGoogle = (SignInButton) rootView.findViewById(R.id.sign_in_google_button);
@@ -236,74 +240,94 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
         @Override
         public void onClick(View v) {
             //VALIDATION LOGIC
-            if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
+            if (!Utils.checkConexion(getContext())) {
                 new AlertDialogUtils.Builder(getContext())
-                        .setResourceMessage(R.string.login_error_validation_message)
-                        .show();
-            } else if (ValidationUtils.isValidEmail(uMail.getText().toString()) == R.string.error_invalid_user_email) {
-                new AlertDialogUtils.Builder(getContext())
-                        .setResourceMessage(R.string.error_invalid_user_email)
-                        .setPositiveText(R.string.btn_ok)
-                        .setTitle(R.string.error_title)
-                        .show();
+                        .setResourceMessage(R.string.noInternetToast)
+                        .setPositiveText(R.string.btn_ok).show();
             } else {
-                //FIREBASE SIGN METHOD
-                showProgress();
-                FireBaseHandler.getInstance(getActivity())
-                        .fireBaseLogin(uMail.getText().toString(),
-                                uPassword.getText().toString(),
-                                getActivity(), LoginFragment.this);
+                if (uMail.getText().toString().isEmpty() || uPassword.getText().toString().isEmpty()) {
+                    new AlertDialogUtils.Builder(getContext())
+                            .setResourceMessage(R.string.login_error_validation_message)
+                            .show();
+                } else if (ValidationUtils.isValidEmail(uMail.getText().toString()) == R.string.error_invalid_user_email) {
+                    new AlertDialogUtils.Builder(getContext())
+                            .setResourceMessage(R.string.error_invalid_user_email)
+                            .setPositiveText(R.string.btn_ok)
+                            .setTitle(R.string.error_title)
+                            .show();
+                } else {
+                    //FIREBASE SIGN METHOD
+                    showProgress();
+                    FireBaseHandler.getInstance(getActivity())
+                            .fireBaseLogin(uMail.getText().toString(),
+                                    uPassword.getText().toString(),
+                                    getActivity(), LoginFragment.this);
 
+                }
             }
         }
     };
 
     @Override
+    public void onFailLogging(Exception e) {
+        new AlertDialogUtils.Builder(getContext())
+                .setStringMessage(e.getMessage())
+                .setPositiveText(R.string.btn_ok).show();
+    }
+
+    @Override
     public void onCompleteLogging(boolean isLogged) {
-        if (isLogged) {
-            FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
-                            UserSessionManager.getInstance(getContext()).logged(mNewUserObject, true);
+        if (Utils.checkConexion(getContext())) {
+            if (isLogged) {
+                FireBaseHandler.getInstance(getContext()).getUserObjectFirebaseDatabaseReference()
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                NewUserModel mNewUserObject = dataSnapshot.getValue(NewUserModel.class);
+                                UserSessionManager.getInstance(getContext()).logged(mNewUserObject, true);
 
-                            hideProgress();
-                            new AlertDialogUtils.Builder(getContext())
-                                    .setResourceMessage(R.string.login_identified)
-                                    .setPositiveText(R.string.btn_ok)
-                                    .setIsCancelable(false)
-                                    .setPositiveButtonListener(new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                hideProgress();
+                                new AlertDialogUtils.Builder(getContext())
+                                        .setResourceMessage(R.string.login_identified)
+                                        .setPositiveText(R.string.btn_ok)
+                                        .setIsCancelable(false)
+                                        .setPositiveButtonListener(new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 
-                                            final Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    //Do something after 100ms
+                                                final Handler handler = new Handler();
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //Do something after 100ms
 
-                                                    Intent intent = MainActivity.newIntent(getActivity());
-                                                    startActivity(intent);
-                                                }
-                                            }, 1500);
-                                        }
-                                    })
-                                    .show();
-                        }
+                                                        Intent intent = MainActivity.newIntent(getActivity());
+                                                        startActivity(intent);
+                                                    }
+                                                }, 1500);
+                                            }
+                                        })
+                                        .show();
+                            }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
 
+            } else {
+                hideProgress();
+                new AlertDialogUtils.Builder(getContext())
+                        .setResourceMessage(R.string.login_not_identified)
+                        .setIsCancelable(false)
+                        .setPositiveText(R.string.btn_ok)
+                        .show();
+            }
         } else {
             new AlertDialogUtils.Builder(getContext())
-                    .setResourceMessage(R.string.login_not_identified)
-                    .setIsCancelable(false)
-                    .setPositiveText(R.string.btn_ok)
-                    .show();
+                    .setResourceMessage(R.string.noInternetToast)
+                    .setPositiveText(R.string.btn_ok).show();
         }
     }
 
