@@ -241,7 +241,7 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                         newComment.getText().toString(),
                         mNewUserObject.getmEmail(),
                         mSpinnerValue,
-                        Utils.getCurrentDateTime()
+                        "-"+Utils.getCurrentDateTime()
                 );
 
 

@@ -16,12 +16,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mywaytech.puppiessearchclient.domain.UserSessionManager;
 import com.mywaytech.puppiessearchclient.models.NewUserModel;
 import com.mywaytech.puppiessearchclient.models.ReportModel;
+import com.mywaytech.puppiessearchclient.utils.Utils;
 
 /**
  * Created by m.maigua on 7/15/2016.
@@ -114,18 +117,19 @@ public class FireBaseHandler {
 
     public interface CallbackLogin {
         void onFailLogging(Exception e);
+
         void onCompleteLogging(boolean isLogged);
     }
 
 
-    public void editUserObject(NewUserModel newUserModel){
+    public void editUserObject(NewUserModel newUserModel) {
 
     }
 
-    public void saveUserObjectByGmail(NewUserModel newUserModel, ValueEventListener mCallback){
-            mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(newUserModel.getmUid()).setValue(newUserModel);
-            mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(newUserModel.getmUid())
-                    .addListenerForSingleValueEvent(mCallback);
+    public void saveUserObjectByGmail(NewUserModel newUserModel, ValueEventListener mCallback) {
+        mFirebaseDatabaseReference.child(OBJECT_USERS_NAME).child(newUserModel.getmUid()).setValue(newUserModel);
+        mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME).child(newUserModel.getmUid())
+                .addListenerForSingleValueEvent(mCallback);
     }
 
     public void saveUserObject(NewUserModel newUserObject) {
@@ -155,7 +159,7 @@ public class FireBaseHandler {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
-                                    Log.e("errorSaveImage: ",exception.getMessage());
+                                    Log.e("errorSaveImage: ", exception.getMessage());
                                 }
                             });
                         }
@@ -174,8 +178,8 @@ public class FireBaseHandler {
     }
 
     public boolean savePetObject(ReportModel reportModel) {
-            mFirebaseDatabaseReference.child(REPORTS).child(reportModel.getuId()).setValue(reportModel);
-            return true;
+        mFirebaseDatabaseReference.child(REPORTS).child(reportModel.getuId()).setValue(reportModel, ServerValue.TIMESTAMP);
+        return true;
     }
 
     public StorageReference setImageFirebaseStorageReference(String imageId) {
@@ -201,11 +205,11 @@ public class FireBaseHandler {
         return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME);
     }
 
-    public DatabaseReference getReportsFirebaseDatabaseReference() {
-        return mFirebaseDatabaseReference.child(REPORTS);
+    public Query getReportsFirebaseDatabaseReference() {
+        return mFirebaseDatabaseReference.child(REPORTS).orderByChild("uDate");
     }
 
-    public String getUserKey(){
+    public String getUserKey() {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         return user.getUid();
     }
