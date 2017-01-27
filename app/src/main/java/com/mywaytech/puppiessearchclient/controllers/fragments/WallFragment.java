@@ -1,6 +1,7 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -13,10 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mywaytech.puppiessearchclient.R;
 import com.mywaytech.puppiessearchclient.adapters.WallAdapter;
@@ -25,6 +28,9 @@ import com.mywaytech.puppiessearchclient.dataaccess.FireBaseHandler;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,6 +52,9 @@ public class WallFragment extends Fragment {
     private TextView mProgressTextInfo;
     private ImageView mProgressErrorImg;
 
+    private DatabaseReference mRefToSort;
+    private List<ReportModel> mListToSort;
+
 
     public static WallFragment newInstance() {
         WallFragment fragment = new WallFragment();
@@ -59,7 +68,7 @@ public class WallFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pet_list = new ArrayList<>();
-        FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
+        FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceByDate()
                 .addValueEventListener(showFireBaseListener);
     }
 
@@ -85,6 +94,8 @@ public class WallFragment extends Fragment {
         mListView.setAdapter(wallAdapter);
         wallAdapter.registerAdapterDataObserver(adapterOnChangeData);
         showProgress();
+
+        mListToSort = new ArrayList<>();
 
         return rootView;
     }
@@ -177,19 +188,20 @@ public class WallFragment extends Fragment {
 
     public void sortList(String type) {
         wallAdapter.clear();
+        mListToSort.clear();
         String typeValue = Utils.getSpinnerSelection(type);
 
         switch (typeValue) {
             case ReportFragment.TYPE_PET_ALL:
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceByDate()
                         .addValueEventListener(showFireBaseListener);
                 break;
             default:
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceBySort()
-                        .orderByChild("uType")
+                mRefToSort = FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceBySort();
+                mRefToSort.orderByChild("uType")
                         .equalTo(typeValue)
-//                        .addValueEventListener(showFireBaseListener);
                         .addChildEventListener(mSortFireBaseListener);
+                mRefToSort.addListenerForSingleValueEvent(mOnCompleteSortListener);
                 break;
         }
 
@@ -199,10 +211,28 @@ public class WallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (Utils.checkConexion(getContext())) {
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceByDate()
                         .addValueEventListener(showFireBaseListener);
                 hideProgress();
             }
+
+        }
+    };
+
+    private ValueEventListener mOnCompleteSortListener=new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Collections.sort(mListToSort, new Comparator<ReportModel>() {
+                @Override
+                public int compare(ReportModel o1, ReportModel o2) {
+                    return o1.getuDate().compareTo(o2.getuDate());
+                }
+            });
+            wallAdapter.setListItems(mListToSort);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
 
         }
     };
@@ -213,10 +243,11 @@ public class WallFragment extends Fragment {
             showProgress();
             if (dataSnapshot.exists()) {
                 ReportModel object = dataSnapshot.getValue(ReportModel.class);
-                wallAdapter.updateData(object);
+                mListToSort.add(object);
             } else {
                 showError(R.string.error_no_results_found);
             }
+
         }
 
         @Override

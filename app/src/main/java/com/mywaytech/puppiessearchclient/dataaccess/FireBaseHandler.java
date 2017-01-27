@@ -205,7 +205,7 @@ public class FireBaseHandler {
         return mFirebaseDatabaseReference.child(FireBaseHandler.OBJECT_USERS_NAME);
     }
 
-    public Query getReportsFirebaseQueryByDate() {
+    public Query getReportsFirebaseDatabaseReferenceByDate() {
         return mFirebaseDatabaseReference.child(REPORTS).orderByChild("uDate");
     }
 
