@@ -101,7 +101,10 @@ public class Utils {
     }
 
     public static String convertLongToString(String longStringDate) {
-        long timestamp = Long.parseLong(longStringDate) * 1000L;
+        String[] timestampSeparated = longStringDate.split("-");
+
+        long timestamp = Long.parseLong(timestampSeparated[1]) * 1000L;
+
         DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         Date netDate = (new Date(timestamp));
         return sdf.format(netDate);

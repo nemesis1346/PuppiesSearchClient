@@ -1,8 +1,5 @@
 package com.mywaytech.puppiessearchclient.controllers.fragments;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -62,7 +59,7 @@ public class WallFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pet_list = new ArrayList<>();
-        FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+        FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
                 .addValueEventListener(showFireBaseListener);
     }
 
@@ -184,13 +181,14 @@ public class WallFragment extends Fragment {
 
         switch (typeValue) {
             case ReportFragment.TYPE_PET_ALL:
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
                         .addValueEventListener(showFireBaseListener);
                 break;
             default:
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReferenceBySort()
                         .orderByChild("uType")
                         .equalTo(typeValue)
+//                        .addValueEventListener(showFireBaseListener);
                         .addChildEventListener(mSortFireBaseListener);
                 break;
         }
@@ -201,7 +199,7 @@ public class WallFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (Utils.checkConexion(getContext())) {
-                FireBaseHandler.getInstance(getContext()).getReportsFirebaseDatabaseReference()
+                FireBaseHandler.getInstance(getContext()).getReportsFirebaseQueryByDate()
                         .addValueEventListener(showFireBaseListener);
                 hideProgress();
             }
