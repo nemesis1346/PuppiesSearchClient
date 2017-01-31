@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ParseException;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -204,8 +205,11 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
             //FIXME this is the global variable of the photo LOCAL
             mTemporalPhoto = (Bitmap) data.getExtras().get("data");
 
+
+            Uri tempUri = PhotoUtils.getImageUri(getContext(), mTemporalPhoto);
+
             if (mTemporalPhoto != null) {
-                imageShow.setImageBitmap(mTemporalPhoto);
+                imageShow.setImageBitmap(PhotoUtils.checkRotationBitmap(tempUri.getPath(), mTemporalPhoto));
                 imageShow.setVisibility(View.VISIBLE);
             }
         }

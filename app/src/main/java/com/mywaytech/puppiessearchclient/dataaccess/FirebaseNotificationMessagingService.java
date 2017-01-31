@@ -18,26 +18,27 @@ import com.mywaytech.puppiessearchclient.controllers.LoginActivity;
  */
 public class FirebaseNotificationMessagingService extends FirebaseMessagingService {
 
-    private static int mCounter=0;
+    private static int mCounter = 0;
 
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
-            Log.d("Notification Body: ","" + remoteMessage.getNotification().getBody());
+            Log.d("Notification Body: ", "" + remoteMessage.getNotification().getBody());
             sendNotificationToSystem(remoteMessage.getNotification());
         }
     }
-    private void sendNotificationToSystem(RemoteMessage.Notification notification){
-        try{
+
+    private void sendNotificationToSystem(RemoteMessage.Notification notification) {
+        try {
             Intent mainActivityIntent = LoginActivity.newIntent(this);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             mainActivityIntent.putExtra(LoginActivity.EXTRA_NOTIFICATION_FLAG, true);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, mainActivityIntent,
                     PendingIntent.FLAG_ONE_SHOT);
 
-            if(notification!=null){
-                NotificationCompat.Builder notificationsBuilder =  new NotificationCompat.Builder(this)
+            if (notification != null) {
+                NotificationCompat.Builder notificationsBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_dog_clue)
                         .setContentTitle(notification.getTitle())
                         .setContentText(notification.getBody())
@@ -54,8 +55,8 @@ public class FirebaseNotificationMessagingService extends FirebaseMessagingServi
                         , notificationsBuilder.build());
 
             }
-        }catch(Exception ex){
-            Log.e("sendNotification:",""+ex);
+        } catch (Exception ex) {
+            Log.e("sendNotification:", "" + ex);
 
         }
     }

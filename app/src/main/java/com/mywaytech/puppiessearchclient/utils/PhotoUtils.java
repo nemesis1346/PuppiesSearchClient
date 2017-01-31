@@ -2,6 +2,10 @@ package com.mywaytech.puppiessearchclient.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 
@@ -62,8 +66,44 @@ public class PhotoUtils {
         return null;
     }
 
-    public static void setImageResultFromFirebase() {
+    public static Bitmap checkRotationBitmap(String imagePath, Bitmap oldBitmap) {
+        Bitmap rotatedBitmap = null;
+        try {
+            ExifInterface ei = new ExifInterface(imagePath);
+            int orientation;
+            orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_NORMAL:
+                    rotatedBitmap = oldBitmap;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotatedBitmap = rotateImage(oldBitmap, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotatedBitmap = rotateImage(oldBitmap, 180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotatedBitmap = rotateImage(oldBitmap, 270);
+                    break;
+                default:
+                    rotatedBitmap = oldBitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rotatedBitmap;
+    }
 
+    public static Bitmap rotateImage(Bitmap source, int angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
 }
