@@ -46,8 +46,8 @@
 
                 <ImageView
                     android:id="@+id/showImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
                     android:visibility="gone"/>
 
                 <!--TODO: EDIT THE REST OF THE EDIT TEXT WITH STYLES-->

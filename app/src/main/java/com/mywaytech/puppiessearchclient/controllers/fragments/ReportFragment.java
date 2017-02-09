@@ -9,10 +9,12 @@ import android.net.ParseException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,6 +48,7 @@ import com.mywaytech.puppiessearchclient.utils.PhotoUtils;
 import com.mywaytech.puppiessearchclient.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -64,8 +67,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private ImageView imageShow;
 
-    public static final String FRAGMENT_VALUE = "com.mywaytech.puppiessearchclient.extras.extra_fragment_value";
-
     public static final String TYPE_PET_SELECT_DEFAULT = "Seleccione Tipo";
     public static final String TYPE_PET_LOST = "LOST";
     public static final String TYPE_PET_ADOPTION = "ADOPTION";
@@ -73,23 +74,13 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     public static final String TYPE_PET_ALL = "ALL";
 
     public static final String TYPE_PET_LOST_STRING = "Perdido";
-    public static final String TYPE_PET_ADOPTION_STRING= "Adopción";
-    public static final String TYPE_PET_ALL_STRING ="Todos";
+    public static final String TYPE_PET_ADOPTION_STRING = "Adopción";
+    public static final String TYPE_PET_ALL_STRING = "Todos";
 
-    private Bitmap mPhoto;
     private Bitmap mTemporalPhoto;
     private ReportModel mReportModel;
 
-    private File mFile;
-    private int callback;
-    private String mFinalPath = "";
-
-    private FirebaseUser mCurrentUser;
-    private String mCurrentUserName;
     private NewUserModel mNewUserObject;
-
-    private FirebaseAuth mFirebaseAuth;
-
     private Spinner mTypeSpinner;
 
     private String mSpinnerValue;
@@ -101,6 +92,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
     private boolean mImageFlag = false;
     private boolean mReportFlag = false;
+
+    private File mPhotoFile;
 
     public static ReportFragment newInstance() {
         Bundle args = new Bundle();
@@ -149,13 +142,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         mTypeSpinner.setAdapter(adapter);
         mTypeSpinner.setOnItemSelectedListener(this);
 
-
-//        mFirebaseAuth = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth();
-//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-
-        //TODO IT MIGHT BE UNNECESARY
-        mCurrentUser = FireBaseHandler.getInstance(getActivity()).getFirebaseAuth().getCurrentUser();
-
         mNewUserObject = UserSessionManager.getInstance(getContext()).getLocalUser();
 
         return rootView;
@@ -181,35 +167,17 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
         }
     };
 
-    private FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            if (mCurrentUser != null) {
-                mCurrentUserName = mCurrentUser.getEmail();
-                Log.d("username: ", "" + mCurrentUserName);
-            } else {
-
-                Toast.makeText(getActivity(), "Usuario no ha iniciado sesión", Toast.LENGTH_LONG).show();
-                getActivity().finish();
-            }
-        }
-    };
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             btn_image.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             btn_image.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
             //FIXME this is the global variable of the photo LOCAL
             mTemporalPhoto = (Bitmap) data.getExtras().get("data");
-
-
-            Uri tempUri = PhotoUtils.getImageUri(getContext(), mTemporalPhoto);
-
+            Uri imageUri = PhotoUtils.getImageUri(getContext(), mTemporalPhoto);
             if (mTemporalPhoto != null) {
-                imageShow.setImageBitmap(PhotoUtils.checkRotationBitmap(tempUri.getPath(), mTemporalPhoto));
+                imageShow.setImageBitmap(PhotoUtils.checkRotationBitmap(imageUri.getPath(), mTemporalPhoto));
                 imageShow.setVisibility(View.VISIBLE);
             }
         }
@@ -232,10 +200,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
 
             } else {
                 String uniqueId = UUID.randomUUID().toString();
-
                 mStorageRef = FireBaseHandler.getInstance(getContext()).setImageFirebaseStorageReference(uniqueId);
                 mImageFirebasepPath = "images/petImage" + uniqueId + ".jpg";
-
                 mReportModel = new ReportModel(
                         uniqueId,
                         UserSessionManager.getInstance(getContext()).getLocalUser().getmUid(),
@@ -245,9 +211,8 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
                         newComment.getText().toString(),
                         mNewUserObject.getmEmail(),
                         mSpinnerValue,
-                        "-"+Utils.getCurrentDateTime()
+                        "-" + Utils.getCurrentDateTime()
                 );
-
 
                 byte[] imageByte = PhotoUtils.processImagePet(mTemporalPhoto);
                 saveImageInFireBase(imageByte);
@@ -259,7 +224,6 @@ public class ReportFragment extends Fragment implements AdapterView.OnItemSelect
     };
 
     public void saveImageInFireBase(byte[] bitMap) {
-
         UploadTask uploadTask = mStorageRef.putBytes(bitMap);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
