@@ -300,9 +300,9 @@ public class LoginFragment extends Fragment implements FireBaseHandler.CallbackL
                                                     @Override
                                                     public void run() {
                                                         //Do something after 100ms
-
                                                         Intent intent = MainActivity.newIntent(getActivity());
                                                         startActivity(intent);
+                                                        getActivity().finish();
                                                     }
                                                 }, 1500);
                                             }

@@ -127,6 +127,7 @@ private GoogleApiClient mGoogleApiClient;
     @Override
     public void onBackPressed() {
         logout();
+
     }
 
     public void logout() {
@@ -150,9 +151,11 @@ private GoogleApiClient mGoogleApiClient;
                                             public void onResult(@NonNull Status status) {
                                                 if (status.isSuccess()) {
                                                     Log.d("", "User Logged out");
+
                                                     Intent mainIntent = new Intent().setClass(
                                                             MainActivity.this, LoginActivity.class);
                                                     startActivity(mainIntent);
+                                                    finish();
                                                 }
                                             }
                                         });
@@ -168,6 +171,7 @@ private GoogleApiClient mGoogleApiClient;
                             Intent mainIntent = new Intent().setClass(
                                     MainActivity.this, LoginActivity.class);
                             startActivity(mainIntent);
+                            finish();
                         }
                     }
                 })
