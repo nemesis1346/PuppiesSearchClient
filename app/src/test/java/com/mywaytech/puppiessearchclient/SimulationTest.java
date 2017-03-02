@@ -13,8 +13,13 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -25,11 +30,10 @@ import java.util.UUID;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricGradleTestRunner.class)
 
-public class UsersSimulationTest {
+public class SimulationTest {
 
     private NewUserModel currentUserModel;
     private ReportModel currentReportModel;
-    private List<NewUserModel> models;
     private List<String> namesResources;
     private List<String> lastNameResources;
     private List<Integer> passwordResources;
@@ -39,13 +43,15 @@ public class UsersSimulationTest {
 
 
     @Test
-    public void date_isCorrect() throws Exception {
+    public void simulateUsers() throws Exception {
 
-        String finalResult = "{";
+        String finalResultUsers = "{";
 
         ShadowLog.setupLogging();
         ShadowLog.stream = System.out;
         //FIRST TEST
+
+        int sizeSample=5;
 
         Random r = new Random();
         int counterRandom1;
@@ -63,7 +69,6 @@ public class UsersSimulationTest {
         int addressCounter2;
         int imageCounter;
 
-        models = new ArrayList<>();
         namesResources = Arrays.asList("Marco", "Antonio", "Daniel", "Andres", "Ignacio", "Ronald", "Jose", "William", "Miguel", "Mauricio", "Ruben", "Edison", "Leonardo", "Luis", "Cristian", "Fernando", "Vagner", "Danielo", "Daniel", "Oswaldo", "Pedro", "Diego", "Zack", "Inti", "Huascar");
         lastNameResources = Arrays.asList("Maigua", "Teran", "Molina", "Zambrano", "Altamirano", "Cartagenova", "Lema", "Quimbo", "Cabascango", "Meneses", "Miranda", "Aguilar", "Cachiguango", "Jackson", "Males", "Sanchez", "Chango", "Mosquera", "Amay", "Mendoza");
         passwordResources = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -73,7 +78,8 @@ public class UsersSimulationTest {
         commentsResources = Arrays.asList("Hola, quisiera saber ¿Cómo lo puedo adoptar? ¿Debo llenar algún formulario o algo?", "Qué lindo, espero encuentre un hogar pronto.", "Su nombre es Toby busca un hogar donde le brinden mucho amor y mucho tiempo para ser feliz", "Cahorrita para adopción responsable", "Perrita en adopción se llama Sheyla se lleva muy bien con los niños", "Molly tiene dos años y quiere un hogar, le gustan mucho los niños", "Me llamo Richi busco un dueño responsable que me ame mucho tengo 4 años", "Mi perrita panda necesita un nuevo amigo para pasear alguien???", "Que buena aplicación mi perro por fin podrá conseguir nuevos amigos está muy solo", "Lucas mira hay muchos perritos que podemos conocer", "Tengo un gato y un perro alguien quiere conocerlos", "Este es Angelito y necesita un dueño responsable.", "Adoptame, soy Scooby doo soy muy juguetón y cariñoso, busco alguien que me quiera.", "Mi perrito está un poco decaído, alguien sabe que síntomas son los que tengo que ver para ver si está enfermo??");
 
         //JUST FOR MALE USERS
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < sizeSample; i++) {
+            //JUST USERS
             counterRandom1 = r.nextInt(namesResources.size());
             counterRandom2 = r.nextInt(namesResources.size());
             counterRandom3 = r.nextInt(lastNameResources.size());
@@ -97,21 +103,61 @@ public class UsersSimulationTest {
             currentUserModel.setmEmail(namesResources.get(counterRandom1) + "." + lastNameResources.get(counterRandom3) + "@" + emailResources.get(emailCounter) + ".com");
             currentUserModel.setAddress(addressResources.get(addressCounter1)+" y "+addressResources.get(addressCounter2));
             currentUserModel.setUid("TEST_"+UUID.randomUUID().toString());
-            currentUserModel.setUserImagePath("userPicturetestImage_" + i + ".jpg");
-            Log.i("name: ", "" + currentUserModel.getmName());
-            Log.i("password: ", "" + currentUserModel.getmPassword());
-            Log.i("email: ", "" + currentUserModel.getmEmail());
-            Log.i("address: ", "" + currentUserModel.getmAddress());
-            Log.i("uid: ", "" + currentUserModel.getmUid());
-            Log.i("image: ", "" + currentUserModel.getmUserImagePath());
+            currentUserModel.setUserImagePath("userPicture/testImage_" + i + ".jpg");
             Gson gson = new Gson();
             String jsonInString = gson.toJson(currentUserModel);
             String result ="\""+ currentUserModel.getmUid() + "\"" + ":" + jsonInString;
-            Log.i("json: ", "" + result);
-            finalResult += result+",";
-        }
-        finalResult += "}";
-        Log.i("finalJson: ", "" + finalResult);
+            if(i<sizeSample-1){
+                finalResultUsers += result+",";
+            }else{
+                finalResultUsers += result;
+            }
 
+            //JUST POSTS
+            currentReportModel =new ReportModel();
+            currentReportModel.setuUserId(currentUserModel.getmUid());
+            currentReportModel.setuId("TEST_POST_"+UUID.randomUUID().toString());
+//            currentReportModel.setImagePath();
+        }
+        finalResultUsers += "}";
+        Log.i("finalJsonUsers: ", "" + finalResultUsers);
+    }
+
+    public static String convertStringDateToTimestamp(String input) throws ParseException {
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Date netDate = sdf.parse(input);
+        long timestampResult=netDate.getTime()/1000L;
+        return String.valueOf(timestampResult);
+    }
+
+    public String randomTimeStamp() throws ParseException {
+        ShadowLog.setupLogging();
+        ShadowLog.stream = System.out;
+        //FIRST TEST
+        Calendar now = Calendar.getInstance();
+        Calendar min = Calendar.getInstance();
+        Calendar randomDate = (Calendar) now.clone();
+        int minYear = 2016;
+        int minMonth = 10;
+        int minDay = 18;
+        min.set(minYear, minMonth-1, minDay);
+        int numberOfDaysToAdd = (int) (Math.random() * (daysBetween(min, now) + 1));
+        randomDate.add(Calendar.DAY_OF_YEAR, -numberOfDaysToAdd);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Log.i("random time:", dateFormat.format(randomDate.getTime()));
+        Log.i("random time timestamp:", convertStringDateToTimestamp(dateFormat.format(randomDate.getTime())));
+        return dateFormat.format(randomDate.getTime());
+    }
+
+    public static int daysBetween(Calendar from, Calendar to) {
+        Calendar date = (Calendar) from.clone();
+        int daysBetween = 0;
+        while (date.before(to)) {
+            date.add(Calendar.DAY_OF_MONTH, 1);
+            daysBetween++;
+        }
+        System.out.println(daysBetween);
+        return daysBetween;
     }
 }
