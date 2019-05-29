@@ -100,6 +100,7 @@ public class FireBaseHandler {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.d("SignOnCompleteError: ", " " + e);
+                                callback.onFailSigningUp(e);
                             }
                         });
                         if (callback != null) {
@@ -112,6 +113,8 @@ public class FireBaseHandler {
     }
 
     public interface CallbackSign {
+        void onFailSigningUp(Exception e);
+
         void onCompleteSigning(boolean isSigned);
     }
 

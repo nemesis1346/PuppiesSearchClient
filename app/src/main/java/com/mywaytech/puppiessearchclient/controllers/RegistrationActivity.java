@@ -279,6 +279,13 @@ public class RegistrationActivity extends BaseActivity implements
     }
 
     @Override
+    public void onFailSigningUp(Exception e) {
+        new AlertDialogUtils.Builder(this)
+                .setStringMessage(e.getMessage())
+                .setPositiveText(R.string.btn_ok).show();
+    }
+
+    @Override
     public void onCompleteSigning(boolean isCreated) {
         if (isCreated) {
             //GET CURRENT USER INFO
