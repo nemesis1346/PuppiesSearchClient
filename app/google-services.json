@@ -1,39 +1,37 @@
 {
   "project_info": {
-    "project_number": "539840606577",
-    "firebase_url": "https://puppiessearch-7c275.firebaseio.com",
-    "project_id": "puppiessearch-7c275",
-    "storage_bucket": "puppiessearch-7c275.appspot.com"
+    "project_number": "1015611142240",
+    "firebase_url": "https://puppies-client.firebaseio.com",
+    "project_id": "puppies-client",
+    "storage_bucket": "puppies-client.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:539840606577:android:0f0fa70aa69d5329",
+        "mobilesdk_app_id": "1:1015611142240:android:0f0fa70aa69d5329",
         "android_client_info": {
           "package_name": "com.mywaytech.puppiessearchclient"
         }
       },
       "oauth_client": [
         {
-          "client_id": "539840606577-ecosf6lplt40avuvm72fnu3dkb3343s5.apps.googleusercontent.com",
+          "client_id": "1015611142240-vj5qsrd1jnequ897djit4vf9ncco79vt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDrcgnuUR289-W74czh5lwK6EqDrycoOfs"
+          "current_key": "AIzaSyAGGiGuM9REFa-bDBdE3IXo_lqmXDZLGqk"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015611142240-vj5qsrd1jnequ897djit4vf9ncco79vt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

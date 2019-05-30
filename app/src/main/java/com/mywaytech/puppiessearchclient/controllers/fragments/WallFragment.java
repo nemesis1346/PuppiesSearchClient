@@ -138,6 +138,7 @@ public class WallFragment extends Fragment {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
+            showErrorString(databaseError.toString());
             showErrorRetry();
         }
     };
@@ -173,6 +174,16 @@ public class WallFragment extends Fragment {
         mListView.setVisibility(View.GONE);
         mRetryBtn.setVisibility(View.VISIBLE);
         mProgressTextInfo.setText(stringId);
+        mProgressTextInfo.setVisibility(View.VISIBLE);
+
+    }
+
+    public void showErrorString(String string) {
+        mProgressBar.setVisibility(View.GONE);
+        mProgressErrorImg.setVisibility(View.VISIBLE);
+        mListView.setVisibility(View.GONE);
+        mRetryBtn.setVisibility(View.VISIBLE);
+        mProgressTextInfo.setText(string);
         mProgressTextInfo.setVisibility(View.VISIBLE);
 
     }

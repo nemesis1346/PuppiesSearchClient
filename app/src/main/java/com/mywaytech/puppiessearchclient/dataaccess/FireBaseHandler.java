@@ -47,7 +47,7 @@ public class FireBaseHandler {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mStorageRef = mFirebaseStorage.getReferenceFromUrl("gs://puppiessearch-7c275.appspot.com");
+        mStorageRef = mFirebaseStorage.getReferenceFromUrl("gs://puppies-client.appspot.com");
         this.mContext = context;
     }
 
