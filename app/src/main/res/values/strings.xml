@@ -143,5 +143,6 @@
     <string name="error_invalid_user_email">Correo Inválido</string>
     <string name="error_invalid_password">Contraseña inválida</string>
     <string name="noInternetToast">Sin conexión a internet</string>
+    <string name="action_login">Login</string>
 
 </resources>

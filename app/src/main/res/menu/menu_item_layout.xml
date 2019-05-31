@@ -12,6 +12,13 @@
         />
 
     <item
+        android:id="@+id/action_login"
+        android:icon="@drawable/ic_login"
+        android:title="@string/action_login"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/action_contact_us"
         android:icon="@drawable/ic_address"
         android:title="@string/action_contact_us"

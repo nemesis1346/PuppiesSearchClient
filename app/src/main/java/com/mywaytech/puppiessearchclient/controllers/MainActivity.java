@@ -111,6 +111,10 @@ private GoogleApiClient mGoogleApiClient;
             case R.id.menuoptions_logout:
                 onBackPressed();
                 return true;
+            case R.id.action_login:
+                intent =new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
